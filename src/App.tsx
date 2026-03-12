@@ -160,7 +160,7 @@ export default function App() {
               </div>
               <div className="contact-row">
                 <span>Email</span>
-                <strong>floydholmberg3@gmail.com</strong>
+                <strong>floydholmberg3@gmai1.com</strong>
               </div>
             </div>
           </div>
