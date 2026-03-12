@@ -25,19 +25,19 @@ export default function App() {
       name: "ESP32 Smart Systems",
       tag: "Embedded",
       text: "Wireless control, sensors, displays, and real embedded prototypes for practical use.",
-      link: "https://github.com/floyd11110/spec-tech-website",
+      link: "https://www.facebook.com/SPECTECHPHIL",
     },
     {
       name: "AI Vision Projects",
       tag: "AI",
       text: "Object detection, classification, and intelligent automation for maker-grade systems.",
-      link: "https://youtube.com",
+      link: "https://www.facebook.com/SPECTECHPHIL",
     },
     {
       name: "Robotics Builds",
       tag: "Robotics",
       text: "Motor control, navigation, perception, and prototype mechanics in one place.",
-      link: "https://youtube.com",
+      link: "https://www.facebook.com/SPECTECHPHIL",
     },
   ];
 
