@@ -1,0 +1,79 @@
+/* Layout correction for the hero visual card.
+   Keeps the category tags aligned and prevents overlap with the main card text. */
+
+.hero-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  gap: 20px 24px;
+  padding: 38px;
+}
+
+.hero-panel::before,
+.panel-glow {
+  z-index: 0;
+}
+
+.circuit-card,
+.mini-card {
+  z-index: 1;
+}
+
+.main-card {
+  position: relative;
+  left: auto;
+  right: auto;
+  top: auto;
+  width: 100%;
+  flex: 1 1 100%;
+  padding: 34px;
+}
+
+.main-card p {
+  max-width: 620px;
+}
+
+.mini-card {
+  position: relative;
+  left: auto !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 14px 22px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .hero-panel {
+    min-height: auto;
+    padding: 30px;
+  }
+}
+
+@media (max-width: 620px) {
+  .hero-panel {
+    padding: 24px;
+    gap: 12px;
+  }
+
+  .main-card {
+    padding: 24px;
+  }
+
+  .main-card h2 {
+    font-size: 28px;
+  }
+
+  .mini-card {
+    width: 100%;
+    min-height: 48px;
+    white-space: normal;
+  }
+}
