@@ -1,0 +1,124 @@
+.tutorial-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  align-items: stretch;
+}
+
+.tutorial-card {
+  position: relative;
+  padding: 26px;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(16, 31, 54, 0.9), rgba(8, 18, 34, 0.82));
+  overflow: hidden;
+}
+
+.tutorial-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(56, 189, 248, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.08) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.tutorial-card > * {
+  position: relative;
+}
+
+.tutorial-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  color: #031522;
+  background: var(--accent);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tutorial-card p {
+  color: var(--muted);
+}
+
+.tutorial-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.tutorial-item {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid rgba(125, 211, 252, 0.2);
+  border-radius: 18px;
+  background: rgba(2, 8, 23, 0.38);
+}
+
+.tutorial-item strong {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: #031522;
+  background: var(--brand);
+}
+
+.tutorial-item h3 {
+  margin-bottom: 4px;
+  font-size: 17px;
+}
+
+.tutorial-item p {
+  margin-bottom: 0;
+  font-size: 14px;
+}
+
+.discussion-box {
+  padding: 26px;
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 90% 0%, rgba(245, 158, 11, 0.14), transparent 32%),
+    rgba(8, 18, 34, 0.76);
+}
+
+.discussion-box ul {
+  margin: 18px 0 0;
+  padding-left: 20px;
+  color: var(--muted);
+}
+
+.discussion-box li {
+  margin-bottom: 10px;
+}
+
+.tutorial-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+@media (max-width: 900px) {
+  .tutorial-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .tutorial-item {
+    grid-template-columns: 1fr;
+  }
+}
