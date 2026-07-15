@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="layout-fix.css" />
+  <link rel="stylesheet" href="tutorials.css" />
 </head>
 <body>
   <header class="site-header">
@@ -24,6 +25,7 @@
       <button class="nav-toggle" id="navToggle" aria-label="Open navigation">☰</button>
       <div class="nav-links" id="navLinks">
         <a href="#services">Services</a>
+        <a href="#tutorials">Tutorials</a>
         <a href="#projects">Projects</a>
         <a href="#process">Process</a>
         <a href="#inquiry">Inquiry</a>
@@ -118,7 +120,64 @@
       </div>
     </section>
 
-    <section class="section alt" id="projects">
+    <section class="section alt" id="tutorials">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Tutorial discussions</p>
+          <h2>Learn the system step by step</h2>
+          <p>Spec-Tech tutorials are designed to explain the circuit, wiring, code, testing, and real troubleshooting behind every project.</p>
+        </div>
+
+        <div class="tutorial-grid">
+          <article class="tutorial-card">
+            <span class="tutorial-badge">Current series</span>
+            <h3>STM32 using Arduino IDE</h3>
+            <p>A beginner-friendly path for students who already know Arduino and want to move into stronger embedded systems using STM32 Blue Pill.</p>
+
+            <div class="tutorial-list">
+              <div class="tutorial-item">
+                <strong>01</strong>
+                <div>
+                  <h3>STM32 Setup + Blink</h3>
+                  <p>Board manager setup, ST-Link/FTDI basics, board selection, and PC13 onboard LED blink test.</p>
+                </div>
+              </div>
+              <div class="tutorial-item">
+                <strong>02</strong>
+                <div>
+                  <h3>Digital Read</h3>
+                  <p>Push button input using INPUT_PULLUP, GPIO logic, and LED response testing.</p>
+                </div>
+              </div>
+              <div class="tutorial-item">
+                <strong>03</strong>
+                <div>
+                  <h3>LCD I2C 20x4</h3>
+                  <p>I2C address scanning, PB6/PB7 wiring, display printing, and LCD backlight troubleshooting.</p>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <aside class="discussion-box">
+            <h3>What each tutorial explains</h3>
+            <ul>
+              <li>What the component does and why it is used in real projects.</li>
+              <li>Exact wiring and pin mapping for STM32, Arduino, ESP32, or Raspberry Pi.</li>
+              <li>Basic code first, then expansion ideas for capstone and prototype use.</li>
+              <li>Common errors such as wrong address, weak power, loose wiring, or logic-level mismatch.</li>
+              <li>Defense-ready explanation: how the hardware, software, and system logic work together.</li>
+            </ul>
+            <div class="tutorial-actions">
+              <a class="button primary" href="https://github.com/floyd11110/STM32_ARDUINO" target="_blank" rel="noopener">Open STM32 GitHub</a>
+              <a class="button secondary" href="https://www.youtube.com/@Spec-Tech" target="_blank" rel="noopener">Watch tutorials</a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Project ideas</p>
@@ -158,7 +217,7 @@
       </div>
     </section>
 
-    <section class="section" id="process">
+    <section class="section alt" id="process">
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">How we work</p>
