@@ -9,4 +9,20 @@ if (navToggle && navLinks) {
     navLinks.classList.toggle('open');
   });
 
-  navLinks
+  navLinks.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+}
+
+if (copyButton && inquiryText && copyStatus) {
+  copyButton.addEventListener('click', async () => {
+    const text = inquiryText.innerText.trim();
+
+    try {
+      await navigator.clipboard.writeText(text);
+      copyStatus.textContent = 'Inquiry format copied. Send it to Spec-Tech on Facebook.';
+    } catch (error) {
+      copyStatus.textContent = 'Copy failed. Please highlight the text and copy manually.';
+    }
+  });
+}
