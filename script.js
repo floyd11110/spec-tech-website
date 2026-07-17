@@ -30,7 +30,9 @@ if (copyButton && inquiryText && copyStatus) {
 const tutorialList = document.querySelector('#tutorials .tutorial-list');
 
 if (tutorialList) {
-  const firstTutorialItem = tutorialList.querySelector('.tutorial-item');
+  const tutorialItems = tutorialList.querySelectorAll('.tutorial-item');
+  const firstTutorialItem = tutorialItems[0];
+  const secondTutorialItem = tutorialItems[1];
 
   if (firstTutorialItem) {
     const setupBlinkLink = document.createElement('a');
@@ -42,6 +44,18 @@ if (tutorialList) {
     setupBlinkLink.setAttribute('aria-label', 'Watch the STM32 Setup and Blink tutorial on Facebook');
     setupBlinkLink.innerHTML = firstTutorialItem.innerHTML;
     firstTutorialItem.replaceWith(setupBlinkLink);
+  }
+
+  if (secondTutorialItem) {
+    const digitalReadLink = document.createElement('a');
+    digitalReadLink.className = secondTutorialItem.className;
+    digitalReadLink.dataset.topic = 'digital-read';
+    digitalReadLink.href = 'https://www.facebook.com/reel/1433198171952762';
+    digitalReadLink.target = '_blank';
+    digitalReadLink.rel = 'noopener';
+    digitalReadLink.setAttribute('aria-label', 'Watch the STM32 Digital Read tutorial on Facebook');
+    digitalReadLink.innerHTML = secondTutorialItem.innerHTML;
+    secondTutorialItem.replaceWith(digitalReadLink);
   }
 }
 
