@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="layout-fix.css" />
   <link rel="stylesheet" href="tutorials.css" />
+  <link rel="stylesheet" href="research.css" />
 </head>
 <body>
   <header class="site-header">
@@ -26,6 +27,7 @@
       <div class="nav-links" id="navLinks">
         <a href="#services">Services</a>
         <a href="#tutorials">Tutorials</a>
+        <a href="#research">Research</a>
         <a href="#projects">Projects</a>
         <a href="#process">Process</a>
         <a href="#inquiry">Inquiry</a>
@@ -170,7 +172,58 @@
       </div>
     </section>
 
-    <section class="section" id="projects">
+    <section class="section" id="research">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Ongoing research</p>
+          <h2>SmartLink wireless telemetry research</h2>
+          <p>Spec-Tech also documents internal research builds. SmartLink is our ongoing STM32-to-STM32 wireless telemetry experiment focused on reliability, link-health feedback, and embedded system safety.</p>
+        </div>
+
+        <div class="research-panel">
+          <article class="research-card">
+            <span class="research-status">Research in progress</span>
+            <h3>SmartLink: STM32 + nRF24L01 telemetry link</h3>
+            <p>
+              SmartLink is an ongoing research project for stronger low-cost wireless telemetry using STM32F103C6 boards and nRF24L01+ PA/LNA modules. The goal is not only to send data, but to measure whether the link is healthy, degraded, unstable, or lost.
+            </p>
+
+            <div class="research-tags">
+              <span>STM32F103C6</span>
+              <span>nRF24L01+ PA/LNA</span>
+              <span>Arduino IDE</span>
+              <span>Telemetry</span>
+              <span>Link Health</span>
+              <span>Drone / Robot Research</span>
+            </div>
+
+            <p class="research-note">
+              Current direction: build reusable Transceiver A and Transceiver B examples, then add optional health feedback for packet loss, duplicate detection, jitter, timeout, and failsafe behavior.
+            </p>
+          </article>
+
+          <aside class="research-metrics">
+            <h3>What SmartLink measures</h3>
+            <div class="metric-grid">
+              <div><strong>5,000+</strong><span>valid packets tested</span></div>
+              <div><strong>0</strong><span>missed packets in stable bench test</span></div>
+              <div><strong>~19.6/s</strong><span>packet rate target during tests</span></div>
+              <div><strong>4 states</strong><span>Healthy / Degraded / Critical / No Signal</span></div>
+            </div>
+
+            <ul>
+              <li>Valid, missed, and duplicate packet counters.</li>
+              <li>Success rate and maximum consecutive packet loss.</li>
+              <li>Average packet interval and jitter monitoring.</li>
+              <li>Timeout and failsafe logic for future drone or robot use.</li>
+              <li>Possible embedded classifier for link-health decision making.</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="projects">
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Project ideas</p>
@@ -206,11 +259,18 @@
               <p>Camera detection, Raspberry Pi or Jetson Nano processing, motor control, and basic autonomous response.</p>
             </div>
           </article>
+          <article class="project-item">
+            <span>05</span>
+            <div>
+              <h3>SmartLink Wireless Telemetry</h3>
+              <p>STM32-to-STM32 nRF24 telemetry with packet validation, missed-packet tracking, jitter monitoring, and link-health feedback.</p>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
-    <section class="section alt" id="process">
+    <section class="section" id="process">
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">How we work</p>
