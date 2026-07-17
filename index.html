@@ -200,14 +200,18 @@
             <p class="research-note">
               Current direction: build reusable Transceiver A and Transceiver B examples, then add optional health feedback for packet loss, duplicate detection, jitter, timeout, and failsafe behavior.
             </p>
+
+            <p class="research-note">
+              Conducted bench experiment: under controlled bench conditions, SmartLink reached 5,000+ valid packets with zero missed packets while monitoring duplicate packets, packet timing, and link stability. This is documented as a bench-test result, not yet a final field-range or commercial reliability claim.
+            </p>
           </article>
 
           <aside class="research-metrics">
-            <h3>What SmartLink measures</h3>
+            <h3>Conducted experiment data</h3>
             <div class="metric-grid">
-              <div><strong>5,000+</strong><span>valid packets tested</span></div>
-              <div><strong>0</strong><span>missed packets in stable bench test</span></div>
-              <div><strong>~19.6/s</strong><span>packet rate target during tests</span></div>
+              <div><strong>5,000+</strong><span>valid packets in bench test</span></div>
+              <div><strong>0</strong><span>missed packets under stable bench conditions</span></div>
+              <div><strong>~19.6/s</strong><span>observed packet rate during testing</span></div>
               <div><strong>4 states</strong><span>Healthy / Degraded / Critical / No Signal</span></div>
             </div>
 
@@ -216,7 +220,7 @@
               <li>Success rate and maximum consecutive packet loss.</li>
               <li>Average packet interval and jitter monitoring.</li>
               <li>Timeout and failsafe logic for future drone or robot use.</li>
-              <li>Possible embedded classifier for link-health decision making.</li>
+              <li>Next validation: distance test, interference test, shielding/enclosure test, and moving-platform test.</li>
             </ul>
           </aside>
         </div>
