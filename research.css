@@ -1,0 +1,145 @@
+.research-panel {
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.research-card,
+.research-metrics {
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: rgba(8, 18, 34, 0.76);
+  box-shadow: var(--shadow);
+}
+
+.research-card {
+  padding: 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.research-card::before {
+  content: "";
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  right: -80px;
+  top: -90px;
+  background: rgba(56, 189, 248, 0.18);
+  filter: blur(48px);
+}
+
+.research-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 8px 12px;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 999px;
+  color: #fde68a;
+  background: rgba(245, 158, 11, 0.1);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.research-card h3 {
+  font-size: clamp(26px, 4vw, 42px);
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+  margin-bottom: 16px;
+}
+
+.research-card p,
+.research-metrics p,
+.research-metrics li {
+  color: var(--muted);
+}
+
+.research-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 24px 0;
+}
+
+.research-tags span {
+  padding: 8px 12px;
+  border: 1px solid rgba(125, 211, 252, 0.24);
+  border-radius: 999px;
+  color: #dff5ff;
+  background: rgba(14, 165, 233, 0.08);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.research-note {
+  margin-top: 18px;
+  padding: 16px;
+  border-left: 3px solid var(--brand);
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.research-metrics {
+  padding: 26px;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 18px 0 22px;
+}
+
+.metric-grid div {
+  padding: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 18px;
+  background: rgba(2, 8, 23, 0.42);
+}
+
+.metric-grid strong,
+.metric-grid span {
+  display: block;
+}
+
+.metric-grid strong {
+  color: var(--text);
+  font-size: 20px;
+}
+
+.metric-grid span {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.research-metrics ul {
+  margin: 14px 0 0;
+  padding-left: 20px;
+}
+
+.research-metrics li {
+  margin-bottom: 8px;
+}
+
+@media (max-width: 900px) {
+  .research-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .research-card,
+  .research-metrics {
+    padding: 22px;
+  }
+}
