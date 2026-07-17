@@ -29,17 +29,17 @@ if (copyButton && inquiryText && copyStatus) {
 
 const tutorialList = document.querySelector('#tutorials .tutorial-list');
 
-if (tutorialList && !tutorialList.querySelector('[data-topic="digital-write"]')) {
-  const digitalWriteTopic = document.createElement('div');
-  digitalWriteTopic.className = 'tutorial-item';
-  digitalWriteTopic.dataset.topic = 'digital-write';
-  digitalWriteTopic.innerHTML = `
+if (tutorialList && !tutorialList.querySelector('[data-topic="analog-write"]')) {
+  const analogWriteTopic = document.createElement('div');
+  analogWriteTopic.className = 'tutorial-item';
+  analogWriteTopic.dataset.topic = 'analog-write';
+  analogWriteTopic.innerHTML = `
     <strong>03</strong>
     <div>
-      <h3>Digital Write</h3>
-      <p>GPIO output using pinMode(OUTPUT), digitalWrite(), HIGH/LOW logic, and external LED control.</p>
+      <h3>Analog Write (PWM)</h3>
+      <p>LED brightness control using analogWrite(), PWM duty cycle, PA6 / TIM3 Channel 1, and values from 0 to 255.</p>
     </div>
   `;
 
-  tutorialList.appendChild(digitalWriteTopic);
+  tutorialList.appendChild(analogWriteTopic);
 }
