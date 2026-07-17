@@ -1,3 +1,22 @@
+.brand-mark {
+  font-size: 0;
+  background-image:
+    linear-gradient(135deg, rgba(56, 189, 248, 0.14), rgba(245, 158, 11, 0.1)),
+    url("assets/spec-tech-logo.svg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  animation: logoGlow 4.5s ease-in-out infinite alternate;
+}
+
+.brand-mark::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  box-shadow: inset 0 0 18px rgba(56, 189, 248, 0.16);
+}
+
 .research-panel {
   display: grid;
   grid-template-columns: 1.08fr 0.92fr;
@@ -235,6 +254,15 @@
   font-size: 20px;
 }
 
+@keyframes logoGlow {
+  from {
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.16);
+  }
+  to {
+    box-shadow: 0 0 34px rgba(56, 189, 248, 0.34), 0 0 18px rgba(245, 158, 11, 0.12);
+  }
+}
+
 @keyframes researchFadeUp {
   from {
     opacity: 0;
@@ -296,6 +324,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .brand-mark,
   .research-panel,
   .research-metrics,
   .incoming-rd,
