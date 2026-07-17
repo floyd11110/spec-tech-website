@@ -211,3 +211,305 @@
     padding: 22px;
   }
 }
+
+/* Mobile layout polish */
+@media (max-width: 900px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  .site-header {
+    position: sticky;
+  }
+
+  .nav {
+    min-height: 66px;
+  }
+
+  .brand {
+    min-width: 0;
+  }
+
+  .brand-mark {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    border-radius: 13px;
+  }
+
+  .brand strong {
+    font-size: 15px;
+  }
+
+  .brand small {
+    font-size: 11px;
+  }
+
+  .nav-links {
+    top: 66px;
+    left: 12px;
+    right: 12px;
+    gap: 8px;
+    padding: 14px;
+    border-radius: 18px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+  }
+
+  .nav-links a {
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(15, 23, 42, 0.55);
+  }
+
+  .nav-links .nav-cta {
+    color: #031522;
+    text-align: center;
+    background: linear-gradient(135deg, var(--brand), #bae6fd);
+  }
+
+  .hero {
+    min-height: auto;
+    padding-top: 44px;
+  }
+
+  .hero-grid {
+    gap: 34px;
+  }
+
+  .hero-copy {
+    text-align: left;
+  }
+
+  .hero-panel {
+    min-height: auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    overflow: visible;
+  }
+
+  .hero-panel::before,
+  .panel-glow {
+    display: none;
+  }
+
+  .circuit-card,
+  .mini-card,
+  .main-card,
+  .card-a,
+  .card-b,
+  .card-c,
+  .card-d {
+    position: relative;
+    inset: auto;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+  }
+
+  .main-card {
+    grid-column: 1 / -1;
+    padding: 24px;
+  }
+
+  .mini-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 58px;
+    text-align: center;
+  }
+
+  .strip-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .research-panel,
+  .diagnosis-grid,
+  .tutorial-grid,
+  .inquiry-grid,
+  .cta-band {
+    grid-template-columns: 1fr !important;
+  }
+
+  .incoming-grid,
+  .metric-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cta-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 620px) {
+  .container {
+    width: min(100% - 22px, 1120px);
+  }
+
+  .section {
+    padding: 48px 0;
+  }
+
+  .hero {
+    padding-top: 34px;
+  }
+
+  h1 {
+    font-size: clamp(34px, 11vw, 46px);
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+  }
+
+  h2 {
+    font-size: clamp(26px, 8vw, 34px);
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
+  .hero-text,
+  .section-heading p,
+  .inquiry p,
+  .footer p {
+    font-size: 15px;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+
+  .hero-actions,
+  .cta-actions,
+  .tutorial-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .button,
+  .nav-cta {
+    width: 100%;
+    min-height: 46px;
+  }
+
+  .stats,
+  .cards.three,
+  .timeline,
+  .strip-grid,
+  .trust-grid,
+  .value-grid,
+  .faq-grid,
+  .incoming-grid,
+  .metric-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero-panel {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    border-radius: 24px;
+  }
+
+  .main-card,
+  .diagnosis-card,
+  .value-card,
+  .faq-card,
+  .cta-band,
+  .trust-item,
+  .research-card,
+  .research-metrics,
+  .incoming-card,
+  .card,
+  .project-item,
+  .step,
+  .tutorial-card,
+  .discussion-box,
+  .inquiry-box {
+    padding: 20px !important;
+    border-radius: 20px !important;
+  }
+
+  .chip-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+  }
+
+  .main-card h2 {
+    font-size: 28px;
+  }
+
+  .project-item {
+    grid-template-columns: 1fr !important;
+  }
+
+  .project-item span {
+    width: max-content;
+  }
+
+  .tutorial-item {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .tutorial-item strong {
+    width: max-content;
+  }
+
+  .research-tags {
+    gap: 8px;
+  }
+
+  .research-tags span {
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+
+  .package-list,
+  .deliverable-list,
+  .value-list,
+  .experiment-list,
+  .research-metrics ul {
+    padding-left: 18px;
+  }
+
+  .inquiry-box pre {
+    font-size: 12px;
+    line-height: 1.55;
+    padding: 14px;
+    overflow-x: auto;
+  }
+
+  .footer-grid,
+  .footer-links {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 380px) {
+  .brand small {
+    display: none;
+  }
+
+  .brand strong {
+    font-size: 14px;
+  }
+
+  .nav-toggle {
+    padding: 7px 10px;
+  }
+
+  .hero-actions {
+    margin: 24px 0;
+  }
+
+  .section {
+    padding: 42px 0;
+  }
+}
