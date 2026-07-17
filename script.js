@@ -43,3 +43,31 @@ if (tutorialList && !tutorialList.querySelector('[data-topic="analog-write"]')) 
 
   tutorialList.appendChild(analogWriteTopic);
 }
+
+const heroText = document.querySelector('.hero-text');
+
+if (heroText) {
+  heroText.textContent = 'Spec-Tech helps students build and understand Arduino, ESP32, STM32, Raspberry Pi, robotics, AI, IoT, solar, battery monitoring, sensors, electronics, metal fabrication, and workshop-supported prototype projects from hardware to software.';
+}
+
+const capabilityStrip = document.querySelector('.strip-grid');
+
+if (capabilityStrip && !capabilityStrip.querySelector('[data-capability="metal-fabrication"]')) {
+  const metalCapability = document.createElement('span');
+  metalCapability.dataset.capability = 'metal-fabrication';
+  metalCapability.textContent = 'Metal Fabrication';
+  capabilityStrip.appendChild(metalCapability);
+}
+
+const serviceCards = document.querySelector('#services .cards');
+
+if (serviceCards && !serviceCards.querySelector('[data-service="metal-fabrication"]')) {
+  const metalService = document.createElement('article');
+  metalService.className = 'card';
+  metalService.dataset.service = 'metal-fabrication';
+  metalService.innerHTML = `
+    <h3>Metal Fabrication &amp; Workshop</h3>
+    <p>Cutting, grinding, welding, fitting, bracket and frame fabrication, mounting plates, stands, and mechanical support for engineering prototypes using available workshop tools.</p>
+  `;
+  serviceCards.appendChild(metalService);
+}
