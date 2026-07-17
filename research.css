@@ -3,6 +3,7 @@
   grid-template-columns: 1.08fr 0.92fr;
   gap: 24px;
   align-items: stretch;
+  animation: researchFadeUp 0.8s ease both;
 }
 
 .research-card,
@@ -11,6 +12,15 @@
   border-radius: 28px;
   background: rgba(8, 18, 34, 0.76);
   box-shadow: var(--shadow);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.research-card:hover,
+.research-metrics:hover,
+.incoming-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(56, 189, 248, 0.38);
+  box-shadow: 0 26px 70px rgba(8, 47, 73, 0.35);
 }
 
 .research-card {
@@ -28,6 +38,7 @@
   top: -90px;
   background: rgba(56, 189, 248, 0.18);
   filter: blur(48px);
+  animation: researchGlow 5s ease-in-out infinite alternate;
 }
 
 .research-status {
@@ -44,6 +55,7 @@
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  animation: statusPulse 2.8s ease-in-out infinite;
 }
 
 .research-card h3 {
@@ -76,7 +88,14 @@
   background: rgba(14, 165, 233, 0.08);
   font-size: 13px;
   font-weight: 800;
+  animation: chipFloat 4s ease-in-out infinite;
 }
+
+.research-tags span:nth-child(2) { animation-delay: 0.2s; }
+.research-tags span:nth-child(3) { animation-delay: 0.4s; }
+.research-tags span:nth-child(4) { animation-delay: 0.6s; }
+.research-tags span:nth-child(5) { animation-delay: 0.8s; }
+.research-tags span:nth-child(6) { animation-delay: 1s; }
 
 .research-note {
   margin-top: 18px;
@@ -101,6 +120,7 @@
 
 .research-metrics {
   padding: 26px;
+  animation: researchFadeUp 0.9s ease 0.12s both;
 }
 
 .metric-grid {
@@ -115,6 +135,13 @@
   border: 1px solid rgba(148, 163, 184, 0.16);
   border-radius: 18px;
   background: rgba(2, 8, 23, 0.42);
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.metric-grid div:hover {
+  transform: scale(1.035);
+  border-color: rgba(34, 211, 238, 0.34);
+  background: rgba(8, 47, 73, 0.38);
 }
 
 .metric-grid strong,
@@ -144,6 +171,7 @@
 
 .incoming-rd {
   margin-top: 52px;
+  animation: researchFadeUp 0.9s ease 0.2s both;
 }
 
 .compact-heading {
@@ -163,7 +191,30 @@
   border-radius: 22px;
   background: rgba(2, 8, 23, 0.48);
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.16);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  animation: cardFadeIn 0.75s ease both;
 }
+
+.incoming-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 0%, rgba(56, 189, 248, 0.08) 45%, transparent 70%);
+  transform: translateX(-120%);
+}
+
+.incoming-card:hover::after {
+  animation: cardSweep 0.9s ease;
+}
+
+.incoming-card:nth-child(1) { animation-delay: 0.05s; }
+.incoming-card:nth-child(2) { animation-delay: 0.12s; }
+.incoming-card:nth-child(3) { animation-delay: 0.19s; }
+.incoming-card:nth-child(4) { animation-delay: 0.26s; }
+.incoming-card:nth-child(5) { animation-delay: 0.33s; }
+.incoming-card:nth-child(6) { animation-delay: 0.40s; }
 
 .incoming-card span {
   display: inline-flex;
@@ -182,6 +233,86 @@
 .incoming-card h3 {
   margin-bottom: 10px;
   font-size: 20px;
+}
+
+@keyframes researchFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes researchGlow {
+  from {
+    opacity: 0.5;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    opacity: 0.95;
+    transform: translate3d(-30px, 24px, 0) scale(1.15);
+  }
+}
+
+@keyframes statusPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 rgba(245, 158, 11, 0);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(245, 158, 11, 0.18);
+  }
+}
+
+@keyframes chipFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes cardSweep {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(120%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .research-panel,
+  .research-metrics,
+  .incoming-rd,
+  .incoming-card,
+  .research-card::before,
+  .research-status,
+  .research-tags span,
+  .incoming-card:hover::after {
+    animation: none;
+  }
+
+  .research-card,
+  .research-metrics,
+  .incoming-card,
+  .metric-grid div {
+    transition: none;
+  }
 }
 
 @media (max-width: 1000px) {
