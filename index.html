@@ -201,26 +201,33 @@
               Current direction: build reusable Transceiver A and Transceiver B examples, then add optional health feedback for packet loss, duplicate detection, jitter, timeout, and failsafe behavior.
             </p>
 
-            <p class="research-note">
-              Conducted bench experiment: under controlled bench conditions, SmartLink reached 5,000+ valid packets with zero missed packets while monitoring duplicate packets, packet timing, and link stability. This is documented as a bench-test result, not yet a final field-range or commercial reliability claim.
-            </p>
+            <div class="research-note">
+              <strong>Conducted bench experiment:</strong>
+              <ul class="experiment-list">
+                <li><strong>Stable bench run:</strong> 5,000+ valid packets with 0 missed packets under controlled bench conditions.</li>
+                <li><strong>Early diagnostic run:</strong> 3,600 valid packets, 13 duplicate packets, and 551 missed packets before tuning and RF handling improvements.</li>
+                <li><strong>RF sensitivity check:</strong> holding or touching the nRF module body caused missed packets to rise up to 38, showing the importance of antenna clearance, enclosure design, grounding, and shielding.</li>
+                <li><strong>Tracked variables:</strong> packet ID, valid count, missed count, duplicate count, packet interval, jitter, timeout, and health state.</li>
+              </ul>
+            </div>
           </article>
 
           <aside class="research-metrics">
             <h3>Conducted experiment data</h3>
             <div class="metric-grid">
-              <div><strong>5,000+</strong><span>valid packets in bench test</span></div>
+              <div><strong>5,000+</strong><span>valid packets in stable bench run</span></div>
               <div><strong>0</strong><span>missed packets under stable bench conditions</span></div>
-              <div><strong>~19.6/s</strong><span>observed packet rate during testing</span></div>
-              <div><strong>4 states</strong><span>Healthy / Degraded / Critical / No Signal</span></div>
+              <div><strong>3,600</strong><span>valid packets in early diagnostic run</span></div>
+              <div><strong>551</strong><span>missed packets before tuning / unstable condition</span></div>
+              <div><strong>13</strong><span>duplicate packets observed during diagnostic test</span></div>
+              <div><strong>38</strong><span>missed packets during body/RF sensitivity check</span></div>
             </div>
 
             <ul>
-              <li>Valid, missed, and duplicate packet counters.</li>
-              <li>Success rate and maximum consecutive packet loss.</li>
-              <li>Average packet interval and jitter monitoring.</li>
-              <li>Timeout and failsafe logic for future drone or robot use.</li>
+              <li>Bench data is used to tune packet validation and link-health logic.</li>
+              <li>The experiment compares stable, unstable, and physically disturbed RF conditions.</li>
               <li>Next validation: distance test, interference test, shielding/enclosure test, and moving-platform test.</li>
+              <li>Results are documented as prototype bench tests, not final commercial reliability claims.</li>
             </ul>
           </aside>
         </div>
