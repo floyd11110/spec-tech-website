@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="layout-fix.css" />
-  <link rel="stylesheet" href="tutorials.css" />
+  <link rel="stylesheet" href="tutorials.css?v=20260717-2" />
   <link rel="stylesheet" href="research.css" />
   <link rel="stylesheet" href="conversion.css" />
 </head>
@@ -45,7 +45,8 @@
           <h1>Guided engineering project development for students and prototype makers.</h1>
           <p class="hero-text">
             Spec-Tech helps students build and understand Arduino, ESP32, STM32, Raspberry Pi,
-            robotics, AI, IoT, solar, battery monitoring, sensors, and electronics projects from hardware to software.
+            robotics, AI, IoT, solar, battery monitoring, sensors, electronics, metal fabrication,
+            and workshop-supported prototype projects from hardware to software.
           </p>
           <div class="hero-actions">
             <a class="button primary" href="https://www.facebook.com/SPECTECHPHIL" target="_blank" rel="noopener">Message Spec-Tech</a>
@@ -83,6 +84,7 @@
         <span>LoRa</span>
         <span>AI Vision</span>
         <span>PCB</span>
+        <span data-capability="metal-fabrication">Metal Fabrication</span>
       </div>
     </section>
 
@@ -105,7 +107,7 @@
 
         <div class="cards three">
           <article class="card">
-            <h3>Capstone & Thesis Consultation</h3>
+            <h3>Capstone &amp; Thesis Consultation</h3>
             <p>Project idea validation, system architecture, feature planning, parts selection, and defense explanation.</p>
           </article>
           <article class="card">
@@ -113,20 +115,24 @@
             <p>Arduino, ESP32, STM32, Raspberry Pi, sensors, displays, motors, GPS, LoRa, and IoT integration.</p>
           </article>
           <article class="card">
-            <h3>Debugging & Troubleshooting</h3>
+            <h3>Debugging &amp; Troubleshooting</h3>
             <p>Help with wiring errors, code problems, sensor reading issues, power supply noise, and communication faults.</p>
           </article>
           <article class="card">
-            <h3>Robotics & Automation</h3>
+            <h3>Robotics &amp; Automation</h3>
             <p>Motor control, PWM, encoders, basic robotics logic, automation panels, and embedded control systems.</p>
           </article>
           <article class="card">
-            <h3>AI & Computer Vision</h3>
+            <h3>AI &amp; Computer Vision</h3>
             <p>Raspberry Pi, Jetson Nano, camera-based detection, object recognition concepts, and AI-assisted systems.</p>
           </article>
           <article class="card">
-            <h3>Solar & Battery Monitoring</h3>
+            <h3>Solar &amp; Battery Monitoring</h3>
             <p>LiFePO4 monitoring, voltage/current sensing, solar charge systems, protection logic, and IoT dashboards.</p>
+          </article>
+          <article class="card" data-service="metal-fabrication">
+            <h3>Metal Fabrication &amp; Workshop</h3>
+            <p>Cutting, grinding, welding, fitting, bracket and frame fabrication, mounting plates, stands, and mechanical support for engineering prototypes using available workshop tools.</p>
           </article>
         </div>
       </div>
@@ -192,18 +198,27 @@
             <p>A beginner-friendly path for students who already know Arduino and want to move into stronger embedded systems using STM32 Blue Pill.</p>
 
             <div class="tutorial-list">
-              <div class="tutorial-item">
+              <a class="tutorial-item" data-topic="setup-blink" href="https://www.facebook.com/reel/1004154882523878" target="_blank" rel="noopener" aria-label="Watch the STM32 Setup and Blink tutorial on Facebook">
                 <strong>01</strong>
                 <div>
                   <h3>STM32 Setup + Blink</h3>
                   <p>Board manager setup, ST-Link/FTDI basics, board selection, and PC13 onboard LED blink test.</p>
                 </div>
-              </div>
-              <div class="tutorial-item">
+              </a>
+
+              <a class="tutorial-item" data-topic="digital-read" href="https://www.facebook.com/reel/1433198171952762" target="_blank" rel="noopener" aria-label="Watch the STM32 Digital Read tutorial on Facebook">
                 <strong>02</strong>
                 <div>
                   <h3>Digital Read</h3>
                   <p>Push button input using INPUT_PULLUP, GPIO logic, and LED response testing.</p>
+                </div>
+              </a>
+
+              <div class="tutorial-item" data-topic="analog-write">
+                <strong>03</strong>
+                <div>
+                  <h3>Analog Write (PWM)</h3>
+                  <p>LED brightness control using analogWrite(), PWM duty cycle, PA6 / TIM3 Channel 1, and values from 0 to 255.</p>
                 </div>
               </div>
             </div>
@@ -486,6 +501,6 @@ Need: diagnosis / consultation / prototype / troubleshooting / defense prep</pre
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=20260717-3"></script>
 </body>
 </html>
