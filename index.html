@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="layout-fix.css" />
   <link rel="stylesheet" href="tutorials.css" />
   <link rel="stylesheet" href="research.css" />
+  <link rel="stylesheet" href="conversion.css" />
 </head>
 <body>
   <header class="site-header">
@@ -26,10 +27,10 @@
       <button class="nav-toggle" id="navToggle" aria-label="Open navigation">☰</button>
       <div class="nav-links" id="navLinks">
         <a href="#services">Services</a>
+        <a href="#diagnosis">Consultation</a>
         <a href="#tutorials">Tutorials</a>
         <a href="#research">Research</a>
         <a href="#projects">Projects</a>
-        <a href="#process">Process</a>
         <a href="#inquiry">Inquiry</a>
         <a class="nav-cta" href="https://www.facebook.com/SPECTECHPHIL" target="_blank" rel="noopener">Message us</a>
       </div>
@@ -48,7 +49,7 @@
           </p>
           <div class="hero-actions">
             <a class="button primary" href="https://www.facebook.com/SPECTECHPHIL" target="_blank" rel="noopener">Message Spec-Tech</a>
-            <a class="button secondary" href="#inquiry">View inquiry format</a>
+            <a class="button secondary" href="#diagnosis">Start project diagnosis</a>
           </div>
           <div class="stats">
             <div><strong>Arduino</strong><span>ESP32 / STM32</span></div>
@@ -82,6 +83,15 @@
         <span>LoRa</span>
         <span>AI Vision</span>
         <span>PCB</span>
+      </div>
+    </section>
+
+    <section class="trust-strip">
+      <div class="container trust-grid">
+        <div class="trust-item"><strong>Guided learning</strong><span>Students learn wiring, code, testing, and system logic.</span></div>
+        <div class="trust-item"><strong>Defense-ready</strong><span>Explanations are prepared around how the project actually works.</span></div>
+        <div class="trust-item"><strong>Real troubleshooting</strong><span>Focus on power, wiring, sensor readings, noise, and communication errors.</span></div>
+        <div class="trust-item"><strong>Prototype mindset</strong><span>Build, test, document, improve, and validate before claiming results.</span></div>
       </div>
     </section>
 
@@ -122,7 +132,52 @@
       </div>
     </section>
 
-    <section class="section alt" id="tutorials">
+    <section class="section alt" id="diagnosis">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Best first step</p>
+          <h2>Project Diagnosis / Consultation</h2>
+          <p>Before buying parts or forcing a project idea, Spec-Tech can help check feasibility, system design, required modules, cost direction, and possible defense explanation.</p>
+        </div>
+
+        <div class="diagnosis-grid">
+          <article class="diagnosis-card featured">
+            <span class="package-badge">Recommended for new clients</span>
+            <h3>Project Diagnosis</h3>
+            <p>A practical review session for capstone, thesis, prototype, or troubleshooting projects. The goal is to make the system clear before spending more time and money.</p>
+            <ul class="package-list">
+              <li>Feasibility check based on deadline, budget, and required features.</li>
+              <li>Recommended hardware, sensors, modules, controller, and power approach.</li>
+              <li>System block diagram and software flow direction.</li>
+              <li>Risk check: weak power, wrong sensor choice, communication range, calibration, and safety issues.</li>
+              <li>Defense explanation outline: what the system measures, controls, displays, stores, or transmits.</li>
+            </ul>
+            <div class="price-note">
+              <strong>Good for:</strong>
+              <span>Students who have an idea but are unsure if it is possible, affordable, or defendable.</span>
+            </div>
+          </article>
+
+          <aside class="diagnosis-card">
+            <h3>What you should send</h3>
+            <ul class="deliverable-list">
+              <li>Course and year level.</li>
+              <li>Project title or rough idea.</li>
+              <li>Deadline and defense schedule.</li>
+              <li>Budget range and available parts.</li>
+              <li>Required features from adviser or panel.</li>
+              <li>Current problem, error, or progress if already started.</li>
+            </ul>
+            <div class="hero-actions">
+              <a class="button primary" href="https://www.facebook.com/SPECTECHPHIL" target="_blank" rel="noopener">Request diagnosis</a>
+              <a class="button secondary" href="#inquiry">Copy inquiry format</a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tutorials">
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Tutorial discussions</p>
@@ -327,7 +382,26 @@
       </div>
     </section>
 
-    <section class="section" id="process">
+    <section class="section" id="why">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Why Spec-Tech</p>
+          <h2>Built for students who need to understand their project</h2>
+          <p>We focus on the explanation behind the build, because working hardware is not enough if the group cannot defend the design.</p>
+        </div>
+
+        <div class="value-grid">
+          <article class="value-card"><span class="value-icon">🔌</span><h3>Hardware clarity</h3><p>Pin mapping, power supply, sensor wiring, signal direction, protection, and realistic module limits.</p></article>
+          <article class="value-card"><span class="value-icon">💻</span><h3>Code explanation</h3><p>Basic logic first, then functions, libraries, serial debugging, timing, calibration, and expansion.</p></article>
+          <article class="value-card"><span class="value-icon">📊</span><h3>Testing mindset</h3><p>Serial logs, sensor validation, packet counters, voltage checks, repeatability, and honest limitations.</p></article>
+          <article class="value-card"><span class="value-icon">🧠</span><h3>Defense preparation</h3><p>System block diagram, process flow, input/output explanation, and expected panel questions.</p></article>
+          <article class="value-card"><span class="value-icon">🛠</span><h3>Prototype support</h3><p>Help from idea stage to wiring, firmware, dashboard, enclosure, documentation, and demo planning.</p></article>
+          <article class="value-card"><span class="value-icon">⚠</span><h3>Risk checking</h3><p>Early detection of unrealistic budget, wrong parts, unsafe wiring, unstable sensors, and weak power design.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="process">
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">How we work</p>
@@ -338,6 +412,37 @@
           <div class="step"><strong>2</strong><h3>Design</h3><p>Create system block diagram, circuit plan, parts list, and software flow.</p></div>
           <div class="step"><strong>3</strong><h3>Build</h3><p>Prototype wiring, firmware, sensors, display, IoT dashboard, and testing.</p></div>
           <div class="step"><strong>4</strong><h3>Teach</h3><p>Explain the hardware, code, troubleshooting, and defense-ready system logic.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Common questions</p>
+          <h2>Before you message</h2>
+        </div>
+        <div class="faq-grid">
+          <article class="faq-card"><h3>Can you check if our idea is possible?</h3><p>Yes. Send the project title, required features, deadline, budget range, and available parts for diagnosis.</p></article>
+          <article class="faq-card"><h3>Do you only make the project?</h3><p>No. The goal is guided development: wiring, coding, testing, explanation, and defense preparation.</p></article>
+          <article class="faq-card"><h3>Can you fix existing code or wiring?</h3><p>Yes. Send photos, code, serial monitor output, wiring diagram, power supply details, and the exact error.</p></article>
+          <article class="faq-card"><h3>Can you help with documentation?</h3><p>We can help explain system flow, component purpose, testing method, limitations, and defense logic.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="cta-band">
+          <div>
+            <p class="eyebrow">Ready to start?</p>
+            <h2>Send your project details and get a clearer technical direction.</h2>
+            <p>Start with diagnosis if you are unsure about feasibility, parts, budget, wiring, code, or defense explanation.</p>
+          </div>
+          <div class="cta-actions">
+            <a class="button primary" href="https://www.facebook.com/SPECTECHPHIL" target="_blank" rel="noopener">Message Spec-Tech</a>
+            <a class="button secondary" href="#inquiry">Use inquiry format</a>
+          </div>
         </div>
       </div>
     </section>
@@ -360,7 +465,7 @@ Budget range:
 Required features:
 Current problem/progress:
 Available parts/modules:
-Need: consultation / prototype / troubleshooting / defense prep</pre>
+Need: diagnosis / consultation / prototype / troubleshooting / defense prep</pre>
           <button class="button secondary full" id="copyInquiry">Copy inquiry format</button>
           <p class="copy-status" id="copyStatus" role="status"></p>
         </div>
