@@ -34,7 +34,7 @@ if (tutorialList) {
   const firstTutorialItem = tutorialItems[0];
   const secondTutorialItem = tutorialItems[1];
 
-  if (firstTutorialItem) {
+  if (firstTutorialItem && firstTutorialItem.tagName !== 'A') {
     const setupBlinkLink = document.createElement('a');
     setupBlinkLink.className = firstTutorialItem.className;
     setupBlinkLink.dataset.topic = 'setup-blink';
@@ -46,7 +46,7 @@ if (tutorialList) {
     firstTutorialItem.replaceWith(setupBlinkLink);
   }
 
-  if (secondTutorialItem) {
+  if (secondTutorialItem && secondTutorialItem.tagName !== 'A') {
     const digitalReadLink = document.createElement('a');
     digitalReadLink.className = secondTutorialItem.className;
     digitalReadLink.dataset.topic = 'digital-read';
@@ -100,4 +100,36 @@ if (serviceCards && !serviceCards.querySelector('[data-service="metal-fabricatio
     <p>Cutting, grinding, welding, fitting, bracket and frame fabrication, mounting plates, stands, and mechanical support for engineering prototypes using available workshop tools.</p>
   `;
   serviceCards.appendChild(metalService);
+}
+
+const smartLinkCard = document.querySelector('#research .research-card');
+
+if (smartLinkCard && !smartLinkCard.querySelector('[data-smartlink-photo]')) {
+  const figure = document.createElement('figure');
+  figure.dataset.smartlinkPhoto = 'prototype';
+  figure.style.margin = '22px 0';
+  figure.style.overflow = 'hidden';
+  figure.style.border = '1px solid rgba(125, 211, 252, 0.24)';
+  figure.style.borderRadius = '18px';
+  figure.style.background = 'rgba(2, 8, 23, 0.5)';
+
+  figure.innerHTML = `
+    <img
+      src="assets/smartlink/smartlink-prototype.svg"
+      alt="SmartLink custom PCB with STM32 Blue Pill and nRF24L01 PA/LNA external antenna module"
+      loading="lazy"
+      style="display:block;width:100%;height:auto;aspect-ratio:420/189;object-fit:cover;"
+    >
+    <figcaption style="padding:14px 16px;color:var(--muted);font-size:14px;line-height:1.6;">
+      <strong style="display:block;color:var(--text);margin-bottom:4px;">SmartLink STM32 + nRF24L01 Prototype</strong>
+      Custom-fabricated PCB for STM32-to-STM32 wireless telemetry testing, with local power filtering and an external-antenna nRF24L01 PA/LNA module.
+    </figcaption>
+  `;
+
+  const tags = smartLinkCard.querySelector('.research-tags');
+  if (tags) {
+    tags.insertAdjacentElement('afterend', figure);
+  } else {
+    smartLinkCard.appendChild(figure);
+  }
 }
