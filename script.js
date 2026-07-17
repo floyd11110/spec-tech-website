@@ -29,6 +29,22 @@ if (copyButton && inquiryText && copyStatus) {
 
 const tutorialList = document.querySelector('#tutorials .tutorial-list');
 
+if (tutorialList) {
+  const firstTutorialItem = tutorialList.querySelector('.tutorial-item');
+
+  if (firstTutorialItem) {
+    const setupBlinkLink = document.createElement('a');
+    setupBlinkLink.className = firstTutorialItem.className;
+    setupBlinkLink.dataset.topic = 'setup-blink';
+    setupBlinkLink.href = 'https://www.facebook.com/reel/1004154882523878';
+    setupBlinkLink.target = '_blank';
+    setupBlinkLink.rel = 'noopener';
+    setupBlinkLink.setAttribute('aria-label', 'Watch the STM32 Setup and Blink tutorial on Facebook');
+    setupBlinkLink.innerHTML = firstTutorialItem.innerHTML;
+    firstTutorialItem.replaceWith(setupBlinkLink);
+  }
+}
+
 if (tutorialList && !tutorialList.querySelector('[data-topic="analog-write"]')) {
   const analogWriteTopic = document.createElement('div');
   analogWriteTopic.className = 'tutorial-item';
