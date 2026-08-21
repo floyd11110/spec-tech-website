@@ -232,5 +232,23 @@ window.SPEC_PROJECTS = [
     testing: ['Obstacle threshold tests', 'Tag centering and approach', 'Mission-state transitions', 'Orientation / return behavior', 'Mechanical actuator operation'],
     limitations: ['Exact LiDAR model is intentionally left unspecified until hardware records are reconfirmed', 'Performance depends on traction, actuator load, target visibility, obstacle geometry, and calibration'],
     future: ['Improve closed-loop drive control', 'Add stronger localization', 'Refine mechanical collection mechanism', 'Add safer actuator current / limit protection']
+  },
+  {
+    id: 'tobacco-smoke-detector',
+    archiveTitle: 'Tobacco Smoke Detection & Alert System',
+    title: 'Tobacco Smoke Detection & Alert System',
+    subtitle: 'ESP32 IoT prototype using MQ-2 and SGP30 response patterns for smoke / VOC alerting and Firebase monitoring.',
+    status: 'Academic IoT Prototype',
+    year: '2026',
+    categories: ['Embedded', 'Instrumentation', 'IoT'],
+    tags: ['ESP32', 'MQ-2', 'SGP30', 'Firebase', 'Smoke / VOC', 'Alarm'],
+    overview: 'A low-cost tobacco-smoke alert prototype that combines an MQ-2 smoke / gas response with an SGP30 VOC / air-quality response. The ESP32 evaluates the combined sensor pattern, drives local indicators and an audible alarm, and can report status to Firebase for remote monitoring.',
+    objective: 'Create a practical thesis-scale prototype that can recognize a sensor-response pattern consistent with smoke and VOC exposure while avoiding unsupported claims of laboratory-grade tobacco-specific chemical identification.',
+    architecture: ['MQ-2 smoke / gas sensing', 'SGP30 VOC / air-quality sensing', 'ESP32 sensor fusion / threshold logic', 'Green / red status indication', 'Buzzer alarm output', 'Firebase status and event reporting'],
+    hardware: ['ESP32 development board', 'MQ-2 gas / smoke sensor with safe ADC-level interface as required', 'SGP30 I2C VOC sensor', 'Green LED', 'Red LED', 'Piezo / active buzzer', 'Planned Version 2: threshold potentiometer and two push buttons'],
+    software: ['Read and normalize MQ-2 and SGP30 responses', 'Combined threshold / pattern-based detection logic', 'Normal and alarm state handling', 'Firebase update / logging logic', 'Planned Version 2: threshold-set function and latched alarm-reset behavior'],
+    testing: ['Establish clean-air baseline', 'Observe response to controlled smoke / VOC exposure', 'Compare MQ-2 and SGP30 response together instead of relying on one sensor alone', 'Tune threshold to reduce false alarms', 'Verify local LED / buzzer response and Firebase updates'],
+    limitations: ['The prototype is pattern-based and is not a laboratory-grade tobacco-specific chemical analyzer', 'MQ-2 responds to multiple combustible gases and smoke sources', 'SGP30 measures broad VOC / air-quality response rather than identifying tobacco molecules specifically', 'Performance depends on airflow, sensor warm-up, placement, contamination, and threshold calibration'],
+    future: ['Version 2: add a potentiometer on an ADC-capable pin for adjustable threshold', 'Version 2: add a SET Threshold button', 'Version 2: add an Alarm Reset button', 'Keep the alarm latched until manually reset after a detection event', 'Build a controlled test dataset for cleaner threshold and pattern tuning']
   }
 ];
