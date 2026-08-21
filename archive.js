@@ -4,57 +4,67 @@ const filters = document.querySelectorAll('.archive-filter');
 const searchInput = document.getElementById('archiveSearch');
 const archiveGrid = document.getElementById('archiveGrid');
 const emptyState = document.getElementById('archiveEmpty');
+const projectData = Array.isArray(window.SPEC_PROJECTS) ? window.SPEC_PROJECTS : [];
 
-// Add archived client/academic prototype entries without exposing private client details.
-if (archiveGrid && !archiveGrid.querySelector('[data-project="e-kulambo"]')) {
+function addArchiveCard(project) {
+  if (!archiveGrid || archiveGrid.querySelector(`[data-project="${project.id}"]`)) return;
   const card = document.createElement('article');
   card.className = 'archive-card';
-  card.dataset.project = 'e-kulambo';
-  card.dataset.category = 'embedded instrumentation';
-  card.dataset.search = 'e-kulambo dengue environmental risk warning mosquito esp32 dht22 rain wet turbidity fuzzy logic dashboard early warning';
+  card.dataset.project = project.id;
+  card.dataset.category = (project.categories || []).map((item) => item.toLowerCase().replace(/[^a-z]+/g, ' ').trim()).join(' ');
+  card.dataset.search = `${project.title} ${(project.tags || []).join(' ')} ${(project.categories || []).join(' ')}`.toLowerCase();
   card.innerHTML = `
-    <div class="archive-meta"><span class="archive-status">Academic Prototype</span><span class="archive-year">2026</span></div>
-    <h2>E-KULAMBO Dengue Environmental Risk Warning System</h2>
-    <p>ESP32-based environmental risk assessment prototype that combines temperature, humidity, rain/wet condition, and turbidity-related sensing with fuzzy-logic classification to indicate conditions that may favor mosquito breeding. The system is designed for environmental risk warning, not direct dengue detection or mosquito counting.</p>
-    <div class="archive-tech"><span>ESP32</span><span>DHT22</span><span>Rain / Wet</span><span>Turbidity</span><span>Fuzzy Logic</span><span>Dashboard</span></div>
+    <div class="archive-meta"><span class="archive-status">${project.status}</span><span class="archive-year">${project.year}</span></div>
+    <h2>${project.archiveTitle || project.title}</h2>
+    <p>${project.subtitle || project.overview}</p>
+    <div class="archive-tech">${(project.tags || []).slice(0, 6).map((tag) => `<span>${tag}</span>`).join('')}</div>
   `;
   archiveGrid.appendChild(card);
 }
 
-if (archiveGrid && !archiveGrid.querySelector('[data-project="chicken-stress"]')) {
-  const card = document.createElement('article');
-  card.className = 'archive-card';
-  card.dataset.project = 'chicken-stress';
-  card.dataset.category = 'ai instrumentation embedded';
-  card.dataset.search = 'chicken stress detection poultry audio classification microphone raspberry pi normal stress other heat stress dht temperature humidity firebase monitoring';
-  card.innerHTML = `
-    <div class="archive-meta"><span class="archive-status">Academic Prototype</span><span class="archive-year">2026</span></div>
-    <h2>Chicken Stress Detection &amp; Monitoring</h2>
-    <p>Audio- and environment-assisted poultry monitoring prototype that analyzes short microphone recordings to classify chicken vocalization patterns such as NORMAL, STRESS, or OTHER, while temperature and humidity sensing provides additional heat-stress context. Monitoring results can be sent to Firebase for remote viewing and logging.</p>
-    <div class="archive-tech"><span>Raspberry Pi</span><span>Audio Classification</span><span>Microphone</span><span>DHT</span><span>Firebase</span><span>Environmental Monitoring</span></div>
-  `;
-  archiveGrid.appendChild(card);
-}
-
-if (archiveGrid && !archiveGrid.querySelector('[data-project="garbage-robot"]')) {
-  const card = document.createElement('article');
-  card.className = 'archive-card';
-  card.dataset.project = 'garbage-robot';
-  card.dataset.category = 'robotics ai embedded fabrication';
-  card.dataset.search = 'autonomous garbage collection robot trash waste robot car raspberry pi lidar april tag apriltag linear actuator dumping mechanism clamp gyro mpu6050 motor control obstacle avoidance navigation';
-  card.innerHTML = `
-    <div class="archive-meta"><span class="archive-status">Robotics Prototype</span><span class="archive-year">2026</span></div>
-    <h2>Autonomous Garbage Collection Robot</h2>
-    <p>Mobile waste-handling robot prototype using Raspberry Pi mission logic, LiDAR-based obstacle sensing, AprilTag target alignment, motor control, gyro-assisted orientation, and a linear-actuator-based dumping or collection mechanism for autonomous garbage-handling tasks.</p>
-    <div class="archive-tech"><span>Raspberry Pi</span><span>LiDAR</span><span>AprilTag</span><span>Linear Actuator</span><span>Gyro</span><span>Motor Control</span></div>
-  `;
-  archiveGrid.appendChild(card);
-}
+// Existing static cards are retained. Add projects that are not already present in the HTML.
+projectData.forEach((project) => {
+  const existing = Array.from(document.querySelectorAll('.archive-card h2')).find((heading) => heading.textContent.trim() === (project.archiveTitle || project.title));
+  if (existing) {
+    const card = existing.closest('.archive-card');
+    if (card) card.dataset.project = project.id;
+  } else {
+    addArchiveCard(project);
+  }
+});
 
 const archiveTotal = document.querySelector('.archive-summary div:first-child strong');
-if (archiveTotal) archiveTotal.textContent = '13+';
+if (archiveTotal) archiveTotal.textContent = `${projectData.length}+`;
 
 const cards = document.querySelectorAll('.archive-card');
+
+cards.forEach((card) => {
+  const id = card.dataset.project;
+  if (!id) return;
+  card.classList.add('archive-card-clickable');
+  card.setAttribute('role', 'link');
+  card.setAttribute('tabindex', '0');
+  card.setAttribute('aria-label', `Open details for ${card.querySelector('h2')?.textContent || 'project'}`);
+
+  const openProject = () => {
+    window.location.href = `project.html?id=${encodeURIComponent(id)}`;
+  };
+
+  card.addEventListener('click', openProject);
+  card.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      openProject();
+    }
+  });
+
+  if (!card.querySelector('.archive-view-link')) {
+    const link = document.createElement('span');
+    link.className = 'archive-view-link';
+    link.textContent = 'View Project →';
+    card.appendChild(link);
+  }
+});
 
 if (navToggle && navLinks) {
   navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
