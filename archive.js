@@ -19,10 +19,25 @@ if (archiveGrid && !archiveGrid.querySelector('[data-project="e-kulambo"]')) {
     <div class="archive-tech"><span>ESP32</span><span>DHT22</span><span>Rain / Wet</span><span>Turbidity</span><span>Fuzzy Logic</span><span>Dashboard</span></div>
   `;
   archiveGrid.appendChild(card);
-
-  const archiveTotal = document.querySelector('.archive-summary div:first-child strong');
-  if (archiveTotal) archiveTotal.textContent = '11+';
 }
+
+if (archiveGrid && !archiveGrid.querySelector('[data-project="chicken-stress"]')) {
+  const card = document.createElement('article');
+  card.className = 'archive-card';
+  card.dataset.project = 'chicken-stress';
+  card.dataset.category = 'ai instrumentation embedded';
+  card.dataset.search = 'chicken stress detection poultry audio classification microphone raspberry pi normal stress other heat stress dht temperature humidity firebase monitoring';
+  card.innerHTML = `
+    <div class="archive-meta"><span class="archive-status">Academic Prototype</span><span class="archive-year">2026</span></div>
+    <h2>Chicken Stress Detection &amp; Monitoring</h2>
+    <p>Audio- and environment-assisted poultry monitoring prototype that analyzes short microphone recordings to classify chicken vocalization patterns such as NORMAL, STRESS, or OTHER, while temperature and humidity sensing provides additional heat-stress context. Monitoring results can be sent to Firebase for remote viewing and logging.</p>
+    <div class="archive-tech"><span>Raspberry Pi</span><span>Audio Classification</span><span>Microphone</span><span>DHT</span><span>Firebase</span><span>Environmental Monitoring</span></div>
+  `;
+  archiveGrid.appendChild(card);
+}
+
+const archiveTotal = document.querySelector('.archive-summary div:first-child strong');
+if (archiveTotal) archiveTotal.textContent = '12+';
 
 const cards = document.querySelectorAll('.archive-card');
 
