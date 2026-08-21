@@ -17,6 +17,80 @@ function list(items) {
   return `<ul>${(items || []).map((item) => `<li>${item}</li>`).join('')}</ul>`;
 }
 
+function methodologySection(project) {
+  const methodologies = {
+    'battery-doctor': [
+      'The Battery Doctor is evaluated using a staged bench procedure. Each voltage-sensing channel is first calibrated against a reference meter, then the monitored cells are observed at rest, under a controlled load, and during post-load recovery.',
+      'Per-cell voltage, pack voltage, cell-to-cell delta, load sag, and recovery are compared to identify weak or imbalanced cells. Repeated measurements are used to separate normal ADC variation from persistent cell behavior.',
+      'Higher-load and higher-series-count tests are introduced only after the sensing network, wiring, and protection limits have been verified.'
+    ],
+    'smartlink': [
+      'SmartLink testing uses numbered packets transmitted at a controlled interval between two STM32 nodes. The receiver checks packet IDs and timestamps to identify valid packets, missed packets, duplicates, timing jitter, and timeout events.',
+      'Bench runs are repeated under stable conditions first, then under progressively more difficult RF conditions such as increased distance, changing antenna orientation, nearby objects, and intentional interference.',
+      'The main validation outputs are packet-success rate, missed-packet rate, duplicate rate, timing consistency, and link-recovery behavior after a temporary loss of communication.'
+    ],
+    'ai-sack-counter': [
+      'The vision pipeline is tested using a fixed camera position and a defined counting region. Video frames are captured by the Raspberry Pi, processed by the detector, and converted into count events only when an object satisfies the selected crossing or tracking condition.',
+      'Automatic counts are compared with a manual reference count for the same sequence. Testing is repeated with changes in lighting, object spacing, partial occlusion, and flow speed to identify conditions that produce missed counts or double counts.',
+      'After the counting stage is stable, the validated count is written to the selected Modbus register and checked from the PLC side to confirm end-to-end data transfer.'
+    ],
+    'lidar-autonomous-robot': [
+      'Robot validation is performed by separating the mission into sensing, navigation, target detection, and motor-control stages before combining them. LiDAR front and side sectors are first checked against known obstacle positions and distances.',
+      'The Raspberry Pi then executes controlled search, approach, avoidance, and target-centering trials while motion commands are sent to the ESP32 motor controller. AprilTag detection is tested independently before being added to the navigation sequence.',
+      'Integrated trials record obstacle response, stopping behavior, target-centering consistency, approach distance, and mission completion so that failures can be traced to sensing, logic, communication, or drivetrain behavior.'
+    ],
+    'smart-mppt': [
+      'MPPT development begins with calibration of PV voltage, battery voltage, and current-sensing channels against reference instruments. The power stage is then tested at reduced power before algorithm testing begins.',
+      'During tracking tests, PV voltage and current are sampled and converted to input power. The controller perturbs the operating point and observes whether the measured power moves toward or away from the maximum-power region.',
+      'Battery-side validation is performed separately for current limiting, constant-voltage behavior, float transition, thermal behavior, and protection responses. Efficiency and tracking performance are calculated only from measured input and output data.'
+    ],
+    'engineering-test-instruments': [
+      'Each embedded instrument is tested against known reference signals or reference meters. Input amplitude, frequency, duty cycle, and waveform type are varied within the intended operating range while the MCU measurement is compared with the reference value.',
+      'Sampling-rate, serial-throughput, trigger behavior, ADC scaling, timing accuracy, and noise are evaluated independently so that the practical limits of the low-cost instrument are documented instead of assuming laboratory-instrument performance.',
+      'Calibration factors and error trends are recorded and used to refine firmware calculations and PC-side visualization.'
+    ],
+    'water-quality': [
+      'Water-monitoring validation starts with individual sensor calibration before multi-sensor integration. The pH channel is checked using known reference solutions, while temperature and level readings are compared with independent reference measurements.',
+      'Repeated readings are collected under stable conditions to evaluate drift and short-term noise. The same sensor inputs are then passed through the ESP32 status and dashboard logic to verify that displayed values and alerts match the measured conditions.',
+      'Long-duration testing is used to identify probe drift, contamination effects, communication dropouts, and enclosure or wiring issues.'
+    ],
+    'gps-tracking': [
+      'GPS testing begins with static outdoor measurements at known locations to establish satellite-lock time and position repeatability. The device is then moved along a known route while coordinates and timestamps are logged.',
+      'Recorded tracks are compared with reference locations or map features to estimate practical position error. Communication testing records successful uploads, delayed messages, and periods with no network coverage.',
+      'Geofence tests deliberately cross a defined boundary several times to verify entry, exit, and event-reporting behavior.'
+    ],
+    'omni-mecanum-parts': [
+      'Mechanical validation starts with dimensional inspection of the printed wheel body, roller spacing, bearing fit, shaft alignment, and roller protrusion. Each roller is checked for free movement before drive testing.',
+      'The assembled wheel is then evaluated for straight motion, lateral or diagonal motion where applicable, rotation, vibration, runout, and traction. Observed mechanical problems are traced back to geometry, material stiffness, print accuracy, or bearing alignment.',
+      'CAD dimensions and print settings are revised between iterations, allowing each prototype version to be compared with the previous one.'
+    ],
+    'pcb-fabrication': [
+      'PCB process development uses controlled exposure, development, and etching trials. Test patterns containing different trace widths, clearances, pads, and text are used so that process resolution can be inspected directly.',
+      'Exposure time and developer conditions are changed one variable at a time. After development and etching, the board is inspected for missing traces, bridges, undercutting, incomplete development, and dimensional loss.',
+      'Successful settings are repeated on later boards to determine whether the process is repeatable enough for routine prototype fabrication.'
+    ],
+    'e-kulambo': [
+      'The E-KULAMBO prototype is tested in two stages: sensor-response validation and fuzzy-risk validation. Temperature, humidity, wet/rain, and turbidity-related inputs are first checked individually under controlled conditions.',
+      'Validated sensor values are normalized and passed into the fuzzy-logic rules. Representative combinations are then applied to confirm that the resulting Normal, Moderate, or Critical-style status follows the intended rule behavior.',
+      'Fault tests are also included so that a failed or invalid sensor reading does not stop the LCD, indicators, or dashboard from continuing to operate. The system is evaluated as an environmental risk-warning prototype, not as a dengue-virus detector or mosquito counter.'
+    ],
+    'chicken-stress': [
+      'Audio validation uses short recorded windows that are preprocessed and converted into the feature representation required by the classifier. Each sample is assigned a reference label before classifier output is compared with that label.',
+      'Temperature and humidity are logged alongside the audio result as environmental context rather than being treated as proof of biological stress. Repeated trials should include normal vocalization, target stress-related examples, and unrelated or noisy audio.',
+      'Performance is evaluated using class counts, false positives, false negatives, and a confusion matrix once a sufficiently labeled dataset is available. The output remains a screening indicator and is not treated as a biological diagnosis.'
+    ],
+    'garbage-robot': [
+      'The garbage-collection robot is validated subsystem by subsystem before full autonomous runs. LiDAR obstacle sensing, camera/AprilTag detection, orientation sensing, drivetrain response, and linear-actuator operation are tested independently first.',
+      'Integrated trials then execute the mission states in sequence: search, center, approach, avoid, align, dock, collection or dumping action, and return. Each transition is observed to confirm that the robot advances only when the required sensor condition is satisfied.',
+      'Mission completion, obstacle-response distance, tag-alignment behavior, actuator cycle completion, and recovery from failed detections are recorded to guide mechanical and software revisions.'
+    ]
+  };
+
+  const paragraphs = methodologies[project.id];
+  if (!paragraphs) return '';
+  return `<article class="project-section wide"><h2>Development Methodology</h2>${paragraphs.map((text) => `<p>${text}</p>`).join('')}</article>`;
+}
+
 function tobaccoResearchSections() {
   const trials = [
     ['P1', 'Paper', '1', 'NO SMOKING', 'Correct'],
@@ -146,10 +220,11 @@ if (!project) {
       <article class="project-section wide"><h2>System Architecture</h2><div class="project-flow">${(tobacco ? ['MQ-135 + SGP30 acquisition', 'Clean-air baseline', 'Smoke episode confirmation', 'Recovery + rearm validation', '3 episodes / 180 s classification', 'Local alarm + Firebase'] : project.architecture || []).map((item) => `<div>${item}</div>`).join('')}</div></article>
       <article class="project-section"><h2>Software / Logic</h2>${tobacco ? list(['32-sample MQ averaging', 'Baseline-relative ΔMQ and ΔTVOC calculation', 'Episode start / recovery state machine', 'Minimum temporal separation between episodes', 'Binary SMOKING DETECTED / NO SMOKING DETECTED output']) : list(project.software)}</article>
       <article class="project-section"><h2>Testing & Validation</h2>${tobacco ? list(['Developmental tests from V1.0 through V2.3 exposed failure modes', 'V2.4 initial benchmark used five paper-combustion and five cigarette-smoking trials', 'Paper produced 1–2 qualified episodes', 'Cigarette produced 3 qualified episodes in all five controlled trials']) : list(project.testing)}</article>
+      ${!tobacco ? methodologySection(project) : ''}
       <article class="project-section"><h2>Current Limitations</h2>${tobacco ? list(['Broad-response gas/VOC sensors are not tobacco-specific', '10 controlled trials are preliminary and do not establish universal accuracy', 'Performance may change with airflow, room size, source distance, sensor aging, contamination, and other VOC sources']) : list(project.limitations)}</article>
       <article class="project-section"><h2>Future Improvements</h2>${tobacco ? list(['Expand validation dataset beyond paper and cigarette smoke', 'Test incense, cooking smoke, perfume, alcohol vapors, and other VOC interferents', 'Test multiple distances, airflow conditions, and room environments', 'Add threshold / reset controls only after the classifier remains stable']) : list(project.future)}</article>
       ${tobacco ? tobaccoResearchSections() : ''}
-      <article class="project-section wide"><h2>Documentation Status</h2><p>${tobacco ? 'The project page now documents the algorithm evolution, V2.4 methodology, final parameters, controlled 5+5 benchmark, graphs, confusion matrix, engineering findings, and limitations. Additional raw logs, photos, circuit diagrams, and longer real-world validation can be added as testing continues.' : 'This page contains the currently documented technical scope. Photos, circuit diagrams, source-code links, measured results, and build notes can be added as the project archive is expanded.'}</p></article>
+      <article class="project-section wide"><h2>Documentation Status</h2><p>${tobacco ? 'The project page now documents the algorithm evolution, V2.4 methodology, final parameters, controlled 5+5 benchmark, graphs, confusion matrix, engineering findings, and limitations. Additional raw logs, photos, circuit diagrams, and longer real-world validation can be added as testing continues.' : 'This page contains the currently documented technical scope and project-specific development methodology. Performance datasets, graphs, photos, circuit diagrams, source-code links, measured results, and build notes can be expanded as validation progresses.'}</p></article>
     </div>`;
 
   content.innerHTML = standardContent;
