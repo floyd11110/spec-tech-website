@@ -71,7 +71,7 @@ if (copyButton && inquiryText && copyStatus) {
       <div class="section-heading">
         <p class="eyebrow">Prototype inventory</p>
         <h2>Available parts and prototype components</h2>
-        <p>Selected electronics, robotics, sensor, display, communication, and power modules may be available for project testing, prototype development, and selected parts selling. Photos will be added per category.</p>
+        <p>Selected electronics, robotics, sensor, display, communication, power, and fabrication resources may be available for project testing, prototype development, and selected parts selling. Photos will be added per category.</p>
       </div>
       <div class="parts-grid">
         <article class="parts-card"><div class="parts-photo">Photo to follow</div><h3>Microcontrollers & Boards</h3><p>For embedded systems, IoT control, robotics logic, and sensor integration.</p><div class="parts-tags"><span>Arduino</span><span>ESP32</span><span>STM32</span><span>Raspberry Pi Pico</span></div></article>
@@ -82,9 +82,9 @@ if (copyButton && inquiryText && copyStatus) {
         <article class="parts-card"><div class="parts-photo">Photo to follow</div><h3>Power, Battery & Solar</h3><p>For power regulation, battery monitoring, solar prototypes, and safer electronics testing.</p><div class="parts-tags"><span>Buck converter</span><span>LiFePO4</span><span>BMS</span><span>Voltage sensing</span><span>MPPT</span></div></article>
         <article class="parts-card"><div class="parts-photo">Photo to follow</div><h3>Computer Vision & AI Boards</h3><p>For camera monitoring, object detection experiments, AI-assisted systems, and edge vision prototypes.</p><div class="parts-tags"><span>ESP32-CAM</span><span>Raspberry Pi</span><span>Jetson</span><span>LuckFox</span><span>Camera</span></div></article>
         <article class="parts-card"><div class="parts-photo">Photo to follow</div><h3>PCB, Wiring & Connectors</h3><p>For cleaner prototype builds, safer connections, easier debugging, and enclosure-ready wiring.</p><div class="parts-tags"><span>PCB</span><span>Headers</span><span>Terminals</span><span>Connectors</span><span>Wires</span></div></article>
-        <article class="parts-card"><div class="parts-photo">Photo to follow</div><h3>Tools & Fabrication Support</h3><p>For mounting, brackets, enclosures, frames, and workshop-supported prototype assembly.</p><div class="parts-tags"><span>3D print</span><span>Laser cut</span><span>Metal work</span><span>Mounting</span></div></article>
+        <article class="parts-card"><div class="parts-photo">2 in-house 3D printers</div><h3>3D Printing & Fabrication Support</h3><p>Two in-house 3D printers support rapid prototyping of enclosures, sensor mounts, brackets, robot parts, mechanical test pieces, and custom components for electronics projects.</p><div class="parts-tags"><span>2× 3D Printers</span><span>PLA / PETG / TPU</span><span>Laser cut</span><span>Welding / metal work</span><span>Custom mounting</span></div></article>
       </div>
-      <div class="parts-note"><strong>Note:</strong> Availability may change depending on current stock and ongoing projects. Message Spec-Tech for parts availability, pricing, setup assistance, or full prototype development.</div>
+      <div class="parts-note"><strong>Note:</strong> Availability may change depending on current stock and ongoing projects. Message Spec-Tech for parts availability, pricing, setup assistance, 3D-printed prototype parts, or full prototype development.</div>
     </div>
   `;
 
