@@ -36,8 +36,23 @@ if (archiveGrid && !archiveGrid.querySelector('[data-project="chicken-stress"]')
   archiveGrid.appendChild(card);
 }
 
+if (archiveGrid && !archiveGrid.querySelector('[data-project="garbage-robot"]')) {
+  const card = document.createElement('article');
+  card.className = 'archive-card';
+  card.dataset.project = 'garbage-robot';
+  card.dataset.category = 'robotics ai embedded fabrication';
+  card.dataset.search = 'autonomous garbage collection robot trash waste robot car raspberry pi lidar april tag apriltag linear actuator dumping mechanism clamp gyro mpu6050 motor control obstacle avoidance navigation';
+  card.innerHTML = `
+    <div class="archive-meta"><span class="archive-status">Robotics Prototype</span><span class="archive-year">2026</span></div>
+    <h2>Autonomous Garbage Collection Robot</h2>
+    <p>Mobile waste-handling robot prototype using Raspberry Pi mission logic, LiDAR-based obstacle sensing, AprilTag target alignment, motor control, gyro-assisted orientation, and a linear-actuator-based dumping or collection mechanism for autonomous garbage-handling tasks.</p>
+    <div class="archive-tech"><span>Raspberry Pi</span><span>LiDAR</span><span>AprilTag</span><span>Linear Actuator</span><span>Gyro</span><span>Motor Control</span></div>
+  `;
+  archiveGrid.appendChild(card);
+}
+
 const archiveTotal = document.querySelector('.archive-summary div:first-child strong');
-if (archiveTotal) archiveTotal.textContent = '12+';
+if (archiveTotal) archiveTotal.textContent = '13+';
 
 const cards = document.querySelectorAll('.archive-card');
 
