@@ -6,7 +6,17 @@ const archiveGrid = document.getElementById('archiveGrid');
 const emptyState = document.getElementById('archiveEmpty');
 const projectData = Array.isArray(window.SPEC_PROJECTS) ? window.SPEC_PROJECTS : [];
 
-function addArchiveCard(project) {
+function normalizedProject(project) {
+  if (project.id !== 'tobacco-smoke-detector') return project;
+  return {
+    ...project,
+    subtitle: 'ESP32 temporal smoke-pattern classifier using MQ-135 + SGP30 with controlled paper-vs-cigarette validation.',
+    tags: ['ESP32', 'MQ-135', 'SGP30', 'Temporal Classification', 'Firebase', 'Smoke / VOC']
+  };
+}
+
+function addArchiveCard(rawProject) {
+  const project = normalizedProject(rawProject);
   if (!archiveGrid || archiveGrid.querySelector(`[data-project="${project.id}"]`)) return;
   const card = document.createElement('article');
   card.className = 'archive-card';
@@ -23,11 +33,21 @@ function addArchiveCard(project) {
 }
 
 // Existing static cards are retained. Add projects that are not already present in the HTML.
-projectData.forEach((project) => {
+projectData.forEach((rawProject) => {
+  const project = normalizedProject(rawProject);
   const existing = Array.from(document.querySelectorAll('.archive-card h2')).find((heading) => heading.textContent.trim() === (project.archiveTitle || project.title));
   if (existing) {
     const card = existing.closest('.archive-card');
-    if (card) card.dataset.project = project.id;
+    if (card) {
+      card.dataset.project = project.id;
+      if (project.id === 'tobacco-smoke-detector') {
+        card.dataset.search = `${project.title} ${(project.tags || []).join(' ')} ${(project.categories || []).join(' ')}`.toLowerCase();
+        const text = card.querySelector('p');
+        const tech = card.querySelector('.archive-tech');
+        if (text) text.textContent = project.subtitle;
+        if (tech) tech.innerHTML = project.tags.slice(0, 6).map((tag) => `<span>${tag}</span>`).join('');
+      }
+    }
   } else {
     addArchiveCard(project);
   }
