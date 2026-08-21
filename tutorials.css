@@ -129,6 +129,34 @@
   margin-top: 22px;
 }
 
+.tutorial-watch-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin-top: 12px;
+  padding: 9px 14px;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.14);
+  color: #e0f7ff;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.tutorial-watch-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(56, 189, 248, 0.9);
+  background: rgba(14, 165, 233, 0.24);
+}
+
+.tutorial-watch-button:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+}
+
 @media (max-width: 900px) {
   .tutorial-grid {
     grid-template-columns: 1fr;

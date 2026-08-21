@@ -90,3 +90,34 @@ if (copyButton && inquiryText && copyStatus) {
 
   main.insertBefore(section, projects || document.getElementById('why') || document.getElementById('inquiry'));
 })();
+
+// Tutorial video buttons
+(function addTutorialVideoButtons() {
+  const videoLinks = {
+    'setup-blink': 'https://www.facebook.com/reel/1004154882523878',
+    'digital-read': 'https://www.facebook.com/reel/1433198171952762',
+    'analog-write': 'https://www.facebook.com/reel/1407065797993800/?s=single_unit'
+  };
+
+  document.querySelectorAll('.tutorial-item[data-topic]').forEach((item) => {
+    const topic = item.dataset.topic;
+    const href = videoLinks[topic] || item.getAttribute('href');
+    const content = item.querySelector('div');
+
+    if (!href || !content || content.querySelector('.tutorial-watch-button')) return;
+
+    const button = document.createElement('a');
+    button.className = 'tutorial-watch-button';
+    button.href = href;
+    button.target = '_blank';
+    button.rel = 'noopener';
+    button.textContent = '▶ Watch Video';
+    button.setAttribute('aria-label', `Watch ${content.querySelector('h3')?.textContent || 'tutorial'} video`);
+
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+    });
+
+    content.appendChild(button);
+  });
+})();
