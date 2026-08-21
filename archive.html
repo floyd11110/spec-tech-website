@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Spec-Tech Project Archive documents prototype, R&D, robotics, AI vision, battery, solar, instrumentation, and fabrication projects." />
+  <title>Project Archive | Spec-Tech Engineering Prototype Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="layout-fix.css" />
+  <link rel="stylesheet" href="archive.css?v=20260821-1" />
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container">
+      <a class="brand" href="index.html#top" aria-label="Spec-Tech home">
+        <span class="brand-mark">ST</span>
+        <span><strong>Spec-Tech</strong><small>Engineering Prototype Lab</small></span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open navigation">☰</button>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html#services">Services</a>
+        <a href="index.html#tutorials">Tutorials</a>
+        <a href="index.html#research">Research</a>
+        <a href="archive.html" aria-current="page">Archive</a>
+        <a href="index.html#forum">Forum</a>
+        <a href="index.html#inquiry">Inquiry</a>
+        <a class="nav-cta" href="https://www.facebook.com/SPECTECHPHIL" target="_blank" rel="noopener">Message us</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="archive-hero section">
+      <div class="container archive-hero-grid">
+        <div>
+          <p class="eyebrow">Spec-Tech Project Archive</p>
+          <h1>Documented engineering builds, experiments, prototypes, and R&amp;D work.</h1>
+          <p>This archive is a growing record of Spec-Tech development work. It is intended to show the actual engineering scope, technology used, and project status without exposing private client information.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="index.html#featured-projects">Featured Projects</a>
+            <a class="button secondary" href="index.html#inquiry">Start a Project</a>
+          </div>
+        </div>
+        <div class="archive-summary">
+          <div><strong>10+</strong><span>documented project directions</span></div>
+          <div><strong>8</strong><span>engineering categories</span></div>
+          <div><strong>R&amp;D</strong><span>bench testing and validation</span></div>
+          <div><strong>PoC</strong><span>industrial and academic prototypes</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Browse archive</p>
+          <h2>Filter by engineering area</h2>
+          <p>Use the category buttons or search by controller, sensor, technology, or project name.</p>
+        </div>
+
+        <div class="archive-toolbar">
+          <div class="archive-filters" id="archiveFilters">
+            <button class="archive-filter active" data-filter="all">All</button>
+            <button class="archive-filter" data-filter="embedded">Embedded</button>
+            <button class="archive-filter" data-filter="robotics">Robotics</button>
+            <button class="archive-filter" data-filter="ai">AI / Vision</button>
+            <button class="archive-filter" data-filter="power">Power / Solar</button>
+            <button class="archive-filter" data-filter="instrumentation">Instrumentation</button>
+            <button class="archive-filter" data-filter="fabrication">Fabrication</button>
+          </div>
+          <input class="archive-search" id="archiveSearch" type="search" placeholder="Search STM32, LiDAR, MPPT, Raspberry Pi..." aria-label="Search project archive" />
+        </div>
+
+        <div class="archive-grid" id="archiveGrid">
+          <article class="archive-card" data-category="embedded power" data-search="battery doctor stm32 lifepo4 tft diagnostics cell voltage imbalance load sag">
+            <div class="archive-meta"><span class="archive-status">R&amp;D</span><span class="archive-year">2026</span></div>
+            <h2>Battery Doctor</h2>
+            <p>STM32-based LiFePO4 diagnostic monitor for cell-voltage tracking, imbalance warnings, load-sag observation, recovery behavior, and TFT display.</p>
+            <div class="archive-tech"><span>STM32</span><span>LiFePO4</span><span>TFT</span><span>Diagnostics</span></div>
+          </article>
+
+          <article class="archive-card" data-category="embedded" data-search="smartlink wireless telemetry stm32 nrf24 packet loss jitter duplicate rf testing">
+            <div class="archive-meta"><span class="archive-status">R&amp;D</span><span class="archive-year">2026</span></div>
+            <h2>SmartLink Wireless Telemetry</h2>
+            <p>STM32-to-STM32 nRF24L01 telemetry research with packet validation, missed-packet tracking, jitter monitoring, duplicate detection, timeout, and link-health feedback.</p>
+            <div class="archive-tech"><span>STM32</span><span>nRF24L01</span><span>Telemetry</span><span>RF Test</span></div>
+          </article>
+
+          <article class="archive-card" data-category="ai embedded" data-search="ai sack counter modbus raspberry pi camera opencv yolo plc industrial">
+            <div class="archive-meta"><span class="archive-status">Industrial PoC</span><span class="archive-year">2026</span></div>
+            <h2>AI Sack Counter + Modbus</h2>
+            <p>Raspberry Pi camera proof of concept for detecting and counting sacks, with count data prepared for PLC integration through Modbus.</p>
+            <div class="archive-tech"><span>Raspberry Pi 5</span><span>OpenCV</span><span>YOLO</span><span>Modbus</span></div>
+          </article>
+
+          <article class="archive-card" data-category="robotics ai embedded" data-search="lidar autonomous robot raspberry pi esp32 navigation obstacle avoidance april tag motor control">
+            <div class="archive-meta"><span class="archive-status">Prototype</span><span class="archive-year">2026</span></div>
+            <h2>LiDAR Autonomous Robot</h2>
+            <p>Mobile robot platform using LiDAR sensing, Raspberry Pi processing, ESP32 motor control, obstacle response, and autonomous navigation logic.</p>
+            <div class="archive-tech"><span>LiDAR</span><span>Raspberry Pi</span><span>ESP32</span><span>Motor Control</span></div>
+          </article>
+
+          <article class="archive-card" data-category="power embedded" data-search="smart mppt solar controller stm32 voltage current sensing power electronics battery charging">
+            <div class="archive-meta"><span class="archive-status">R&amp;D</span><span class="archive-year">2026</span></div>
+            <h2>Smart MPPT Solar Controller</h2>
+            <p>Microcontroller-based solar charge-controller development using voltage/current sensing, MPPT logic, battery charging stages, and protection functions.</p>
+            <div class="archive-tech"><span>STM32</span><span>MPPT</span><span>Solar</span><span>Power Electronics</span></div>
+          </article>
+
+          <article class="archive-card" data-category="instrumentation embedded" data-search="engineering test instruments oscilloscope logic analyzer power analyzer signal generator esp32 stm32 python">
+            <div class="archive-meta"><span class="archive-status">Prototype</span><span class="archive-year">2026</span></div>
+            <h2>Engineering Test Instruments</h2>
+            <p>Low-cost embedded instruments including oscilloscope, logic analyzer, signal generator, power analyzer, and serial visualization experiments.</p>
+            <div class="archive-tech"><span>ESP32</span><span>STM32</span><span>Python</span><span>DAQ</span></div>
+          </article>
+
+          <article class="archive-card" data-category="instrumentation embedded" data-search="water quality monitoring esp32 ph ds18b20 ultrasonic dashboard sensor calibration">
+            <div class="archive-meta"><span class="archive-status">Prototype Direction</span><span class="archive-year">2026</span></div>
+            <h2>Water Quality Monitoring</h2>
+            <p>ESP32-based monitoring concept using pH, temperature, water level, dashboard display, alerts, and data logging.</p>
+            <div class="archive-tech"><span>ESP32</span><span>pH</span><span>DS18B20</span><span>Dashboard</span></div>
+          </article>
+
+          <article class="archive-card" data-category="embedded instrumentation" data-search="gps tracking gsm lora wifi geofencing map monitoring telemetry">
+            <div class="archive-meta"><span class="archive-status">Prototype Direction</span><span class="archive-year">2026</span></div>
+            <h2>GPS Tracking &amp; Monitoring</h2>
+            <p>Tracking architecture using GPS plus GSM, LoRa, or Wi-Fi communication for movement history, geofencing, and remote monitoring.</p>
+            <div class="archive-tech"><span>GPS</span><span>GSM</span><span>LoRa</span><span>IoT</span></div>
+          </article>
+
+          <article class="archive-card" data-category="fabrication robotics" data-search="omni mecanum wheel 3d print tpu petg robot mechanical fabrication">
+            <div class="archive-meta"><span class="archive-status">Mechanical R&amp;D</span><span class="archive-year">2026</span></div>
+            <h2>Omni / Mecanum Robot Parts</h2>
+            <p>Mechanical drivetrain and wheel-development experiments using custom 3D-printed components, TPU rollers, PETG frames, and fit-testing iterations.</p>
+            <div class="archive-tech"><span>3D Printing</span><span>TPU</span><span>PETG</span><span>Robotics</span></div>
+          </article>
+
+          <article class="archive-card" data-category="fabrication embedded" data-search="pcb fabrication kicad dry film uv laser exposure developer etching prototype">
+            <div class="archive-meta"><span class="archive-status">Workshop R&amp;D</span><span class="archive-year">2026</span></div>
+            <h2>PCB Fabrication Experiments</h2>
+            <p>KiCad PCB design and in-house prototyping experiments involving dry-film photoresist, exposure, developing, etching, and board iteration.</p>
+            <div class="archive-tech"><span>KiCad</span><span>PCB</span><span>Dry Film</span><span>Workshop</span></div>
+          </article>
+        </div>
+
+        <div class="archive-empty" id="archiveEmpty">No archive entries match that filter or search.</div>
+        <div class="archive-note"><strong>Archive policy:</strong> Client names, school names, private data, proprietary files, and confidential project details are not published unless permission is explicitly given.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div><strong>Spec-Tech Engineering Prototype Lab</strong><p>Project documentation, prototype development, troubleshooting, R&amp;D, and engineering education.</p></div>
+      <div class="footer-links"><a href="index.html">Home</a><a href="index.html#forum">Forum</a><a href="https://www.facebook.com/SPECTECHPHIL" target="_blank" rel="noopener">Facebook</a></div>
+    </div>
+  </footer>
+
+  <script src="archive.js?v=20260821-1"></script>
+</body>
+</html>
