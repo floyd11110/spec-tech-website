@@ -121,3 +121,122 @@ if (copyButton && inquiryText && copyStatus) {
     content.appendChild(button);
   });
 })();
+
+// Featured engineering portfolio
+(function addFeaturedProjects() {
+  const main = document.querySelector('main');
+  const projects = document.getElementById('projects');
+  if (!main || !projects || document.getElementById('featured-projects')) return;
+
+  const style = document.createElement('style');
+  style.textContent = `
+    .featured-project-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+    .featured-project-card { position:relative; padding:24px; border:1px solid var(--line); border-radius:24px; background:linear-gradient(180deg,rgba(15,30,52,.95),rgba(7,17,31,.84)); box-shadow:var(--shadow); overflow:hidden; transition:transform .22s ease,border-color .22s ease; }
+    .featured-project-card:hover { transform:translateY(-5px); border-color:rgba(56,189,248,.42); }
+    .featured-project-card::after { content:""; position:absolute; width:140px; height:140px; right:-55px; top:-55px; border-radius:50%; background:rgba(56,189,248,.08); }
+    .project-status { display:inline-flex; padding:6px 10px; margin-bottom:14px; border-radius:999px; background:rgba(56,189,248,.12); border:1px solid rgba(56,189,248,.25); color:#cdefff; font-size:11px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; }
+    .featured-project-card h3 { margin-bottom:10px; }
+    .featured-project-card p { color:var(--muted); }
+    .project-tech { display:flex; flex-wrap:wrap; gap:7px; margin-top:16px; }
+    .project-tech span { padding:6px 9px; border-radius:999px; background:rgba(15,23,42,.72); border:1px solid rgba(148,163,184,.16); font-size:11px; font-weight:800; color:#dceffc; }
+    @media(max-width:950px){.featured-project-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:620px){.featured-project-grid{grid-template-columns:1fr}}
+  `;
+  document.head.appendChild(style);
+
+  const section = document.createElement('section');
+  section.className = 'section';
+  section.id = 'featured-projects';
+  section.innerHTML = `
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">Featured engineering work</p>
+        <h2>Prototype, R&amp;D, and industrial proof-of-concept projects</h2>
+        <p>Selected Spec-Tech development work covering embedded systems, robotics, AI vision, battery diagnostics, solar power electronics, and engineering instrumentation.</p>
+      </div>
+      <div class="featured-project-grid">
+        <article class="featured-project-card"><span class="project-status">R&amp;D</span><h3>Battery Doctor</h3><p>STM32-based LiFePO4 diagnostic platform for cell-voltage monitoring, imbalance detection, load-sag observation, recovery behavior, and TFT-based battery health display.</p><div class="project-tech"><span>STM32</span><span>LiFePO4</span><span>TFT</span><span>Diagnostics</span></div></article>
+        <article class="featured-project-card"><span class="project-status">R&amp;D</span><h3>SmartLink Wireless Telemetry</h3><p>STM32 + nRF24L01 telemetry research focused on valid packets, missed packets, duplicates, jitter, timeout behavior, and link-health feedback.</p><div class="project-tech"><span>STM32</span><span>nRF24L01</span><span>Telemetry</span><span>RF Testing</span></div></article>
+        <article class="featured-project-card"><span class="project-status">Industrial PoC</span><h3>AI Sack Counter + Modbus</h3><p>Raspberry Pi camera vision proof of concept for detecting and counting sacks, with the counted value prepared for PLC integration through Modbus.</p><div class="project-tech"><span>Raspberry Pi 5</span><span>OpenCV</span><span>YOLO</span><span>Modbus</span></div></article>
+        <article class="featured-project-card"><span class="project-status">Prototype</span><h3>LiDAR Autonomous Robot</h3><p>Mobile robotics platform using LiDAR obstacle sensing, Raspberry Pi processing, ESP32 motor control, and navigation logic for autonomous movement.</p><div class="project-tech"><span>LiDAR</span><span>Raspberry Pi</span><span>ESP32</span><span>Motor Control</span></div></article>
+        <article class="featured-project-card"><span class="project-status">R&amp;D</span><h3>Smart MPPT Solar Controller</h3><p>Microcontroller-based solar charge-controller research using voltage/current sensing, MPPT algorithms, battery charging logic, and electrical protection.</p><div class="project-tech"><span>STM32</span><span>MPPT</span><span>Power Electronics</span><span>Solar</span></div></article>
+        <article class="featured-project-card"><span class="project-status">Prototype</span><h3>Engineering Test Instruments</h3><p>Low-cost embedded test tools including oscilloscope, logic-analyzer, signal-generation, power-analysis, and serial visualization experiments.</p><div class="project-tech"><span>ESP32</span><span>STM32</span><span>Python</span><span>Data Acquisition</span></div></article>
+      </div>
+    </div>`;
+
+  main.insertBefore(section, projects);
+})();
+
+// Engineering forum powered by GitHub Issues
+(function addEngineeringForum() {
+  const main = document.querySelector('main');
+  const why = document.getElementById('why');
+  const inquiryNav = navLinks ? navLinks.querySelector('a[href="#inquiry"]') : null;
+  if (!main || document.getElementById('forum')) return;
+
+  if (navLinks && inquiryNav && !navLinks.querySelector('a[href="#forum"]')) {
+    const forumNav = document.createElement('a');
+    forumNav.href = '#forum';
+    forumNav.textContent = 'Forum';
+    forumNav.addEventListener('click', closeMobileNav);
+    navLinks.insertBefore(forumNav, inquiryNav);
+  }
+
+  const style = document.createElement('style');
+  style.textContent = `
+    .forum-wrap { display:grid; grid-template-columns:1.15fr .85fr; gap:22px; }
+    .forum-panel,.forum-side { padding:26px; border-radius:26px; border:1px solid var(--line); background:rgba(8,18,34,.78); box-shadow:var(--shadow); }
+    .forum-panel { background:radial-gradient(circle at 0% 0%,rgba(56,189,248,.13),transparent 35%),rgba(8,18,34,.82); }
+    .forum-categories { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:20px 0; }
+    .forum-category { padding:14px; border-radius:16px; border:1px solid rgba(125,211,252,.16); background:rgba(2,8,23,.34); }
+    .forum-category strong { display:block; margin-bottom:4px; }
+    .forum-category span { color:var(--muted); font-size:13px; }
+    .forum-rules { margin:16px 0 0; padding-left:20px; color:var(--muted); }
+    .forum-rules li { margin-bottom:9px; }
+    @media(max-width:850px){.forum-wrap{grid-template-columns:1fr}}
+    @media(max-width:560px){.forum-categories{grid-template-columns:1fr}}
+  `;
+  document.head.appendChild(style);
+
+  const section = document.createElement('section');
+  section.className = 'section alt';
+  section.id = 'forum';
+  section.innerHTML = `
+    <div class="container">
+      <div class="section-heading">
+        <p class="eyebrow">Community troubleshooting</p>
+        <h2>Spec-Tech Engineering Forum</h2>
+        <p>A public engineering discussion area for students, makers, and prototype builders. Questions are organized through GitHub Issues so wiring, code, logs, test results, and solutions can stay searchable.</p>
+      </div>
+      <div class="forum-wrap">
+        <div class="forum-panel">
+          <h3>Ask, troubleshoot, and document engineering problems</h3>
+          <div class="forum-categories">
+            <div class="forum-category"><strong>Embedded Systems</strong><span>Arduino, ESP32, STM32, sensors, displays</span></div>
+            <div class="forum-category"><strong>Robotics</strong><span>Motors, LiDAR, navigation, control</span></div>
+            <div class="forum-category"><strong>AI &amp; Vision</strong><span>Raspberry Pi, cameras, OpenCV, YOLO</span></div>
+            <div class="forum-category"><strong>Power &amp; Solar</strong><span>Battery, MPPT, inverter, protection</span></div>
+            <div class="forum-category"><strong>PCB &amp; Electronics</strong><span>Wiring, circuits, debugging, fabrication</span></div>
+            <div class="forum-category"><strong>Capstone &amp; Thesis</strong><span>Feasibility, architecture, testing, defense</span></div>
+          </div>
+          <div class="hero-actions">
+            <a class="button primary" href="https://github.com/floyd11110/spec-tech-website/issues/new?template=forum.yml" target="_blank" rel="noopener">Ask a Question</a>
+            <a class="button secondary" href="https://github.com/floyd11110/spec-tech-website/issues" target="_blank" rel="noopener">Browse Discussions</a>
+          </div>
+        </div>
+        <aside class="forum-side">
+          <h3>Good forum posts include</h3>
+          <ul class="forum-rules">
+            <li>Exact controller, module, sensor, or software used.</li>
+            <li>Power supply voltage and relevant wiring details.</li>
+            <li>Error messages, serial logs, measurements, or screenshots.</li>
+            <li>Short code section that reproduces the problem.</li>
+            <li>Expected behavior versus actual behavior.</li>
+            <li>No passwords, API keys, or private client information.</li>
+          </ul>
+        </aside>
+      </div>
+    </div>`;
+
+  main.insertBefore(section, why || document.getElementById('inquiry'));
+})();
