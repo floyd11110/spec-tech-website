@@ -2,8 +2,29 @@ const navToggle = document.getElementById('navToggle');
 const navLinks = document.getElementById('navLinks');
 const filters = document.querySelectorAll('.archive-filter');
 const searchInput = document.getElementById('archiveSearch');
-const cards = document.querySelectorAll('.archive-card');
+const archiveGrid = document.getElementById('archiveGrid');
 const emptyState = document.getElementById('archiveEmpty');
+
+// Add archived client/academic prototype entries without exposing private client details.
+if (archiveGrid && !archiveGrid.querySelector('[data-project="e-kulambo"]')) {
+  const card = document.createElement('article');
+  card.className = 'archive-card';
+  card.dataset.project = 'e-kulambo';
+  card.dataset.category = 'embedded instrumentation';
+  card.dataset.search = 'e-kulambo dengue environmental risk warning mosquito esp32 dht22 rain wet turbidity fuzzy logic dashboard early warning';
+  card.innerHTML = `
+    <div class="archive-meta"><span class="archive-status">Academic Prototype</span><span class="archive-year">2026</span></div>
+    <h2>E-KULAMBO Dengue Environmental Risk Warning System</h2>
+    <p>ESP32-based environmental risk assessment prototype that combines temperature, humidity, rain/wet condition, and turbidity-related sensing with fuzzy-logic classification to indicate conditions that may favor mosquito breeding. The system is designed for environmental risk warning, not direct dengue detection or mosquito counting.</p>
+    <div class="archive-tech"><span>ESP32</span><span>DHT22</span><span>Rain / Wet</span><span>Turbidity</span><span>Fuzzy Logic</span><span>Dashboard</span></div>
+  `;
+  archiveGrid.appendChild(card);
+
+  const archiveTotal = document.querySelector('.archive-summary div:first-child strong');
+  if (archiveTotal) archiveTotal.textContent = '11+';
+}
+
+const cards = document.querySelectorAll('.archive-card');
 
 if (navToggle && navLinks) {
   navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
