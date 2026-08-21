@@ -1,0 +1,61 @@
+name: Spec-Tech Engineering Forum
+description: Ask an engineering, electronics, robotics, AI, solar, battery, PCB, or prototype question.
+title: "[Forum] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Welcome to the Spec-Tech Engineering Forum. Share enough technical detail so other makers and students can understand the problem and help troubleshoot it.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Embedded Systems / Arduino / ESP32 / STM32
+        - Robotics / Motor Control / LiDAR
+        - AI / Computer Vision / Raspberry Pi
+        - Solar / Battery / Power Electronics
+        - Sensors / Instrumentation / Data Acquisition
+        - PCB / Electronics / Troubleshooting
+        - Mechanical / 3D Printing / Fabrication
+        - Capstone / Thesis / Prototype Design
+        - Other Engineering Topic
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Question or problem
+      description: Explain what you are building and the exact problem you want to solve.
+      placeholder: What are you trying to build, and what is not working as expected?
+    validations:
+      required: true
+
+  - type: textarea
+    id: hardware
+    attributes:
+      label: Hardware / software used
+      description: List the controller, sensors, modules, power supply, software, libraries, and relevant versions.
+      placeholder: ESP32, ADS1115, 12 V supply, Arduino IDE 2.x, etc.
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Wiring, code, logs, readings, or test results
+      description: Paste the important code/log excerpt or describe measured voltages, sensor values, errors, and tests already performed.
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+      placeholder: What should the system do when it is working correctly?
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Before posting
+      options:
+        - label: I removed passwords, API keys, private client data, and other sensitive information.
+          required: true
