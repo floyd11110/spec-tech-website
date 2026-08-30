@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SPEC-TECH Embedded Platform: hardware-validated STM32F103C8 libraries, APIs, resource ownership, validation results, and development status." />
+  <title>Embedded Platform | Spec-Tech Engineering Prototype Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="layout-fix.css" />
+  <link rel="stylesheet" href="platform.css?v=20260830-1" />
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container">
+      <a class="brand" href="index.html#top" aria-label="Spec-Tech home">
+        <span class="brand-mark">ST</span>
+        <span><strong>Spec-Tech</strong><small>Engineering Prototype Lab</small></span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open navigation">☰</button>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html#services">Services</a>
+        <a href="index.html#tutorials">Tutorials</a>
+        <a href="index.html#research">Research</a>
+        <a href="platform.html" aria-current="page">Platform</a>
+        <a href="archive.html">Archive</a>
+        <a href="index.html#forum">Forum</a>
+        <a href="index.html#inquiry">Inquiry</a>
+        <a class="nav-cta" href="https://www.facebook.com/SPECTECHPHIL" target="_blank" rel="noopener">Message us</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="platform-hero section">
+      <div class="container platform-hero-grid">
+        <div>
+          <p class="eyebrow">SPEC-TECH Embedded Platform</p>
+          <h1>Reusable embedded libraries built around hardware validation.</h1>
+          <p class="platform-intro">The SPEC-TECH platform combines Arduino IDE convenience with controlled STM32 peripheral use, explicit resource ownership, reusable APIs, and regression testing before a release is frozen.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#libraries">Browse Libraries</a>
+            <a class="button secondary" href="#resource-map">Resource Map</a>
+          </div>
+        </div>
+        <div class="platform-summary" aria-label="STM32F103C8 platform summary">
+          <div><strong>STM32F103C8</strong><span>current documented MCU family</span></div>
+          <div><strong>4</strong><span>frozen core libraries</span></div>
+          <div><strong>8 MHz</strong><span>validated Counter range ceiling</span></div>
+          <div><strong>Hardware</strong><span>regression-gated releases</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt">
+      <div class="container platform-family-grid">
+        <article class="family-card active-family">
+          <div class="family-topline"><span>ACTIVE PLATFORM FAMILY</span><strong>STM32</strong></div>
+          <h2>STM32F103C8 Platform</h2>
+          <p>72 MHz Cortex-M3 development platform for GPIO, timers, PWM, ADC, waveform capture, high-speed pulse counting, signal analysis, and reusable device drivers.</p>
+          <div class="platform-tags"><span>72 MHz</span><span>Arduino IDE</span><span>Direct Peripheral Control</span><span>Hardware Validated</span></div>
+        </article>
+        <article class="family-card secondary-family">
+          <div class="family-topline"><span>PLATFORM FAMILY</span><strong>ESP32</strong></div>
+          <h2>ESP32 Platform</h2>
+          <p>SPEC-TECH also maintains ESP32 platform libraries for core hardware, networking, HTTP, Firebase, SPI, I2C, I2S, and related embedded functions. A dedicated public page will be added as the archive is consolidated.</p>
+          <div class="platform-tags"><span>Wi-Fi</span><span>HTTP</span><span>Firebase</span><span>I2S</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="libraries">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">STM32F103C8 library archive</p>
+          <h2>Current SPEC-TECH STM32 libraries</h2>
+          <p>Filter by role or search by library, peripheral, pin, timer, or function. FINAL/FROZEN means the validated release is not modified in place; future changes branch to a new version.</p>
+        </div>
+
+        <div class="platform-toolbar">
+          <div class="platform-filters" id="platformFilters">
+            <button class="platform-filter active" data-filter="all">All</button>
+            <button class="platform-filter" data-filter="core">Core</button>
+            <button class="platform-filter" data-filter="device">Device</button>
+            <button class="platform-filter" data-filter="final">Final</button>
+            <button class="platform-filter" data-filter="test">Test</button>
+          </div>
+          <input class="platform-search" id="platformSearch" type="search" placeholder="Search Counter, TIM2, I2C, sensor..." aria-label="Search SPEC-TECH libraries" />
+        </div>
+
+        <div class="library-grid" id="libraryGrid">
+          <article class="library-card" data-category="core final" data-search="basic gpio clock timer tim2 pwm tim1 adc pa8 pa0">
+            <div class="library-meta"><span class="status-badge final">FINAL / FROZEN</span><span>v1.1.3</span></div>
+            <h3>SpecTechF103C8Basic</h3>
+            <p>Core GPIO, clock reporting, TIM2 basic timer, TIM1 PWM, and ADC functions for the STM32F103C8 platform.</p>
+            <div class="validation-line"><strong>22/22 PASS</strong><span>installed FINAL regression</span></div>
+            <div class="platform-tags"><span>GPIO</span><span>TIM2</span><span>PWM</span><span>ADC</span></div>
+          </article>
+
+          <article class="library-card" data-category="core final" data-search="capture waveform frequency duty high low period pa6 tim3 input capture">
+            <div class="library-meta"><span class="status-badge final">FINAL / FROZEN</span><span>v1.0.0</span></div>
+            <h3>SpecTechF103C8Capture</h3>
+            <p>Single-signal hardware timing engine for period, frequency, HIGH time, LOW time, and duty-cycle measurement.</p>
+            <div class="validation-line"><strong>96/96 PASS</strong><span>installed FINAL regression</span></div>
+            <div class="platform-tags"><span>PA6</span><span>TIM3</span><span>Frequency</span><span>Duty</span></div>
+          </article>
+
+          <article class="library-card" data-category="core final" data-search="counter pulse frequency events pa0 tim2 external clock overflow 8mhz">
+            <div class="library-meta"><span class="status-badge final">FINAL / FROZEN</span><span>v1.0.0</span></div>
+            <h3>SpecTechF103C8Counter</h3>
+            <p>Hardware pulse/event counting and frequency-window measurement using TIM2 external clock mode with overflow extension.</p>
+            <div class="validation-line"><strong>163/163 PASS</strong><span>validated through 8 MHz</span></div>
+            <div class="platform-tags"><span>PA0</span><span>TIM2</span><span>Pulse Count</span><span>8 MHz</span></div>
+          </article>
+
+          <article class="library-card feature-card" data-category="core final" data-search="signal analyzer auto capture counter statistics tolerance pass fail waveform frequency duty 100khz 8mhz">
+            <div class="library-meta"><span class="status-badge final">FINAL / FROZEN</span><span>v1.0.0</span></div>
+            <h3>SpecTechF103C8SignalAnalyzer</h3>
+            <p>Higher-level signal statistics and tolerance analysis with automatic selection between Capture and Counter backends.</p>
+            <div class="validation-line"><strong>150/150 PASS</strong><span>260 completed analyses</span></div>
+            <div class="platform-tags"><span>AUTO Backend</span><span>Statistics</span><span>PASS / FAIL</span><span>10 Hz–8 MHz</span></div>
+          </article>
+
+          <article class="library-card" data-category="device final" data-search="ads1115 adc 16 bit i2c analog voltage autorange calibration">
+            <div class="library-meta"><span class="status-badge final">FINAL</span><span>v1.0.1</span></div>
+            <h3>SpecTechADS1115</h3>
+            <p>ADS1115 16-bit ADC interface with voltage acquisition, filtering, autorange, calibration, and comparator helpers.</p>
+            <div class="platform-tags"><span>ADS1115</span><span>I2C</span><span>16-bit ADC</span></div>
+          </article>
+
+          <article class="library-card" data-category="device final" data-search="dht11 humidity temperature sensor gpio">
+            <div class="library-meta"><span class="status-badge final">FINAL</span><span>v1.0.0</span></div>
+            <h3>SpecTechDHT11</h3>
+            <p>DHT11 temperature and humidity acquisition with protocol validation and readable status reporting.</p>
+            <div class="platform-tags"><span>DHT11</span><span>Temperature</span><span>Humidity</span></div>
+          </article>
+
+          <article class="library-card" data-category="device final" data-search="hcsr04 ultrasonic distance echo trigger robotics filter non blocking">
+            <div class="library-meta"><span class="status-badge final">FINAL</span><span>v2.0.0</span></div>
+            <h3>SpecTechHCSR04</h3>
+            <p>Ultrasonic distance interface supporting blocking and non-blocking measurements plus averaging and median filtering.</p>
+            <div class="platform-tags"><span>HC-SR04</span><span>Distance</span><span>Non-blocking</span></div>
+          </article>
+
+          <article class="library-card" data-category="core test device" data-search="i2c i2c1 pb6 pb7 master bus 100khz 400khz register scan probe">
+            <div class="library-meta"><span class="status-badge validated">VALIDATED DEPENDENCY</span><span>v1.0.3</span></div>
+            <h3>SpecTechF103C8I2C</h3>
+            <p>Direct-register I2C1 master core on PB6/PB7 used by SPEC-TECH I2C device libraries. The current stored artifact remains TEST-named.</p>
+            <div class="platform-tags"><span>PB6 / PB7</span><span>I2C1</span><span>100 / 400 kHz</span></div>
+          </article>
+
+          <article class="library-card" data-category="device test" data-search="lcd i2c hd44780 display 16x2 backpack">
+            <div class="library-meta"><span class="status-badge test">TEST</span><span>v1.0.0</span></div>
+            <h3>SpecTechLCDI2C</h3>
+            <p>HD44780-compatible character LCD interface through an I2C backpack.</p>
+            <div class="platform-tags"><span>LCD</span><span>I2C</span><span>HD44780</span></div>
+          </article>
+
+          <article class="library-card" data-category="device test" data-search="mpu6050 imu accelerometer gyroscope orientation pitch roll motion i2c">
+            <div class="library-meta"><span class="status-badge test">TEST</span><span>v2.0.0</span></div>
+            <h3>SpecTechMPU6050</h3>
+            <p>IMU acquisition, calibration, motion-state helpers, and fused pitch/roll orientation. Main polling path is hardware validated.</p>
+            <div class="platform-tags"><span>MPU6050</span><span>IMU</span><span>Orientation</span></div>
+          </article>
+
+          <article class="library-card" data-category="device test" data-search="mag5883 qmc5883 hmc5883 magnetometer compass heading i2c">
+            <div class="library-meta"><span class="status-badge test">TEST</span><span>v1.0.0</span></div>
+            <h3>SpecTechMag5883</h3>
+            <p>QMC5883L/HMC5883L magnetometer interface with heading and calibration helpers.</p>
+            <div class="platform-tags"><span>Compass</span><span>Magnetometer</span><span>I2C</span></div>
+          </article>
+
+          <article class="library-card" data-category="device test" data-search="servo pwm position pulse pa8 tim1 paused">
+            <div class="library-meta"><span class="status-badge paused">TEST / PAUSED</span><span>v0.1.0</span></div>
+            <h3>SpecTechServo</h3>
+            <p>Servo pulse/angle control development branch. Testing is paused and this package is not treated as FINAL.</p>
+            <div class="platform-tags"><span>Servo</span><span>PWM</span><span>PA8</span></div>
+          </article>
+
+          <article class="library-card" data-category="device test" data-search="vl53l0x tof time of flight distance ranging i2c calibration">
+            <div class="library-meta"><span class="status-badge test">TEST</span><span>v0.1.1</span></div>
+            <h3>SpecTechVL53L0X</h3>
+            <p>Single-shot VL53L0X time-of-flight ranging interface with diagnostic status reporting.</p>
+            <div class="platform-tags"><span>VL53L0X</span><span>ToF</span><span>I2C</span></div>
+          </article>
+        </div>
+        <div class="platform-empty" id="platformEmpty">No libraries match that filter or search.</div>
+      </div>
+    </section>
+
+    <section class="section alt" id="resource-map">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Resource ownership</p>
+          <h2>Know what peripheral owns each pin and timer.</h2>
+          <p>Resource ownership is explicit so reusable libraries do not silently fight over the same STM32 peripheral.</p>
+        </div>
+        <div class="resource-table-wrap">
+          <table class="resource-table">
+            <thead><tr><th>Resource</th><th>Primary owner / use</th><th>Important rule</th></tr></thead>
+            <tbody>
+              <tr><td>PA8 / TIM1_CH1</td><td>Basic PWM, test signal source</td><td>One active owner at a time.</td></tr>
+              <tr><td>PA6 / TIM3</td><td>Capture / SignalAnalyzer Capture</td><td>PA6 is also SPI1 MISO; do not share it while Capture is active.</td></tr>
+              <tr><td>PA0 / TIM2</td><td>Counter / SignalAnalyzer Counter</td><td>Conflicts with Basic TIM2 ownership and PA0 ADC while Counter is active.</td></tr>
+              <tr><td>PB6 / PB7</td><td>I2C1 shared bus</td><td>Device libraries share the SPEC-TECH I2C layer; unique addresses are required.</td></tr>
+              <tr><td>PA9 / PA10</td><td>USART1 debug / FTDI</td><td>Common debug and serial validation path.</td></tr>
+              <tr><td>PA13 / PA14</td><td>SWD</td><td>Reserved for programming/debugging.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Release engineering</p>
+          <h2>How a SPEC-TECH library becomes FINAL.</h2>
+        </div>
+        <div class="release-flow">
+          <article><strong>01</strong><h3>Design</h3><p>Define purpose, API, pins, timers, dependencies, and conflicts before coding.</p></article>
+          <article><strong>02</strong><h3>TEST FLAT</h3><p>Active core development stays in a flat test folder while features are changing.</p></article>
+          <article><strong>03</strong><h3>Hardware Regression</h3><p>Run real-board tests, edge cases, restart/recovery checks, and resource cleanup tests.</p></article>
+          <article><strong>04</strong><h3>RC Install</h3><p>Install the packaged Arduino library and repeat the regression from the installed copy.</p></article>
+          <article><strong>05</strong><h3>FINAL / FROZEN</h3><p>Freeze the known-good version. Future behavior changes branch to a new version.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt">
+      <div class="container next-platform-card">
+        <div>
+          <p class="eyebrow">Next platform development</p>
+          <h2>Dual-signal timing foundation</h2>
+          <p>The next planned timing work is a new TEST branch for synchronized two-signal timing, intended to support future phase, propagation-delay, edge-order, and dead-time analysis without modifying the frozen Capture or SignalAnalyzer releases.</p>
+        </div>
+        <span class="status-badge test">PLANNED / TEST</span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div><strong>Spec-Tech Engineering Prototype Lab</strong><p>Hardware-validated embedded libraries, engineering documentation, prototype development, and R&amp;D.</p></div>
+      <div class="footer-links"><a href="index.html">Home</a><a href="platform.html">Platform</a><a href="archive.html">Archive</a><a href="index.html#inquiry">Inquiry</a></div>
+    </div>
+  </footer>
+
+  <script src="platform.js?v=20260830-1"></script>
+</body>
+</html>
