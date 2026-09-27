@@ -43,6 +43,7 @@
           <div class="hero-actions">
             <a class="button primary" href="#libraries">Browse Libraries</a>
             <a class="button secondary" href="#resource-map">Resource Maps</a>
+            <a class="button secondary" href="#mega-plc-development">Mega PLC Development</a>
           </div>
         </div>
         <div class="platform-summary" aria-label="SPEC-TECH embedded platform summary">
@@ -296,6 +297,61 @@
               <tr><td>Wi-Fi / HTTP / Firebase</td><td>Network application stack</td><td>Real credentials and Firebase secrets remain outside public source/examples; use runtime configuration/placeholders.</td></tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section alt" id="mega-plc-development">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Test &amp; Development</p>
+          <h2>Spec-Tech Mega PLC — Arduino Mega 2560 Development</h2>
+          <p>Active R&amp;D platform for converting an Arduino Mega 2560 into a basic PLC runtime with deterministic ladder-style instruction execution, EEPROM program storage, serial programming/readback, live monitoring, and a future graphical PLC Studio. Current validated baseline: <strong>SpecTechMegaPLC v0.1.9.5-DEV</strong>. This remains a development and validation platform, not a finished commercial PLC product.</p>
+        </div>
+
+        <div class="platform-family-grid">
+          <article class="family-card active-family">
+            <div class="family-topline"><span>CURRENT DEVELOPMENT BASELINE</span><strong>v0.1.9.5-DEV</strong></div>
+            <h3>Runtime architecture</h3>
+            <p>16 normal digital inputs, 16 normal digital outputs, 8 reserved analog inputs, dedicated high-speed/interrupt resources, reserved PWM/pulse resources, USB serial programming/debug, planned RS485/Modbus expansion, EEPROM user-program persistence with CRC validation, watchdog recovery, STOP safety, and a 400-instruction program ceiling.</p>
+            <div class="platform-tags"><span>Arduino Mega 2560</span><span>EEPROM + CRC16</span><span>400 Instructions</span><span>115200 Serial</span><span>Watchdog</span><span>Safe STOP</span></div>
+          </article>
+          <article class="family-card active-family">
+            <div class="family-topline"><span>PLC STUDIO FOUNDATION</span><strong>IN DEVELOPMENT</strong></div>
+            <h3>Two-way engineering workflow</h3>
+            <p>The validated PC/PLC path now supports program WRITE/COMMIT, exact instruction READ-back, online monitoring while RUN, and reconstruction of PLC instructions into editable ladder-model rungs. The next integration stage is the graphical Ladder → Compile → Write PLC → Run → Read PLC workflow.</p>
+            <div class="platform-tags"><span>Write PLC</span><span>Read PLC</span><span>RUN / STOP</span><span>Online Monitor</span><span>Ladder Reconstruction</span></div>
+          </article>
+        </div>
+
+        <div class="platform-subheading"><span>Hardware validation record</span><strong>Numbered regression and development tests</strong></div>
+        <div class="resource-table-wrap">
+          <table class="resource-table">
+            <thead><tr><th>Test / Area</th><th>Validated result</th><th>Development detail</th></tr></thead>
+            <tbody>
+              <tr><td>TEST 001–012</td><td>PASS</td><td>Boot/serial, physical Y0, scan engine, TON timing/reset, CTU rising-edge/reset, SET/RST latch, AND/OR/LDN/ANDN/ORN, and independent rung execution.</td></tr>
+              <tr><td>TEST 013–017</td><td>PASS</td><td>Physical Y0–Y15 output bank, M0–M63 relay bank, T0–T15 timer bank, C0–C15 counter bank, and signed 32-bit D0–D31 diagnostics.</td></tr>
+              <tr><td>TEST 018–025</td><td>PASS</td><td>EEPROM COMMIT/load, automatic boot AUTOLOAD in STOP, CRC corruption rejection, RUN/STOP transitions, STOP safety, FORCE/RELEASE priority, exact program readback, and CLEAR safety semantics.</td></tr>
+              <tr><td>TEST 026–029</td><td>PASS</td><td>Strict parser/invalid-command rejection, watchdog recovery, scan-engine stress, and a 30-minute mixed continuous runtime soak.</td></tr>
+              <tr><td>TEST 030</td><td>20/20 PASS</td><td>Repeated physical RESET persistence: EEPROM AUTOLOAD, STOP boot, exact program retention, volatile-state reset, output safety, TON and CTU execution.</td></tr>
+              <tr><td>TEST 031</td><td>HARDWARE PASS</td><td>Physical pushbuttons on X0/D22, X2/D24, and X4/D26 successfully drove real ladder scans and Y0–Y2 outputs.</td></tr>
+              <tr><td>TEST 033 + 033B</td><td>HARDWARE PASS</td><td>Combined X + M + TON + CTU logic, including focused non-blocking TON verification and physical output behavior.</td></tr>
+              <tr><td>TEST 034 REV B</td><td>FULL PASS</td><td>Maximum 400-instruction capacity: 400/400 WRITE, COMMIT, exact READ before/after reset, AUTOLOAD COUNT=400, and physical execution through instruction 399.</td></tr>
+              <tr><td>TEST 035</td><td>1834/1834 PASS</td><td>Automated serial stress across STATUS/INFO, M and D operations, program READs, invalid-command rejection, RUN-mode traffic, program integrity, and final STOP safety.</td></tr>
+              <tr><td>TEST 036</td><td>692/692 PASS</td><td>Online monitoring while RUN with live X/M/Y/T/C/D activity. Physical X0→Y0, X2→TON→Y1, and X4→CTU→Y2 remained correct during PC monitoring.</td></tr>
+              <tr><td>TEST 037 REV B</td><td>FULL PASS</td><td>13/13 PLC instructions read back, reconstructed into five ladder rungs, recompiled tuple-for-tuple exactly, with zero unknown opcodes and no PLC modification.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="next-platform-card" style="margin-top:18px">
+          <div>
+            <p class="eyebrow">Development status</p>
+            <h3>Current validated scope and next integration stage</h3>
+            <p>The runtime baseline remains unchanged at v0.1.9.5-DEV because the latest capacity, serial-stress, online-monitoring, and ladder-readback tests exposed no firmware defect. Development is paused after TEST 037 while the validated results are documented. Planned next work is graphical PLC Studio integration and final regression before any stable-release decision.</p>
+          </div>
+          <span class="status-badge test">ACTIVE R&amp;D</span>
         </div>
       </div>
     </section>
