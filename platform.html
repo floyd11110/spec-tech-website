@@ -44,6 +44,7 @@
             <a class="button primary" href="#libraries">Browse Libraries</a>
             <a class="button secondary" href="#resource-map">Resource Maps</a>
             <a class="button secondary" href="#mega-plc-development">Mega PLC Development</a>
+            <a class="button secondary" href="plc-instructions.html">PLC Instructions</a>
           </div>
         </div>
         <div class="platform-summary" aria-label="SPEC-TECH embedded platform summary">
@@ -307,22 +308,22 @@
         <div class="section-heading">
           <p class="eyebrow">Active PLC R&amp;D</p>
           <h2>ST-CPU-MEGA — Spec-Tech Mega PLC</h2>
-          <p>Arduino Mega 2560 based PLC development platform with a ladder runtime, EEPROM user-program storage, graphical PLC Studio, hardware RUN/STOP control, and live online monitoring. Current hardware-validated checkpoint: <strong>Firmware v0.1.10.7-DEV + PLC Studio v0.6.10-DEV</strong>. The platform remains an R&amp;D/basic PLC system, not a finished commercial PLC.</p>
+          <p>Arduino Mega 2560 based PLC development platform with a ladder runtime, EEPROM user-program storage, graphical PLC Studio, hardware RUN/STOP control, and live online monitoring. Current hardware-validated development checkpoint: <strong>Firmware v0.1.10.11-DEV + PLC Studio v0.6.18-DEV</strong>. The platform remains an R&amp;D/basic PLC system, not a finished commercial PLC.</p>
         </div>
 
         <div class="platform-family-grid">
           <article class="family-card active-family">
-            <div class="family-topline"><span>CURRENT RUNTIME</span><strong>v0.1.10.7-DEV</strong></div>
+            <div class="family-topline"><span>CURRENT RUNTIME</span><strong>v0.1.10.11-DEV</strong></div>
             <h3>ST-CPU-MEGA PLC Runtime</h3>
             <p>16 normal digital inputs and 16 normal digital outputs, EEPROM program persistence with CRC, 400-instruction ceiling, watchdog recovery, safe STOP behavior, serial programming/readback at 115200 baud, dedicated R/M memory spaces, TON timers, CTU counters, and counter reset.</p>
             <div class="platform-tags"><span>16 X / 16 Y</span><span>R0–R63</span><span>M0–M63</span><span>T0–T15</span><span>C0–C15</span><span>400 Instructions</span></div>
           </article>
 
           <article class="family-card active-family">
-            <div class="family-topline"><span>CURRENT PLC STUDIO</span><strong>v0.6.10-DEV</strong></div>
+            <div class="family-topline"><span>CURRENT PLC STUDIO</span><strong>v0.6.18-DEV</strong></div>
             <h3>Graphical ladder + online monitor</h3>
-            <p>Qt-based ladder engineering environment with structured rungs, series and parallel paths, multiple outputs, TON/CTU blocks, properties, Undo/Redo, topology-aware instruction generation, Connect/Write/Readback Verify, RUN/STOP, and live X/Y/R/M/T/C monitoring.</p>
-            <div class="platform-tags"><span>Ladder Editor</span><span>Compile / Write</span><span>Readback Verify</span><span>RUN / STOP</span><span>Online Monitor</span><span>Green Live State</span></div>
+            <p>Qt-based ladder engineering environment with structured rungs, series and parallel paths, multiple outputs, TON/CTU blocks, properties, Undo/Redo, topology-aware instruction generation, Connect/Write/READ PLC, RUN/STOP, live monitoring, and hardware-validated persistent structural Online Edit while RUN.</p>
+            <div class="platform-tags"><span>Ladder Editor</span><span>Compile / Write</span><span>READ PLC</span><span>RUN / STOP</span><span>Online Edit</span><span>Online Monitor</span></div>
           </article>
         </div>
 
@@ -337,7 +338,7 @@
               <tr><td>M</td><td>M0–M63</td><td>64 latched memory relays for SET/RESET logic; independent from R.</td></tr>
               <tr><td>T</td><td>T0–T15</td><td>16 TON timers with live elapsed/preset, READY/TIMING/DONE monitoring.</td></tr>
               <tr><td>C</td><td>C0–C15</td><td>16 CTU counters with rising-edge counting, live count/preset, DONE state, and RES reset.</td></tr>
-              <tr><td>D</td><td>D0–D31</td><td>Signed 32-bit data-register diagnostics in the current runtime.</td></tr>
+              <tr><td>D</td><td>D0–D31 planned baseline</td><td>Data-register architecture is being defined before MOV, math, compare, analog, timer/counter data transfer, and ST module data functions are implemented.</td></tr>
               <tr><td>Program</td><td>400 instructions</td><td>EEPROM-backed user program with exact readback verification.</td></tr>
             </tbody>
           </table>
@@ -364,6 +365,9 @@
               <tr><td>X/Y/R/M monitor</td><td>HARDWARE/UI PASS</td><td>Live energized states are shown directly on the ladder with green interior highlighting.</td></tr>
               <tr><td>TON monitor</td><td>HARDWARE/UI PASS</td><td>Live elapsed/preset milliseconds with READY, TIMING, DONE and active green highlighting.</td></tr>
               <tr><td>CTU + RES monitor</td><td>HARDWARE/UI PASS</td><td>Live count/preset, READY/COUNTING/DONE, threshold contact behavior, continued up-counting, and RES C reset to zero.</td></tr>
+              <tr><td>READ PLC reconstruction</td><td>HARDWARE/UI PASS</td><td>Topology reconstruction validated for shared contacts and identical parallel branches with a common suffix.</td></tr>
+              <tr><td>Structural Online Edit</td><td>HARDWARE/UI PASS</td><td>Expansion and contraction while RUN validated with runtime state preservation and EEPROM persistence.</td></tr>
+              <tr><td>Online Edit power-fail recovery</td><td>CONTROLLED HARDWARE PASS</td><td>Journal recovery validated at the deterministic interrupted-commit fault-injection point; this is not a claim of exhaustive arbitrary-timing power-loss coverage.</td></tr>
             </tbody>
           </table>
         </div>
@@ -373,7 +377,8 @@
             <p class="eyebrow">Current development estimate</p>
             <h3>Basic PLC software core is approaching feature-complete status</h3>
             <p>The current software core is approximately <strong>80–85%</strong> of the intended ST-CPU-MEGA Basic PLC software scope. The complete V1 product is approximately <strong>70–75%</strong> when industrial 24 V I/O hardware, analog I/O, HSC, communications, final compiler hardening, and full release regression are included.</p>
-            <p><strong>Next development directions:</strong> rising/falling-edge ladder contacts, analog I/O, high-speed counter support on reserved D2/D3 resources, RS485/Modbus communications, stronger compiler limits/regression, and final stable-release testing.</p>
+            <p><strong>Next development directions:</strong> D-register/data architecture, MOV and numerical operations, continuous timer/counter functions, analog processing, ST module function blocks, edge contacts, HSC, RS485/Modbus, compiler hardening, and final stable-release testing.</p>
+            <p><a class="button secondary" href="plc-instructions.html">Open PLC Instruction &amp; Function Roadmap</a></p>
           </div>
           <span class="status-badge test">ACTIVE R&amp;D</span>
         </div>
