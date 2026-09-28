@@ -318,10 +318,10 @@
             <div class="platform-tags"><span>Arduino Mega 2560</span><span>EEPROM + CRC16</span><span>400 Instructions</span><span>115200 Serial</span><span>Watchdog</span><span>Safe STOP</span></div>
           </article>
           <article class="family-card active-family">
-            <div class="family-topline"><span>PLC STUDIO FOUNDATION</span><strong>IN DEVELOPMENT</strong></div>
-            <h3>Two-way engineering workflow</h3>
-            <p>The validated PC/PLC path now supports program WRITE/COMMIT, exact instruction READ-back, online monitoring while RUN, and reconstruction of PLC instructions into editable ladder-model rungs. The next integration stage is the graphical Ladder → Compile → Write PLC → Run → Read PLC workflow.</p>
-            <div class="platform-tags"><span>Write PLC</span><span>Read PLC</span><span>RUN / STOP</span><span>Online Monitor</span><span>Ladder Reconstruction</span></div>
+            <div class="family-topline"><span>PLC STUDIO FOUNDATION</span><strong>v0.5.4A-DEV</strong></div>
+            <h3>Graphical ladder engineering workflow</h3>
+            <p>Spec-Tech PLC Studio now has a structured Qt ladder editor with selectable contacts and wires, series insertion with automatic shift/collapse, parallel input branches, multiple output branches, dynamic rung expansion, TON and CTU function blocks, Undo/Redo history, and a right-side component Properties editor. The current v0.5.4A development branch also adds an offline Ladder → Instruction compiler preview before any serial write is enabled.</p>
+            <div class="platform-tags"><span>Qt Ladder Editor</span><span>Undo / Redo</span><span>Properties</span><span>TON / CTU</span><span>Offline Compiler</span></div>
           </article>
         </div>
 
@@ -345,11 +345,37 @@
           </table>
         </div>
 
+        <div class="platform-subheading"><span>PLC Studio development</span><strong>Graphical editor and compiler milestones</strong></div>
+        <div class="resource-table-wrap">
+          <table class="resource-table">
+            <thead><tr><th>Studio version</th><th>Status</th><th>Development detail</th></tr></thead>
+            <tbody>
+              <tr><td>v0.4.1A–v0.4.7</td><td>CONFIRMED</td><td>Structured ladder canvas, predefined rung wiring, selectable common/wire segments, Insert Cell with auto-shift, Delete Cell with auto-collapse, output/wire deletion, multiple output branches, and dynamic rung height.</td></tr>
+              <tr><td>v0.4.9</td><td>CONFIRMED</td><td>TON graphical function block with timer address, millisecond preset, drag/drop placement, rendering, and editing.</td></tr>
+              <tr><td>v0.5.0</td><td>CONFIRMED</td><td>Dynamic parallel input branch rows with automatic rung expansion/collapse and downstream rung repositioning.</td></tr>
+              <tr><td>v0.5.1</td><td>CONFIRMED</td><td>CTU graphical counter block with C address and preset-count editing.</td></tr>
+              <tr><td>v0.5.2</td><td>CONFIRMED</td><td>Undo/Redo with whole-ladder state snapshots, toolbar controls, Ctrl+Z, Ctrl+Y, and topology/layout restoration.</td></tr>
+              <tr><td>v0.5.3B</td><td>CONFIRMED</td><td>Component Properties panel with Type, Device, Preset, Comment, Apply, device-family validation, and working selection-to-properties synchronization.</td></tr>
+              <tr><td>v0.5.4A</td><td>ACTIVE DEV</td><td>Offline compiler preview generates LD/LDN/AND/ANDN/OR/ORN, OUT, SET, RST, TON, CTU, END plus firmware WRITE/COMMIT command previews. Nothing is transmitted to the Mega.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="next-platform-card" style="margin-top:18px">
+          <div>
+            <p class="eyebrow">Compiler validation finding</p>
+            <h3>Topology-aware compilation required before Write PLC</h3>
+            <p>The current offline compiler successfully exposes the generated instruction stream, but testing with parallel and nested branches showed that row-based compilation can lose the true branch/merge topology. The next compiler revision will traverse the actual ladder network from L1 through series paths, parallel branches, nested branches, merge points, and outputs before emitting PLC instructions.</p>
+            <p><strong>Remaining integration stages:</strong> topology-aware compiler → separate R/M runtime architecture → compiler regression suite → serial Connect / Write PLC / COMMIT / RUN hardware validation. Studio R currently represents a normal relay while M represents latched SET/RESET memory; the temporary R→firmware-M compatibility mapping will not be treated as the final runtime architecture.</p>
+          </div>
+          <span class="status-badge test">COMPILER R&amp;D</span>
+        </div>
+
         <div class="next-platform-card" style="margin-top:18px">
           <div>
             <p class="eyebrow">Development status</p>
             <h3>Current validated scope and next integration stage</h3>
-            <p>The runtime baseline remains unchanged at v0.1.9.5-DEV because the latest capacity, serial-stress, online-monitoring, and ladder-readback tests exposed no firmware defect. Development is paused after TEST 037 while the validated results are documented. Planned next work is graphical PLC Studio integration and final regression before any stable-release decision.</p>
+            <p>The Mega runtime baseline remains unchanged at <strong>v0.1.9.5-DEV</strong> because the capacity, serial-stress, online-monitoring, and ladder-readback tests exposed no firmware defect. PLC Studio has now advanced through the graphical editor foundation to <strong>v0.5.4A-DEV</strong>. The current compiler preview correctly demonstrates basic instruction generation, but complex/nested branch compilation is not yet treated as validated because the first compiler pass is row-based rather than topology-aware. No automatic serial Write PLC function is enabled yet.</p>
           </div>
           <span class="status-badge test">ACTIVE R&amp;D</span>
         </div>
