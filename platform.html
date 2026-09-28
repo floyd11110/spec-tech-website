@@ -305,24 +305,77 @@
     <section class="section alt" id="mega-plc-development">
       <div class="container">
         <div class="section-heading">
-          <p class="eyebrow">Test &amp; Development</p>
-          <h2>Spec-Tech Mega PLC — Arduino Mega 2560 Development</h2>
-          <p>Active R&amp;D platform for converting an Arduino Mega 2560 into a basic PLC runtime with deterministic ladder-style instruction execution, EEPROM program storage, serial programming/readback, live monitoring, and a future graphical PLC Studio. Current validated baseline: <strong>SpecTechMegaPLC v0.1.9.5-DEV</strong>. This remains a development and validation platform, not a finished commercial PLC product.</p>
+          <p class="eyebrow">Active PLC R&amp;D</p>
+          <h2>ST-CPU-MEGA — Spec-Tech Mega PLC</h2>
+          <p>Arduino Mega 2560 based PLC development platform with a ladder runtime, EEPROM user-program storage, graphical PLC Studio, hardware RUN/STOP control, and live online monitoring. Current hardware-validated checkpoint: <strong>Firmware v0.1.10.7-DEV + PLC Studio v0.6.10-DEV</strong>. The platform remains an R&amp;D/basic PLC system, not a finished commercial PLC.</p>
         </div>
 
         <div class="platform-family-grid">
           <article class="family-card active-family">
-            <div class="family-topline"><span>CURRENT DEVELOPMENT BASELINE</span><strong>v0.1.9.5-DEV</strong></div>
-            <h3>Runtime architecture</h3>
-            <p>16 normal digital inputs, 16 normal digital outputs, 8 reserved analog inputs, dedicated high-speed/interrupt resources, reserved PWM/pulse resources, USB serial programming/debug, planned RS485/Modbus expansion, EEPROM user-program persistence with CRC validation, watchdog recovery, STOP safety, and a 400-instruction program ceiling.</p>
-            <div class="platform-tags"><span>Arduino Mega 2560</span><span>EEPROM + CRC16</span><span>400 Instructions</span><span>115200 Serial</span><span>Watchdog</span><span>Safe STOP</span></div>
+            <div class="family-topline"><span>CURRENT RUNTIME</span><strong>v0.1.10.7-DEV</strong></div>
+            <h3>ST-CPU-MEGA PLC Runtime</h3>
+            <p>16 normal digital inputs and 16 normal digital outputs, EEPROM program persistence with CRC, 400-instruction ceiling, watchdog recovery, safe STOP behavior, serial programming/readback at 115200 baud, dedicated R/M memory spaces, TON timers, CTU counters, and counter reset.</p>
+            <div class="platform-tags"><span>16 X / 16 Y</span><span>R0–R63</span><span>M0–M63</span><span>T0–T15</span><span>C0–C15</span><span>400 Instructions</span></div>
           </article>
+
           <article class="family-card active-family">
-            <div class="family-topline"><span>PLC STUDIO FOUNDATION</span><strong>v0.5.4A-DEV</strong></div>
-            <h3>Graphical ladder engineering workflow</h3>
-            <p>Spec-Tech PLC Studio now has a structured Qt ladder editor with selectable contacts and wires, series insertion with automatic shift/collapse, parallel input branches, multiple output branches, dynamic rung expansion, TON and CTU function blocks, Undo/Redo history, and a right-side component Properties editor. The current v0.5.4A development branch also adds an offline Ladder → Instruction compiler preview before any serial write is enabled.</p>
-            <div class="platform-tags"><span>Qt Ladder Editor</span><span>Undo / Redo</span><span>Properties</span><span>TON / CTU</span><span>Offline Compiler</span></div>
+            <div class="family-topline"><span>CURRENT PLC STUDIO</span><strong>v0.6.10-DEV</strong></div>
+            <h3>Graphical ladder + online monitor</h3>
+            <p>Qt-based ladder engineering environment with structured rungs, series and parallel paths, multiple outputs, TON/CTU blocks, properties, Undo/Redo, topology-aware instruction generation, Connect/Write/Readback Verify, RUN/STOP, and live X/Y/R/M/T/C monitoring.</p>
+            <div class="platform-tags"><span>Ladder Editor</span><span>Compile / Write</span><span>Readback Verify</span><span>RUN / STOP</span><span>Online Monitor</span><span>Green Live State</span></div>
           </article>
+        </div>
+
+        <div class="platform-subheading"><span>Current device capacity</span><strong>Validated logical resources</strong></div>
+        <div class="resource-table-wrap">
+          <table class="resource-table">
+            <thead><tr><th>Device</th><th>Current range</th><th>Role</th></tr></thead>
+            <tbody>
+              <tr><td>X</td><td>X0–X15</td><td>Physical digital inputs on Mega D22–D37.</td></tr>
+              <tr><td>Y</td><td>Y0–Y15</td><td>Physical digital outputs using the validated ST-CPU-MEGA pin map.</td></tr>
+              <tr><td>R</td><td>R0–R63</td><td>64 normal internal relays with a dedicated runtime bank.</td></tr>
+              <tr><td>M</td><td>M0–M63</td><td>64 latched memory relays for SET/RESET logic; independent from R.</td></tr>
+              <tr><td>T</td><td>T0–T15</td><td>16 TON timers with live elapsed/preset, READY/TIMING/DONE monitoring.</td></tr>
+              <tr><td>C</td><td>C0–C15</td><td>16 CTU counters with rising-edge counting, live count/preset, DONE state, and RES reset.</td></tr>
+              <tr><td>D</td><td>D0–D31</td><td>Signed 32-bit data-register diagnostics in the current runtime.</td></tr>
+              <tr><td>Program</td><td>400 instructions</td><td>EEPROM-backed user program with exact readback verification.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="platform-subheading"><span>Validated engineering workflow</span><strong>PLC Studio → ST-CPU-MEGA</strong></div>
+        <div class="release-flow">
+          <article><strong>01</strong><h3>Design</h3><p>Create structured ladder rungs with contacts, branches, coils, relays, timers, and counters.</p></article>
+          <article><strong>02</strong><h3>Compile</h3><p>Lower ladder topology into the PLC instruction stream, including validated PUSH/ORS parallel-path handling.</p></article>
+          <article><strong>03</strong><h3>Write + Verify</h3><p>STOP, CLEAR, WRITE, COMMIT, then READ back and compare the program exactly before operation.</p></article>
+          <article><strong>04</strong><h3>Run</h3><p>Start the PLC scan engine and execute the stored ladder against physical Mega inputs and outputs.</p></article>
+          <article><strong>05</strong><h3>Monitor</h3><p>Observe live X/Y/R/M states plus TON elapsed timing and CTU current counts directly on the ladder.</p></article>
+        </div>
+
+        <div class="platform-subheading"><span>Recent hardware validation</span><strong>Runtime + Studio milestones</strong></div>
+        <div class="resource-table-wrap">
+          <table class="resource-table">
+            <thead><tr><th>Milestone</th><th>Status</th><th>Validated result</th></tr></thead>
+            <tbody>
+              <tr><td>Parallel ladder lowering</td><td>HARDWARE PASS</td><td>PUSH/ORS branch execution validated, including repeated branch paths and the tested Studio compiler output.</td></tr>
+              <tr><td>Write PLC + readback</td><td>HARDWARE PASS</td><td>Compile → WRITE → COMMIT → exact readback verification completed successfully before RUN.</td></tr>
+              <tr><td>RUN / STOP</td><td>HARDWARE PASS</td><td>Physical ladder execution works in RUN and outputs shut down correctly under STOP safety behavior.</td></tr>
+              <tr><td>R/M architecture</td><td>HARDWARE PASS</td><td>R0–R63 normal relays and M0–M63 latched memory relays now use independent runtime banks.</td></tr>
+              <tr><td>X/Y/R/M monitor</td><td>HARDWARE/UI PASS</td><td>Live energized states are shown directly on the ladder with green interior highlighting.</td></tr>
+              <tr><td>TON monitor</td><td>HARDWARE/UI PASS</td><td>Live elapsed/preset milliseconds with READY, TIMING, DONE and active green highlighting.</td></tr>
+              <tr><td>CTU + RES monitor</td><td>HARDWARE/UI PASS</td><td>Live count/preset, READY/COUNTING/DONE, threshold contact behavior, continued up-counting, and RES C reset to zero.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="next-platform-card" style="margin-top:18px">
+          <div>
+            <p class="eyebrow">Current development estimate</p>
+            <h3>Basic PLC software core is approaching feature-complete status</h3>
+            <p>The current software core is approximately <strong>80–85%</strong> of the intended ST-CPU-MEGA Basic PLC software scope. The complete V1 product is approximately <strong>70–75%</strong> when industrial 24 V I/O hardware, analog I/O, HSC, communications, final compiler hardening, and full release regression are included.</p>
+            <p><strong>Next development directions:</strong> rising/falling-edge ladder contacts, analog I/O, high-speed counter support on reserved D2/D3 resources, RS485/Modbus communications, stronger compiler limits/regression, and final stable-release testing.</p>
+          </div>
+          <span class="status-badge test">ACTIVE R&amp;D</span>
         </div>
 
         <div class="platform-subheading"><span>Modular PLC roadmap</span><strong>Planned intelligent expansion modules</strong></div>
@@ -330,88 +383,16 @@
           <table class="resource-table">
             <thead><tr><th>Module</th><th>Planned function</th><th>Architecture / capability</th></tr></thead>
             <tbody>
-              <tr><td>ST-CPU-Mega</td><td>Main PLC CPU</td><td>Arduino Mega 2560 ladder runtime, EEPROM user program, serial engineering link, onboard X/Y I/O, and main expansion-bus control.</td></tr>
-              <tr><td>ST-DI16</td><td>16-channel digital input</td><td>Planned protected/isolated 24 V field-input module. Expansion addressing can continue after onboard X0–X15, e.g. X16–X31.</td></tr>
-              <tr><td>ST-DO16</td><td>16-channel digital output</td><td>Planned protected 24 V transistor/MOSFET field-output module with expansion addressing after onboard Y0–Y15.</td></tr>
-              <tr><td>ST-RO8</td><td>8-channel relay output</td><td>Planned relay-isolated switching module for loads better suited to electromechanical contacts.</td></tr>
-              <tr><td>ST-AI8</td><td>8-channel high-resolution analog input</td><td>Planned STM32F103C8 intelligent module using <strong>2× ADS1115</strong> 16-bit ADCs for eight analog channels, with protected signal conditioning for future 0–5 V, 0–10 V, 0–20 mA, and 4–20 mA field inputs.</td></tr>
-              <tr><td>ST-AO4</td><td>4-channel analog output</td><td>Planned industrial analog-output module for process-control signals.</td></tr>
-              <tr><td>ST-HSC4</td><td>High-speed counter</td><td>Planned dedicated pulse, frequency, and encoder acquisition module using MCU timer/counter hardware.</td></tr>
-              <tr><td>ST-MIX16</td><td>Mixed I/O</td><td>Planned compact combination of digital and/or analog field I/O for smaller distributed stations.</td></tr>
-              <tr><td>ST-MOTION</td><td>Motion / PTO</td><td>Planned dedicated STM32 motion controller for deterministic Step/Dir, pulse-train generation, positioning, and motor-control expansion without burdening the Mega scan engine.</td></tr>
-              <tr><td>ST-COM</td><td>Communications</td><td>Planned communications expansion for RS485/Modbus and future field/network interfaces.</td></tr>
-              <tr><td>ST-TEMP</td><td>Temperature acquisition</td><td>Planned dedicated RTD/thermocouple process-temperature interface.</td></tr>
-              <tr><td>ST-LOADCELL</td><td>Precision weighing</td><td>Planned specialized high-resolution load-cell acquisition module; separate from the general-purpose ST-AI8.</td></tr>
-              <tr><td>ST-POWER</td><td>PLC power conditioning</td><td>Planned protected 24 V input and regulated internal logic-power distribution.</td></tr>
-              <tr><td>ST-HMI</td><td>Local operator interface</td><td>Planned display/HMI/keypad interface for local machine operation and diagnostics.</td></tr>
-              <tr><td>ST-AI/VISION</td><td>Vision / AI integration</td><td>Future Raspberry Pi-class higher-level processing for machine vision and AI while deterministic machine control remains in the PLC architecture.</td></tr>
+              <tr><td>ST-CPU-Mega</td><td>Main PLC CPU</td><td>Current Arduino Mega ladder runtime, onboard X/Y, EEPROM user program, Studio engineering link, and future expansion-bus control.</td></tr>
+              <tr><td>ST-DI16 / ST-DO16</td><td>Digital expansion</td><td>Planned protected 24 V field-input and transistor/MOSFET output modules.</td></tr>
+              <tr><td>ST-AI8 / ST-AO4</td><td>Analog process I/O</td><td>Planned conditioned analog acquisition/output for industrial sensor and control signals.</td></tr>
+              <tr><td>ST-HSC4</td><td>High-speed counting</td><td>Dedicated pulse, frequency, and encoder acquisition independent of ordinary PLC scan timing.</td></tr>
+              <tr><td>ST-MOTION</td><td>Motion / PTO</td><td>Planned STM32-class deterministic Step/Dir and pulse-train motion controller.</td></tr>
+              <tr><td>ST-COM</td><td>Communications</td><td>Planned RS485/Modbus and future field/network interfaces.</td></tr>
+              <tr><td>ST-HMI</td><td>Operator interface</td><td>Local display/HMI integration for machine operation and diagnostics.</td></tr>
+              <tr><td>ST-AI/VISION</td><td>Vision / AI</td><td>Future Raspberry Pi-class higher-level processing while deterministic machine control remains in the PLC layer.</td></tr>
             </tbody>
           </table>
-        </div>
-
-        <div class="next-platform-card" style="margin-top:18px">
-          <div>
-            <p class="eyebrow">Planned expansion backbone</p>
-            <h3>RS485 / Modbus intelligent remote I/O</h3>
-            <p>The modular architecture is planned around the Mega main PLC CPU communicating with intelligent expansion modules over an RS485/Modbus multidrop bus. STM32F103C8 is a primary candidate for dedicated I/O modules. Prototype transceivers may use MAX485-class hardware, while later industrial revisions will require appropriate field protection and isolation.</p>
-            <p><strong>ST-AI8 concept:</strong> two ADS1115 devices provide eight 16-bit ADC channels to an STM32 module MCU. The analog front end will handle field-signal protection, scaling, low-pass filtering, calibration, and engineering-unit conversion before values are exposed to the PLC over the expansion bus. ADS1115-class acquisition is intended for process sensors and other relatively slow analog signals, not high-speed waveform/oscilloscope acquisition.</p>
-          </div>
-          <span class="status-badge test">PLANNED / ARCHITECTURE</span>
-        </div>
-
-        <div class="platform-subheading"><span>Hardware validation record</span><strong>Numbered regression and development tests</strong></div>
-        <div class="resource-table-wrap">
-          <table class="resource-table">
-            <thead><tr><th>Test / Area</th><th>Validated result</th><th>Development detail</th></tr></thead>
-            <tbody>
-              <tr><td>TEST 001–012</td><td>PASS</td><td>Boot/serial, physical Y0, scan engine, TON timing/reset, CTU rising-edge/reset, SET/RST latch, AND/OR/LDN/ANDN/ORN, and independent rung execution.</td></tr>
-              <tr><td>TEST 013–017</td><td>PASS</td><td>Physical Y0–Y15 output bank, M0–M63 relay bank, T0–T15 timer bank, C0–C15 counter bank, and signed 32-bit D0–D31 diagnostics.</td></tr>
-              <tr><td>TEST 018–025</td><td>PASS</td><td>EEPROM COMMIT/load, automatic boot AUTOLOAD in STOP, CRC corruption rejection, RUN/STOP transitions, STOP safety, FORCE/RELEASE priority, exact program readback, and CLEAR safety semantics.</td></tr>
-              <tr><td>TEST 026–029</td><td>PASS</td><td>Strict parser/invalid-command rejection, watchdog recovery, scan-engine stress, and a 30-minute mixed continuous runtime soak.</td></tr>
-              <tr><td>TEST 030</td><td>20/20 PASS</td><td>Repeated physical RESET persistence: EEPROM AUTOLOAD, STOP boot, exact program retention, volatile-state reset, output safety, TON and CTU execution.</td></tr>
-              <tr><td>TEST 031</td><td>HARDWARE PASS</td><td>Physical pushbuttons on X0/D22, X2/D24, and X4/D26 successfully drove real ladder scans and Y0–Y2 outputs.</td></tr>
-              <tr><td>TEST 033 + 033B</td><td>HARDWARE PASS</td><td>Combined X + M + TON + CTU logic, including focused non-blocking TON verification and physical output behavior.</td></tr>
-              <tr><td>TEST 034 REV B</td><td>FULL PASS</td><td>Maximum 400-instruction capacity: 400/400 WRITE, COMMIT, exact READ before/after reset, AUTOLOAD COUNT=400, and physical execution through instruction 399.</td></tr>
-              <tr><td>TEST 035</td><td>1834/1834 PASS</td><td>Automated serial stress across STATUS/INFO, M and D operations, program READs, invalid-command rejection, RUN-mode traffic, program integrity, and final STOP safety.</td></tr>
-              <tr><td>TEST 036</td><td>692/692 PASS</td><td>Online monitoring while RUN with live X/M/Y/T/C/D activity. Physical X0→Y0, X2→TON→Y1, and X4→CTU→Y2 remained correct during PC monitoring.</td></tr>
-              <tr><td>TEST 037 REV B</td><td>FULL PASS</td><td>13/13 PLC instructions read back, reconstructed into five ladder rungs, recompiled tuple-for-tuple exactly, with zero unknown opcodes and no PLC modification.</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="platform-subheading"><span>PLC Studio development</span><strong>Graphical editor and compiler milestones</strong></div>
-        <div class="resource-table-wrap">
-          <table class="resource-table">
-            <thead><tr><th>Studio version</th><th>Status</th><th>Development detail</th></tr></thead>
-            <tbody>
-              <tr><td>v0.4.1A–v0.4.7</td><td>CONFIRMED</td><td>Structured ladder canvas, predefined rung wiring, selectable common/wire segments, Insert Cell with auto-shift, Delete Cell with auto-collapse, output/wire deletion, multiple output branches, and dynamic rung height.</td></tr>
-              <tr><td>v0.4.9</td><td>CONFIRMED</td><td>TON graphical function block with timer address, millisecond preset, drag/drop placement, rendering, and editing.</td></tr>
-              <tr><td>v0.5.0</td><td>CONFIRMED</td><td>Dynamic parallel input branch rows with automatic rung expansion/collapse and downstream rung repositioning.</td></tr>
-              <tr><td>v0.5.1</td><td>CONFIRMED</td><td>CTU graphical counter block with C address and preset-count editing.</td></tr>
-              <tr><td>v0.5.2</td><td>CONFIRMED</td><td>Undo/Redo with whole-ladder state snapshots, toolbar controls, Ctrl+Z, Ctrl+Y, and topology/layout restoration.</td></tr>
-              <tr><td>v0.5.3B</td><td>CONFIRMED</td><td>Component Properties panel with Type, Device, Preset, Comment, Apply, device-family validation, and working selection-to-properties synchronization.</td></tr>
-              <tr><td>v0.5.4A</td><td>ACTIVE DEV</td><td>Offline compiler preview generates LD/LDN/AND/ANDN/OR/ORN, OUT, SET, RST, TON, CTU, END plus firmware WRITE/COMMIT command previews. Nothing is transmitted to the Mega.</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="next-platform-card" style="margin-top:18px">
-          <div>
-            <p class="eyebrow">Compiler validation finding</p>
-            <h3>Topology-aware compilation required before Write PLC</h3>
-            <p>The current offline compiler successfully exposes the generated instruction stream, but testing with parallel and nested branches showed that row-based compilation can lose the true branch/merge topology. The next compiler revision will traverse the actual ladder network from L1 through series paths, parallel branches, nested branches, merge points, and outputs before emitting PLC instructions.</p>
-            <p><strong>Remaining integration stages:</strong> topology-aware compiler → separate R/M runtime architecture → compiler regression suite → serial Connect / Write PLC / COMMIT / RUN hardware validation. Studio R currently represents a normal relay while M represents latched SET/RESET memory; the temporary R→firmware-M compatibility mapping will not be treated as the final runtime architecture.</p>
-          </div>
-          <span class="status-badge test">COMPILER R&amp;D</span>
-        </div>
-
-        <div class="next-platform-card" style="margin-top:18px">
-          <div>
-            <p class="eyebrow">Development status</p>
-            <h3>Current validated scope and next integration stage</h3>
-            <p>The Mega runtime baseline remains unchanged at <strong>v0.1.9.5-DEV</strong> because the capacity, serial-stress, online-monitoring, and ladder-readback tests exposed no firmware defect. PLC Studio has now advanced through the graphical editor foundation to <strong>v0.5.4A-DEV</strong>. The current compiler preview correctly demonstrates basic instruction generation, but complex/nested branch compilation is not yet treated as validated because the first compiler pass is row-based rather than topology-aware. No automatic serial Write PLC function is enabled yet.</p>
-          </div>
-          <span class="status-badge test">ACTIVE R&amp;D</span>
         </div>
       </div>
     </section>
