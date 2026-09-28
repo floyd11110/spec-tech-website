@@ -325,6 +325,40 @@
           </article>
         </div>
 
+        <div class="platform-subheading"><span>Modular PLC roadmap</span><strong>Planned intelligent expansion modules</strong></div>
+        <div class="resource-table-wrap">
+          <table class="resource-table">
+            <thead><tr><th>Module</th><th>Planned function</th><th>Architecture / capability</th></tr></thead>
+            <tbody>
+              <tr><td>ST-CPU-Mega</td><td>Main PLC CPU</td><td>Arduino Mega 2560 ladder runtime, EEPROM user program, serial engineering link, onboard X/Y I/O, and main expansion-bus control.</td></tr>
+              <tr><td>ST-DI16</td><td>16-channel digital input</td><td>Planned protected/isolated 24 V field-input module. Expansion addressing can continue after onboard X0–X15, e.g. X16–X31.</td></tr>
+              <tr><td>ST-DO16</td><td>16-channel digital output</td><td>Planned protected 24 V transistor/MOSFET field-output module with expansion addressing after onboard Y0–Y15.</td></tr>
+              <tr><td>ST-RO8</td><td>8-channel relay output</td><td>Planned relay-isolated switching module for loads better suited to electromechanical contacts.</td></tr>
+              <tr><td>ST-AI8</td><td>8-channel high-resolution analog input</td><td>Planned STM32F103C8 intelligent module using <strong>2× ADS1115</strong> 16-bit ADCs for eight analog channels, with protected signal conditioning for future 0–5 V, 0–10 V, 0–20 mA, and 4–20 mA field inputs.</td></tr>
+              <tr><td>ST-AO4</td><td>4-channel analog output</td><td>Planned industrial analog-output module for process-control signals.</td></tr>
+              <tr><td>ST-HSC4</td><td>High-speed counter</td><td>Planned dedicated pulse, frequency, and encoder acquisition module using MCU timer/counter hardware.</td></tr>
+              <tr><td>ST-MIX16</td><td>Mixed I/O</td><td>Planned compact combination of digital and/or analog field I/O for smaller distributed stations.</td></tr>
+              <tr><td>ST-MOTION</td><td>Motion / PTO</td><td>Planned dedicated STM32 motion controller for deterministic Step/Dir, pulse-train generation, positioning, and motor-control expansion without burdening the Mega scan engine.</td></tr>
+              <tr><td>ST-COM</td><td>Communications</td><td>Planned communications expansion for RS485/Modbus and future field/network interfaces.</td></tr>
+              <tr><td>ST-TEMP</td><td>Temperature acquisition</td><td>Planned dedicated RTD/thermocouple process-temperature interface.</td></tr>
+              <tr><td>ST-LOADCELL</td><td>Precision weighing</td><td>Planned specialized high-resolution load-cell acquisition module; separate from the general-purpose ST-AI8.</td></tr>
+              <tr><td>ST-POWER</td><td>PLC power conditioning</td><td>Planned protected 24 V input and regulated internal logic-power distribution.</td></tr>
+              <tr><td>ST-HMI</td><td>Local operator interface</td><td>Planned display/HMI/keypad interface for local machine operation and diagnostics.</td></tr>
+              <tr><td>ST-AI/VISION</td><td>Vision / AI integration</td><td>Future Raspberry Pi-class higher-level processing for machine vision and AI while deterministic machine control remains in the PLC architecture.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="next-platform-card" style="margin-top:18px">
+          <div>
+            <p class="eyebrow">Planned expansion backbone</p>
+            <h3>RS485 / Modbus intelligent remote I/O</h3>
+            <p>The modular architecture is planned around the Mega main PLC CPU communicating with intelligent expansion modules over an RS485/Modbus multidrop bus. STM32F103C8 is a primary candidate for dedicated I/O modules. Prototype transceivers may use MAX485-class hardware, while later industrial revisions will require appropriate field protection and isolation.</p>
+            <p><strong>ST-AI8 concept:</strong> two ADS1115 devices provide eight 16-bit ADC channels to an STM32 module MCU. The analog front end will handle field-signal protection, scaling, low-pass filtering, calibration, and engineering-unit conversion before values are exposed to the PLC over the expansion bus. ADS1115-class acquisition is intended for process sensors and other relatively slow analog signals, not high-speed waveform/oscilloscope acquisition.</p>
+          </div>
+          <span class="status-badge test">PLANNED / ARCHITECTURE</span>
+        </div>
+
         <div class="platform-subheading"><span>Hardware validation record</span><strong>Numbered regression and development tests</strong></div>
         <div class="resource-table-wrap">
           <table class="resource-table">
