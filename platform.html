@@ -398,7 +398,7 @@
               <tr><td>ST-DRIVE</td><td>Closed-loop motor drive — Development</td><td>Dedicated drive MCU, NEMA stepper support, encoder feedback, closed-loop positioning, position/speed feedback, following-error and stall diagnostics, with modular integration to ST-MOTION.</td></tr>
               <tr><td>ST-COM</td><td>Communications</td><td>Planned RS485/Modbus and future field/network interfaces.</td></tr>
               <tr><td>ST-HMI</td><td>Operator interface</td><td>Local display/HMI integration for machine operation and diagnostics.</td></tr>
-              <tr><td>ST-AI/VISION</td><td>Vision / AI</td><td>Future Raspberry Pi-class higher-level processing while deterministic machine control remains in the PLC layer.</td></tr>
+              <tr><td>ST-VISION</td><td>Industrial machine vision — Development</td><td>Raspberry Pi 5 is the initial R&amp;D compute platform for triggered inspection, measurement, X/Y/θ extraction, vision-guided positioning and future AI/CV; deterministic machine sequencing remains in the PLC layer.</td></tr>
             </tbody>
           </table>
         </div>
@@ -409,8 +409,8 @@
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">SPEC-TECH R&amp;D / DEVELOPMENT</p>
-          <h2>ST PLC + HMI Platform Development</h2>
-          <p>Current in-house development is organized as coordinated PLC, motion/drive, expansion-module, and HMI platform work.</p>
+          <h2>Industrial Automation / PLC / Motion / Vision / HMI Ecosystem</h2>
+          <p>Current in-house R&amp;D is organized as coordinated PLC, expansion-module, motion/drive, machine-vision, and HMI platform development. Each subsystem remains separately defined while being designed for future integration into the wider Spec-Tech automation ecosystem.</p>
         </div>
         <div class="platform-family-grid">
           <article class="family-card active-family">
@@ -426,11 +426,63 @@
             <div class="platform-tags"><span>NEMA Stepper</span><span>Encoder Feedback</span><span>Closed Loop</span><span>Drive MCU</span><span>Diagnostics</span></div>
           </article>
           <article class="family-card active-family">
+            <div class="family-topline"><span>ST-VISION PLATFORM</span><strong>R&amp;D / UNDER DEVELOPMENT</strong></div>
+            <h3>Industrial Machine Vision</h3>
+            <p>Processor-independent industrial vision architecture using Raspberry Pi 5 Model B as the initial R&amp;D compute platform. Development targets include triggered image acquisition, controlled lighting, inspection, measurement, position/orientation detection, coordinate extraction, and future AI/CV processing while the ST PLC CPU remains responsible for machine sequencing and control.</p>
+            <div class="platform-tags"><span>Raspberry Pi 5</span><span>Machine Vision</span><span>Triggered Inspection</span><span>Measurement</span><span>X / Y / θ</span><span>Future AI/CV</span></div>
+          </article>
+          <article class="family-card active-family">
             <div class="family-topline"><span>HMI PLATFORM</span><strong>HARDWARE VALIDATED</strong></div>
             <h3>7-inch ESP32 HMI Platform</h3>
             <p>7&quot; SSD1963 800×480 display platform using SpecTechESP32TFT and SpecTechESP32HMI, with LCD Studio BUILD &amp; UPLOAD workflow plus validated TEMP, GRAPH, and multi-page HMI behavior.</p>
             <div class="platform-tags"><span>SSD1963 800×480</span><span>SpecTechESP32TFT</span><span>SpecTechESP32HMI</span><span>LCD Studio</span><span>TEMP / GRAPH</span><span>Multi-page</span></div>
           </article>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section alt" id="st-vision-development">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">ST-VISION — R&amp;D / UNDER DEVELOPMENT</p>
+          <h2>Industrial machine vision for inspection, positioning, and motion guidance</h2>
+          <p>ST-VISION is being developed as the machine-vision layer of the Spec-Tech ecosystem. Raspberry Pi 5 Model B is the initial development processor, while the long-term architecture remains processor-independent. ST-VISION supplies inspection, measurement, position, and orientation results; the ST PLC CPU remains responsible for machine sequencing and control.</p>
+        </div>
+
+        <div class="platform-family-grid">
+          <article class="family-card active-family">
+            <div class="family-topline"><span>DEVELOPMENT TARGET 01</span><strong>UNDER DEVELOPMENT</strong></div>
+            <h3>High-Speed Chip / Crystal Inspection</h3>
+            <p>Triggered camera inspection for small chip/crystal-like parts on an indexing machine. The development direction includes synchronized strobe/backlight illumination, controlled exposure, ROI processing, part presence, edge/chip/breakage inspection, optically detectable cracks, dimensions, orientation, and PASS/FAIL results.</p>
+            <div class="platform-tags"><span>Global-Shutter Direction</span><span>Hardware Trigger</span><span>Strobe / Backlight</span><span>Edge Inspection</span><span>Orientation</span><span>PASS / FAIL</span></div>
+          </article>
+
+          <article class="family-card active-family">
+            <div class="family-topline"><span>DEVELOPMENT TARGET 02</span><strong>UNDER DEVELOPMENT</strong></div>
+            <h3>Vision-Guided Pad Alignment &amp; Dispensing</h3>
+            <p>The camera localizes a pad/frame before dispensing, determines the actual pad center and X/Y/rotation offsets, then transforms vision coordinates into machine coordinates for position correction through the PLC and ST-MOTION layers.</p>
+            <div class="platform-tags"><span>Pad Center</span><span>X / Y Offset</span><span>Rotation θ</span><span>Coordinate Transform</span><span>ST-MOTION</span><span>Dispensing Alignment</span></div>
+          </article>
+        </div>
+
+        <div class="platform-subheading"><span>Integration architecture</span><strong>Vision result → PLC decision → motion execution</strong></div>
+        <div class="release-flow">
+          <article><strong>01</strong><h3>Camera / Lighting</h3><p>Acquire a controlled image using the appropriate camera, trigger, exposure, strobe, or backlight arrangement.</p></article>
+          <article><strong>02</strong><h3>ST-VISION</h3><p>Perform machine vision, inspection, measurement, coordinate extraction, and orientation calculation.</p></article>
+          <article><strong>03</strong><h3>ST PLC CPU</h3><p>Use the vision result to determine the required machine action and preserve PLC-level sequencing and control.</p></article>
+          <article><strong>04</strong><h3>ST-MOTION</h3><p>Execute the required positioning or motion command from the PLC control layer.</p></article>
+          <article><strong>05</strong><h3>ST-DRIVE / I/O</h3><p>Handle the motor-drive or output level required to actuate the machine.</p></article>
+        </div>
+
+        <div class="next-platform-card" style="margin-top:18px">
+          <div>
+            <p class="eyebrow">Planned capability direction</p>
+            <h3>Inspection, measurement, alignment, and future AI/CV</h3>
+            <p>Development targets include presence/absence detection, defect and contour inspection, dimensional measurement, counting, X/Y coordinate extraction, angle/orientation detection, color inspection, barcode/QR reading, OCR/marking verification, vision-guided positioning, machine alignment, dispensing alignment, and future AI-based inspection.</p>
+            <p>A future pad-dispensing extension may add post-dispense inspection for material presence, centering, deposit area/diameter, amount, overflow, shape consistency, and PASS/FAIL evaluation.</p>
+          </div>
+          <span class="status-badge test">PLANNED / DEVELOPMENT</span>
         </div>
       </div>
     </section>
