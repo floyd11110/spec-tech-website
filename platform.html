@@ -308,19 +308,19 @@
         <div class="section-heading">
           <p class="eyebrow">Active PLC R&amp;D</p>
           <h2>ST-CPU-MEGA — Spec-Tech Mega PLC</h2>
-          <p>Arduino Mega 2560 based PLC development platform with a ladder runtime, EEPROM user-program storage, graphical PLC Studio, hardware RUN/STOP control, and live online monitoring. Current hardware-validated development checkpoint: <strong>Firmware v0.1.10.11-DEV + PLC Studio v0.6.18-DEV</strong>. The platform remains an R&amp;D/basic PLC system, not a finished commercial PLC.</p>
+          <p>Spec-Tech PLC platform R&amp;D covering the PLC CPU Foundation, PLC Studio, modular expansion architecture, digital I/O expansion, motion control, and closed-loop motor-drive development. Current CPU software checkpoint: <strong>Firmware v0.1.10.16-DEV + PLC Studio v0.6.25-DEV</strong>. The platform remains an R&amp;D/basic PLC system, not a finished commercial PLC.</p>
         </div>
 
         <div class="platform-family-grid">
           <article class="family-card active-family">
-            <div class="family-topline"><span>CURRENT RUNTIME</span><strong>v0.1.10.11-DEV</strong></div>
+            <div class="family-topline"><span>CURRENT RUNTIME</span><strong>v0.1.10.16-DEV</strong></div>
             <h3>ST-CPU-MEGA PLC Runtime</h3>
-            <p>16 normal digital inputs and 16 normal digital outputs, EEPROM program persistence with CRC, 400-instruction ceiling, watchdog recovery, safe STOP behavior, serial programming/readback at 115200 baud, dedicated R/M memory spaces, TON timers, CTU counters, and counter reset.</p>
-            <div class="platform-tags"><span>16 X / 16 Y</span><span>R0–R63</span><span>M0–M63</span><span>T0–T15</span><span>C0–C15</span><span>400 Instructions</span></div>
+            <p>16 normal digital inputs and 16 normal digital outputs, EEPROM program persistence, 400-instruction ceiling, watchdog recovery, safe STOP behavior, serial programming/readback at 115200 baud, dedicated R/M memory spaces, TON timers, CTU counters, D0–D31 signed 32-bit data registers, and the validated MOV data-transfer family.</p>
+            <div class="platform-tags"><span>16 X / 16 Y</span><span>R0–R63</span><span>M0–M63</span><span>T0–T15</span><span>C0–C15</span><span>D0–D31 INT32</span><span>400 Instructions</span></div>
           </article>
 
           <article class="family-card active-family">
-            <div class="family-topline"><span>CURRENT PLC STUDIO</span><strong>v0.6.18-DEV</strong></div>
+            <div class="family-topline"><span>CURRENT PLC STUDIO</span><strong>v0.6.25-DEV</strong></div>
             <h3>Graphical ladder + online monitor</h3>
             <p>Qt-based ladder engineering environment with structured rungs, series and parallel paths, multiple outputs, TON/CTU blocks, properties, Undo/Redo, topology-aware instruction generation, Connect/Write/READ PLC, RUN/STOP, live monitoring, and hardware-validated persistent structural Online Edit while RUN.</p>
             <div class="platform-tags"><span>Ladder Editor</span><span>Compile / Write</span><span>READ PLC</span><span>RUN / STOP</span><span>Online Edit</span><span>Online Monitor</span></div>
@@ -338,7 +338,7 @@
               <tr><td>M</td><td>M0–M63</td><td>64 latched memory relays for SET/RESET logic; independent from R.</td></tr>
               <tr><td>T</td><td>T0–T15</td><td>16 TON timers with live elapsed/preset, READY/TIMING/DONE monitoring.</td></tr>
               <tr><td>C</td><td>C0–C15</td><td>16 CTU counters with rising-edge counting, live count/preset, DONE state, and RES reset.</td></tr>
-              <tr><td>D</td><td>D0–D31 planned baseline</td><td>Data-register architecture is being defined before MOV, math, compare, analog, timer/counter data transfer, and ST module data functions are implemented.</td></tr>
+              <tr><td>D</td><td>D0–D31</td><td>Signed 32-bit volatile data registers. Hardware-validated MOV paths: Constant→D, D→D, T→D elapsed time, and C→D current count.</td></tr>
               <tr><td>Program</td><td>400 instructions</td><td>EEPROM-backed user program with exact readback verification.</td></tr>
             </tbody>
           </table>
@@ -368,6 +368,8 @@
               <tr><td>READ PLC reconstruction</td><td>HARDWARE/UI PASS</td><td>Topology reconstruction validated for shared contacts and identical parallel branches with a common suffix.</td></tr>
               <tr><td>Structural Online Edit</td><td>HARDWARE/UI PASS</td><td>Expansion and contraction while RUN validated with runtime state preservation and EEPROM persistence.</td></tr>
               <tr><td>Online Edit power-fail recovery</td><td>CONTROLLED HARDWARE PASS</td><td>Journal recovery validated at the deterministic interrupted-commit fault-injection point; this is not a claim of exhaustive arbitrary-timing power-loss coverage.</td></tr>
+              <tr><td>D-register core</td><td>HARDWARE PASS</td><td>D0–D31 validated as signed 32-bit runtime registers with STOP→RUN retention and reset/power-cycle volatility.</td></tr>
+              <tr><td>MOV data-transfer family</td><td>HARDWARE/UI PASS</td><td>Constant→D, D→D, T→D elapsed time, and C→D current count validated with live Studio monitoring and Online Edit interaction.</td></tr>
             </tbody>
           </table>
         </div>
@@ -377,7 +379,7 @@
             <p class="eyebrow">Current development estimate</p>
             <h3>Basic PLC software core is approaching feature-complete status</h3>
             <p>The current software core is approximately <strong>80–85%</strong> of the intended ST-CPU-MEGA Basic PLC software scope. The complete V1 product is approximately <strong>70–75%</strong> when industrial 24 V I/O hardware, analog I/O, HSC, communications, final compiler hardening, and full release regression are included.</p>
-            <p><strong>Next development directions:</strong> D-register/data architecture, MOV and numerical operations, continuous timer/counter functions, analog processing, ST module function blocks, edge contacts, HSC, RS485/Modbus, compiler hardening, and final stable-release testing.</p>
+            <p><strong>Current development directions:</strong> continuous timer/counter functions, numerical/math and compare operations, analog processing, ST Module Manager/API integration, edge contacts, HSC, communications, compiler hardening, and final stable-release testing.</p>
             <p><a class="button secondary" href="plc-instructions.html">Open PLC Instruction &amp; Function Roadmap</a></p>
           </div>
           <span class="status-badge test">ACTIVE R&amp;D</span>
@@ -392,12 +394,43 @@
               <tr><td>ST-DI16 / ST-DO16</td><td>Digital expansion</td><td>Planned protected 24 V field-input and transistor/MOSFET output modules.</td></tr>
               <tr><td>ST-AI8 / ST-AO4</td><td>Analog process I/O</td><td>Planned conditioned analog acquisition/output for industrial sensor and control signals.</td></tr>
               <tr><td>ST-HSC4</td><td>High-speed counting</td><td>Dedicated pulse, frequency, and encoder acquisition independent of ordinary PLC scan timing.</td></tr>
-              <tr><td>ST-MOTION</td><td>Motion / PTO</td><td>Planned STM32-class deterministic Step/Dir and pulse-train motion controller.</td></tr>
+              <tr><td>ST-MOTION</td><td>Motion controller — Development</td><td>Dedicated modular motion-control layer for deterministic Step/Dir, pulse-train and future coordinated positioning functions.</td></tr>
+              <tr><td>ST-DRIVE</td><td>Closed-loop motor drive — Development</td><td>Dedicated drive MCU, NEMA stepper support, encoder feedback, closed-loop positioning, position/speed feedback, following-error and stall diagnostics, with modular integration to ST-MOTION.</td></tr>
               <tr><td>ST-COM</td><td>Communications</td><td>Planned RS485/Modbus and future field/network interfaces.</td></tr>
               <tr><td>ST-HMI</td><td>Operator interface</td><td>Local display/HMI integration for machine operation and diagnostics.</td></tr>
               <tr><td>ST-AI/VISION</td><td>Vision / AI</td><td>Future Raspberry Pi-class higher-level processing while deterministic machine control remains in the PLC layer.</td></tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="st-rd-overview">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">SPEC-TECH R&amp;D / DEVELOPMENT</p>
+          <h2>ST PLC + HMI Platform Development</h2>
+          <p>Current in-house development is organized as coordinated PLC, motion/drive, expansion-module, and HMI platform work.</p>
+        </div>
+        <div class="platform-family-grid">
+          <article class="family-card active-family">
+            <div class="family-topline"><span>PLC PLATFORM</span><strong>ACTIVE R&amp;D</strong></div>
+            <h3>ST PLC Platform</h3>
+            <p>ST PLC CPU Foundation, ST PLC Studio, ST Module Architecture, ST-DI16 / ST-DO16 Expansion, ST-MOTION Motion Controller development, and ST-DRIVE Closed-Loop Motor Drive development.</p>
+            <div class="platform-tags"><span>CPU Foundation</span><span>PLC Studio</span><span>ST Modules</span><span>DI16 / DO16</span><span>ST-MOTION</span><span>ST-DRIVE</span></div>
+          </article>
+          <article class="family-card active-family">
+            <div class="family-topline"><span>ST-DRIVE DIRECTION</span><strong>DEVELOPMENT</strong></div>
+            <h3>Closed-Loop Stepper Drive</h3>
+            <p>NEMA stepper support with encoder feedback, closed-loop positioning, dedicated drive MCU, position/speed feedback, following-error and stall diagnostics, and modular integration with ST-MOTION.</p>
+            <div class="platform-tags"><span>NEMA Stepper</span><span>Encoder Feedback</span><span>Closed Loop</span><span>Drive MCU</span><span>Diagnostics</span></div>
+          </article>
+          <article class="family-card active-family">
+            <div class="family-topline"><span>HMI PLATFORM</span><strong>HARDWARE VALIDATED</strong></div>
+            <h3>7-inch ESP32 HMI Platform</h3>
+            <p>7&quot; SSD1963 800×480 display platform using SpecTechESP32TFT and SpecTechESP32HMI, with LCD Studio BUILD &amp; UPLOAD workflow plus validated TEMP, GRAPH, and multi-page HMI behavior.</p>
+            <div class="platform-tags"><span>SSD1963 800×480</span><span>SpecTechESP32TFT</span><span>SpecTechESP32HMI</span><span>LCD Studio</span><span>TEMP / GRAPH</span><span>Multi-page</span></div>
+          </article>
         </div>
       </div>
     </section>
