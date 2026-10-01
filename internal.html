@@ -57,10 +57,14 @@
         <button class="logout" id="logoutButton" type="button">Lock Portal</button>
       </div>
       <div class="portal-grid">
-        <article class="portal-panel"><h2>ST PLC</h2><p>Internal CPU, PLC Studio, module architecture, validation, and engineering development area.</p></article>
-        <article class="portal-panel"><h2>ST Modules</h2><p>Internal expansion-module architecture, hardware planning, addressing, interfaces, and validation records.</p></article>
-        <article class="portal-panel"><h2>ST Motion / Drive</h2><p>Internal motion-control and closed-loop drive development area.</p></article>
-        <article class="portal-panel"><h2>ST Vision / HMI</h2><p>Internal machine-vision and operator-interface development area.</p></article>
+        <a class="portal-panel" href="internal-plc.html" style="color:inherit;text-decoration:none"><h2>ST PLC Engineering</h2><p>CPU runtime, scan/timing techniques, logical devices, ladder compiler, Online Edit, EEPROM and software reliability.</p></a>
+        <a class="portal-panel" href="internal-hardware.html" style="color:inherit;text-decoration:none"><h2>Hardware Design Vault</h2><p>24 V I/O, MOSFET design, protection, power, EMI/noise techniques, PCB review and component engineering notes.</p></a>
+        <a class="portal-panel" href="internal-modules.html" style="color:inherit;text-decoration:none"><h2>ST Modules & HSC</h2><p>Module addressing, Module Manager, transport abstraction, DI/DO expansion and precision timing/high-speed measurement.</p></a>
+        <a class="portal-panel" href="internal-systems.html" style="color:inherit;text-decoration:none"><h2>ST Systems Engineering</h2><p>ST-MOTION, ST-DRIVE, ST-VISION, HMI, SCADA and ST-I4.0 system architecture and design techniques.</p></a>
+      </div>
+      <div style="margin-top:22px;padding:18px;border:1px solid #243954;border-radius:16px;background:#0d1b2d">
+        <p class="status">ENGINEERING DOCUMENTATION METHOD</p>
+        <p style="color:#aebed2;line-height:1.65;margin-bottom:0">Internal records follow: Problem → Requirement → Engineering Principle → Architecture/Design → Calculation → Implementation → Test Method → Actual Result → Limitation → Final Design Decision. Development status is kept separate from physically validated results.</p>
       </div>
     </section>
   </main>
