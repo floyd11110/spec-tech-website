@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <title>Spec-Tech Internal Access</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body{min-height:100vh;margin:0;background:#07111f;color:#e8eef8;font-family:Inter,sans-serif}
+    .internal-shell{min-height:100vh;display:grid;place-items:center;padding:24px}
+    .access-card{width:min(460px,100%);background:#0d1b2d;border:1px solid #243954;border-radius:20px;padding:32px;box-shadow:0 24px 70px rgba(0,0,0,.35)}
+    .access-mark{width:58px;height:58px;border-radius:14px;display:grid;place-items:center;background:#132944;border:1px solid #315071;font-weight:800;font-size:20px;margin-bottom:22px}
+    .access-card h1{margin:0 0 8px;font-size:28px}
+    .access-card p{color:#aebed2;line-height:1.6}
+    .access-card label{display:block;margin:24px 0 8px;font-weight:700}
+    .access-card input{box-sizing:border-box;width:100%;padding:14px 16px;border-radius:10px;border:1px solid #36506f;background:#071321;color:#fff;font:inherit;outline:none}
+    .access-card input:focus{border-color:#73a9df}
+    .access-card button{width:100%;margin-top:14px;padding:14px 16px;border:0;border-radius:10px;background:#e9f2fb;color:#07111f;font:inherit;font-weight:800;cursor:pointer}
+    .access-card button:hover{filter:brightness(.95)}
+    #error{min-height:22px;margin:12px 0 0;color:#ff9e9e;font-size:14px}
+    .back-link{display:inline-block;margin-top:12px;color:#9fc6ed;text-decoration:none}
+    #portal{display:none;width:min(1050px,100%);margin:auto}
+    .portal-head{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:22px}
+    .portal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+    .portal-panel{background:#0d1b2d;border:1px solid #243954;border-radius:16px;padding:22px}
+    .portal-panel h2{font-size:18px;margin:0 0 10px}.portal-panel p{color:#aebed2;line-height:1.55;margin:0}
+    .status{font-size:12px;font-weight:800;letter-spacing:.08em;color:#9fc6ed}
+    .logout{background:transparent!important;color:#bcd2e8!important;border:1px solid #36506f!important;width:auto!important;margin:0!important}
+  </style>
+</head>
+<body>
+  <main class="internal-shell">
+    <section class="access-card" id="loginPanel" aria-labelledby="loginTitle">
+      <div class="access-mark">ST</div>
+      <p class="status">SPEC-TECH INTERNAL</p>
+      <h1 id="loginTitle">Authorized Access Only</h1>
+      <p>This page is reserved for Spec-Tech internal engineering and development information.</p>
+      <form id="accessForm">
+        <label for="password">Password</label>
+        <input id="password" type="password" autocomplete="current-password" autofocus />
+        <button type="submit">Enter Internal Portal</button>
+        <p id="error" role="alert"></p>
+      </form>
+      <a class="back-link" href="index.html">← Return to public website</a>
+    </section>
+
+    <section id="portal">
+      <div class="portal-head">
+        <div>
+          <p class="status">AUTHORIZED SESSION</p>
+          <h1>Spec-Tech Engineering Portal</h1>
+        </div>
+        <button class="logout" id="logoutButton" type="button">Lock Portal</button>
+      </div>
+      <div class="portal-grid">
+        <article class="portal-panel"><h2>ST PLC</h2><p>Internal CPU, PLC Studio, module architecture, validation, and engineering development area.</p></article>
+        <article class="portal-panel"><h2>ST Modules</h2><p>Internal expansion-module architecture, hardware planning, addressing, interfaces, and validation records.</p></article>
+        <article class="portal-panel"><h2>ST Motion / Drive</h2><p>Internal motion-control and closed-loop drive development area.</p></article>
+        <article class="portal-panel"><h2>ST Vision / HMI</h2><p>Internal machine-vision and operator-interface development area.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const accessForm = document.getElementById('accessForm');
+    const passwordInput = document.getElementById('password');
+    const error = document.getElementById('error');
+    const loginPanel = document.getElementById('loginPanel');
+    const portal = document.getElementById('portal');
+
+    function unlock() {
+      sessionStorage.setItem('stInternalAccess', '1');
+      loginPanel.style.display = 'none';
+      portal.style.display = 'block';
+    }
+
+    function lock() {
+      sessionStorage.removeItem('stInternalAccess');
+      portal.style.display = 'none';
+      loginPanel.style.display = 'block';
+      passwordInput.value = '';
+      error.textContent = '';
+      passwordInput.focus();
+    }
+
+    if (sessionStorage.getItem('stInternalAccess') === '1') unlock();
+
+    accessForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      if (passwordInput.value === 'ST-access') {
+        error.textContent = '';
+        unlock();
+      } else {
+        error.textContent = 'Access denied. Incorrect password.';
+        passwordInput.select();
+      }
+    });
+
+    document.getElementById('logoutButton').addEventListener('click', lock);
+  </script>
+</body>
+</html>
