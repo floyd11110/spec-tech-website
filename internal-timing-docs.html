@@ -1,0 +1,59 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="robots" content="noindex,nofollow"><title>STTiming Detailed Documentation</title><link rel="stylesheet" href="internal.css"></head>
+<body><header><b>ST INTERNAL / TIMING DOCS</b><nav><a href="internal.html">Dashboard</a><a href="internal-embedded.html">Embedded Overview</a><a href="internal-embedded-examples.html">All Examples</a><a href="internal-pulse-docs.html">Pulse Docs</a></nav></header>
+<main>
+<p class="ey">PHASE 3 / PERIPHERAL CONVENIENCE LAYER</p><h1>STTiming v0.1.0-DEV</h1>
+<p>Detailed reference for non-blocking millisecond timing on the current Arduino Nano / ATmega328P checkpoint.</p>
+
+<section><h2>Purpose</h2><div class="record"><b>Why it exists</b><p><code>delay()</code> blocks the user loop. STTimer allows timed actions while the loop continues to execute other logic.</p><b>Execution model</b><p>No hidden scheduler. The application explicitly checks the timer from normal Arduino <code>loop()</code>.</p><b>Timebase</b><p>The current implementation uses <code>millis()</code> and unsigned elapsed-time subtraction.</p></div></section>
+
+<section><h2>Basic use</h2><pre><code>#include &lt;STTiming.h&gt;
+
+STTimer timer(1000);
+
+void setup()
+{
+    timer.start();
+}
+
+void loop()
+{
+    if (timer.expired())
+    {
+        // action every interval
+        timer.restart();
+    }
+}</code></pre></section>
+
+<section><h2>API reference</h2><table class="api-table">
+<tr><th>Function</th><th>Meaning</th><th>Status</th></tr>
+<tr><td>start()</td><td>Starts the timer from zero when stopped.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>elapsed()</td><td>Returns elapsed milliseconds since the current start/restart.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>expired()</td><td>True when elapsed time is greater than or equal to the interval.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>remaining()</td><td>Returns milliseconds remaining, clamped to zero after expiry.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>reset()</td><td>Clears elapsed time and stops the timer.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>restart()</td><td>Clears elapsed time and immediately starts again.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>setInterval(ms)</td><td>Changes the configured interval.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>interval()</td><td>Returns the configured interval.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>running()</td><td>Reports whether the timer is currently active.</td><td><span class="badge pass">PASS</span></td></tr>
+</table></section>
+
+<section><h2>Semantics</h2><div class="cols2"><article><h3>reset()</h3><pre><code>timer.reset();</code></pre><p>After reset: <code>elapsed() = 0</code> and <code>running() = false</code>.</p></article><article><h3>restart()</h3><pre><code>timer.restart();</code></pre><p>After restart: <code>elapsed() = 0</code> and <code>running() = true</code>.</p></article></div></section>
+
+<section><h2>Overflow-safe millis handling</h2><p>The timer should compare elapsed time using unsigned subtraction:</p><pre><code>elapsed = now - startTime;</code></pre><p>This is safer than comparing against <code>startTime + interval</code> because normal unsigned wraparound is handled by modular arithmetic.</p></section>
+
+<section><h2>Hardware validation</h2><pre><code>Initial interval = 1000
+Initial running = FALSE
+After start(), running = TRUE
+Elapsed before reset = 403
+After reset(), running = FALSE
+After reset(), elapsed = 0
+After setInterval(2000), interval = 2000
+After restart(), running = TRUE
+--- 2000 ms TIMER EXPIRED ---
+elapsed = 2000
+remaining = 0
+running = TRUE</code></pre><p>Repeated 1000 ms restart cycles also produced consistent elapsed/remaining progression around 250/750, 500/500, 750/250 and expiry near 1000/0.</p></section>
+
+<section><h2>Important limitation</h2><p>STTiming is non-blocking only if the rest of the sketch remains responsive. A long blocking call elsewhere in the loop can delay when <code>expired()</code> is checked. STTimer does not create a background scheduler.</p></section>
+</main></body></html>
