@@ -1,0 +1,307 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <meta name="robots" content="noindex,nofollow">
+  <title>STAnalogIO Detailed Documentation</title>
+  <link rel="stylesheet" href="internal.css">
+</head>
+<body>
+<header>
+  <b>ST INTERNAL / ANALOG DOCS</b>
+  <nav>
+    <a href="internal.html">Dashboard</a>
+    <a href="internal-embedded.html">Embedded Overview</a>
+    <a href="internal-embedded-docs.html">Digital I/O Docs</a>
+    <a href="internal-embedded-examples.html">All Examples</a>
+    <a href="internal-plc.html">PLC</a>
+  </nav>
+</header>
+<main>
+  <p class="ey">ST EMBEDDED DOCUMENTATION</p>
+  <h1>STAnalogIO v0.2.0-DEV</h1>
+  <p>Detailed reference for analog input sampling, averaging, voltage conversion, configurable ADC reference voltage, and PWM output on the current Arduino Nano / ATmega328P checkpoint.</p>
+
+  <section>
+    <h2>1. What STAnalogIO is</h2>
+    <div class="record">
+      <b>Purpose</b>
+      <p>STAnalogIO wraps common Arduino analog operations in lightweight objects. <code>STAnalogInput</code> handles ADC sampling and conversion. <code>STAnalogOutput</code> handles PWM output through Arduino <code>analogWrite()</code>.</p>
+      <b>Execution model</b>
+      <p>All reads and writes happen only when called by the user sketch. There is no hidden sampler, scheduler, interrupt service, heap allocation, or required <code>ST.run()</code>.</p>
+      <b>Current validation target</b>
+      <p>Arduino Nano / ATmega328P @ 16 MHz using the current ST Embedded IDE checkpoint.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. STAnalogInput — creating an input</h2>
+    <pre><code>#include &lt;STAnalogIO.h&gt;
+
+STAnalogInput sensor(A0, 5.0f);</code></pre>
+    <p><code>A0</code> is the analog pin. <code>5.0f</code> is the voltage reference value used by the library when converting ADC counts to volts.</p>
+    <div class="callout warn">
+      <span class="note-title">Reference voltage is a conversion assumption</span>
+      <p>Passing <code>5.0f</code> does not measure the Nano supply. If the real reference is 4.90 V, use 4.90 V for better conversion accuracy. Raw ADC operation can be correct even when absolute voltage accuracy is limited by an inaccurate reference assumption.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. <code>begin()</code></h2>
+    <p>Initializes the analog input object for use. The current API keeps setup explicit and consistent with the rest of the ST convenience layer.</p>
+    <pre><code>void setup()
+{
+    sensor.begin();
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>4. <code>read()</code> — one raw ADC sample</h2>
+    <p><code>read()</code> performs one ADC conversion and returns the raw Nano ADC count.</p>
+    <pre><code>int raw = sensor.read();
+
+Serial.println(raw);</code></pre>
+    <p>On the validated classic Nano target, the observed range was:</p>
+    <table>
+      <tr><th>Input condition</th><th>Observed ADC</th></tr>
+      <tr><td>Near GND</td><td>0</td></tr>
+      <tr><td>Intermediate potentiometer positions</td><td>Values throughout the range</td></tr>
+      <tr><td>Near reference/full scale</td><td>1023</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>5. <code>readAverage(samples)</code> — averaged ADC reading</h2>
+    <p>This function takes multiple ADC samples and returns their arithmetic average. It is useful when a sensor has small random sample-to-sample variation.</p>
+    <pre><code>uint16_t average = sensor.readAverage(10);</code></pre>
+    <p>Conceptually:</p>
+    <pre><code>sample1 + sample2 + ... + sampleN
+-------------------------------- = average
+                N</code></pre>
+    <p>Example from the hardware test:</p>
+    <pre><code>RAW = 457 | AVG10 = 458
+RAW = 485 | AVG10 = 486
+RAW = 649 | AVG10 = 649
+RAW = 866 | AVG10 = 865</code></pre>
+    <div class="callout">
+      <span class="note-title">What averaging does</span>
+      <p>It smooths small random variation. It does not magically correct calibration error, bad grounding, clipping, sensor drift, or a wrong voltage reference.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>6. <code>readVoltage()</code></h2>
+    <p>Reads the ADC and converts the count to volts using the configured reference voltage.</p>
+    <p>For the current Nano implementation, the conversion corresponds to:</p>
+    <pre><code>Voltage = ADC × Vref / 1023</code></pre>
+    <p>Example: with <code>Vref = 5.0 V</code> and an ADC reading around 485, the measured output was about 2.375–2.380 V.</p>
+    <pre><code>float volts = sensor.readVoltage();</code></pre>
+  </section>
+
+  <section>
+    <h2>7. <code>readAverageVoltage(samples)</code></h2>
+    <p>This combines multi-sample averaging with voltage conversion.</p>
+    <pre><code>float avgVolts = sensor.readAverageVoltage(10);</code></pre>
+    <p>Hardware validation reached both endpoints:</p>
+    <pre><code>RAW = 0    | AVG10 = 0    | V = 0.000 | AVG V = 0.000
+RAW = 1023 | AVG10 = 1023 | V = 5.000 | AVG V = 5.000</code></pre>
+  </section>
+
+  <section>
+    <h2>8. Why raw, average, voltage, and average-voltage can differ slightly</h2>
+    <p>If the sketch calls these functions one after another, they are not all based on one identical ADC sample.</p>
+    <pre><code>sensor.read();                  // one sample
+sensor.readAverage(10);         // ten new samples
+sensor.readVoltage();           // another new sample
+sensor.readAverageVoltage(10);  // ten more new samples</code></pre>
+    <p>If a potentiometer or sensor is moving, small differences are expected because each call observes the signal at a different time.</p>
+  </section>
+
+  <section>
+    <h2>9. Reference voltage configuration</h2>
+    <h3><code>referenceVoltage()</code></h3>
+    <p>Returns the reference voltage value currently stored by the object.</p>
+    <pre><code>Serial.println(sensor.referenceVoltage(), 3);</code></pre>
+
+    <h3><code>setReferenceVoltage(volts)</code></h3>
+    <p>Changes the conversion reference used by future voltage calculations.</p>
+    <pre><code>sensor.setReferenceVoltage(4.900f);</code></pre>
+
+    <h3>Validated behavior</h3>
+    <pre><code>PIN = 14
+INITIAL VREF = 5.000
+NEW VREF = 4.900
+ADC = 1023
+VOLTAGE USING 4.900 VREF = 4.900</code></pre>
+    <p>This confirms that the conversion tracks the configured reference value.</p>
+  </section>
+
+  <section>
+    <h2>10. <code>pin()</code></h2>
+    <p>Returns the configured Arduino analog pin value. On the validated Nano target, <code>A0</code> reported numerically as 14.</p>
+    <pre><code>Serial.println(sensor.pin());  // observed: 14</code></pre>
+  </section>
+
+  <section>
+    <h2>11. STAnalogOutput — PWM output</h2>
+    <pre><code>STAnalogOutput pwm(9);
+
+void setup()
+{
+    pwm.begin();
+}</code></pre>
+    <p>The current implementation wraps Arduino PWM output. On the Nano test, D9 was used.</p>
+    <div class="callout warn">
+      <span class="note-title">PWM is not a true DAC voltage</span>
+      <p><code>analogWrite()</code> on the classic Nano produces a digital PWM waveform on supported PWM pins. A value such as 128 means approximately 50% duty cycle, not a steady analog voltage of half the supply unless external filtering/load behavior makes it appear that way.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>12. PWM API</h2>
+    <table class="api-table">
+      <tr><th>Function</th><th>Meaning</th><th>Hardware validation</th></tr>
+      <tr><td>begin()</td><td>Initializes the PWM output object.</td><td><span class="badge pass">PASS</span></td></tr>
+      <tr><td>write(value)</td><td>Writes PWM value 0–255.</td><td><span class="badge pass">PASS</span></td></tr>
+      <tr><td>off()</td><td>Sets output value to 0.</td><td><span class="badge pass">PASS</span></td></tr>
+      <tr><td>full()</td><td>Sets output value to 255.</td><td><span class="badge pass">PASS</span></td></tr>
+      <tr><td>value()</td><td>Returns the tracked PWM command value.</td><td><span class="badge pass">PASS</span></td></tr>
+      <tr><td>pin()</td><td>Returns the configured output pin.</td><td><span class="badge pass">PASS</span></td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>13. PWM values and duty cycle</h2>
+    <table>
+      <tr><th>Command</th><th>Approximate duty</th><th>Observed hardware behavior</th></tr>
+      <tr><td><code>write(0)</code></td><td>0%</td><td>OFF</td></tr>
+      <tr><td><code>write(64)</code></td><td>~25%</td><td>Low/dim output</td></tr>
+      <tr><td><code>write(128)</code></td><td>~50%</td><td>Mid-level PWM behavior</td></tr>
+      <tr><td><code>write(192)</code></td><td>~75%</td><td>Higher/brighter output</td></tr>
+      <tr><td><code>full()</code></td><td>100%</td><td>Full output</td></tr>
+      <tr><td><code>off()</code></td><td>0%</td><td>OFF</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>14. Basic PWM example</h2>
+    <pre><code>#include &lt;STAnalogIO.h&gt;
+
+STAnalogOutput pwm(9);
+
+void setup()
+{
+    Serial.begin(115200);
+    pwm.begin();
+}
+
+void loop()
+{
+    pwm.write(0);
+    delay(1000);
+
+    pwm.write(64);
+    delay(1000);
+
+    pwm.write(128);
+    delay(1000);
+
+    pwm.write(192);
+    delay(1000);
+
+    pwm.full();
+    delay(1000);
+
+    pwm.off();
+    delay(1000);
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>15. Complete analog input example</h2>
+    <pre><code>#include &lt;STAnalogIO.h&gt;
+
+STAnalogInput sensor(A0, 5.0f);
+
+void setup()
+{
+    Serial.begin(115200);
+    sensor.begin();
+}
+
+void loop()
+{
+    int raw = sensor.read();
+    uint16_t avg = sensor.readAverage(10);
+    float volts = sensor.readVoltage();
+    float avgVolts = sensor.readAverageVoltage(10);
+
+    Serial.print("RAW = ");
+    Serial.print(raw);
+    Serial.print(" | AVG10 = ");
+    Serial.print(avg);
+    Serial.print(" | V = ");
+    Serial.print(volts, 3);
+    Serial.print(" | AVG V = ");
+    Serial.println(avgVolts, 3);
+
+    delay(500);
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>16. Hardware validation summary</h2>
+    <table>
+      <tr><th>Feature</th><th>Status</th><th>Evidence</th></tr>
+      <tr><td>read()</td><td><span class="badge pass">PASS</span></td><td>Observed ADC range from 0 to 1023</td></tr>
+      <tr><td>readAverage(10)</td><td><span class="badge pass">PASS</span></td><td>Averaged values tracked raw signal with reduced small variations</td></tr>
+      <tr><td>readVoltage()</td><td><span class="badge pass">PASS</span></td><td>0.000 V to configured 5.000 V endpoint</td></tr>
+      <tr><td>readAverageVoltage(10)</td><td><span class="badge pass">PASS</span></td><td>Average-voltage endpoint and intermediate behavior validated</td></tr>
+      <tr><td>pin()</td><td><span class="badge pass">PASS</span></td><td>A0 reported as 14 on Nano</td></tr>
+      <tr><td>referenceVoltage()</td><td><span class="badge pass">PASS</span></td><td>Reported 5.000 V initial reference</td></tr>
+      <tr><td>setReferenceVoltage()</td><td><span class="badge pass">PASS</span></td><td>Changed to 4.900 V and conversion followed it</td></tr>
+      <tr><td>PWM write/value/pin</td><td><span class="badge pass">PASS</span></td><td>Serial state and physical D9 hardware behavior confirmed</td></tr>
+      <tr><td>full()/off()</td><td><span class="badge pass">PASS</span></td><td>255/full and 0/off behavior confirmed</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>17. Common mistakes</h2>
+    <table class="compare-table">
+      <tr><th>Mistake</th><th>Problem</th><th>Correction</th></tr>
+      <tr><td>Treating <code>5.0f</code> as measured Vcc</td><td>Absolute voltage can be inaccurate</td><td>Measure the real reference when accuracy matters</td></tr>
+      <tr><td>Expecting average to fix calibration</td><td>Averaging only reduces random variation</td><td>Calibrate reference/sensor separately</td></tr>
+      <tr><td>Expecting every API call to use one sample</td><td>Each read function can acquire new ADC samples</td><td>Store one raw value if a single snapshot is required</td></tr>
+      <tr><td>Calling PWM a true analog voltage</td><td>Nano analogWrite is PWM</td><td>Describe it as duty-cycle output unless externally filtered</td></tr>
+      <tr><td>Using a non-PWM pin for variable PWM output</td><td>Hardware capability differs by pin</td><td>Use a supported PWM pin such as the validated D9 checkpoint</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>18. Quick reference</h2>
+    <pre><code>// ANALOG INPUT
+STAnalogInput sensor(A0, 5.0f);
+
+sensor.begin();
+sensor.read();
+sensor.readAverage(10);
+sensor.readVoltage();
+sensor.readAverageVoltage(10);
+sensor.setReferenceVoltage(4.90f);
+sensor.referenceVoltage();
+sensor.pin();
+
+// PWM OUTPUT
+STAnalogOutput pwm(9);
+
+pwm.begin();
+pwm.write(128);
+pwm.off();
+pwm.full();
+pwm.value();
+pwm.pin();</code></pre>
+  </section>
+</main>
+</body>
+</html>
