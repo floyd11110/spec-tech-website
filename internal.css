@@ -1,1 +1,14 @@
 body{margin:0;background:#07111f;color:#e8eef8;font:14px Arial,sans-serif;line-height:1.6}a{color:#a9d4f7;text-decoration:none}header{display:flex;justify-content:space-between;padding:16px 5%;background:#081522;border-bottom:1px solid #263d57}nav{display:flex;gap:14px;flex-wrap:wrap}main{max-width:1200px;margin:auto;padding:40px 20px}h1{font-size:42px}.ey{font-size:11px;letter-spacing:.12em;color:#83b8e7;font-weight:bold}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}article,.record{background:#0d1b2d;border:1px solid #263d57;border-radius:14px;padding:20px}section{margin:36px 0}li,p{color:#b4c2d0}.record b{color:#91c2e9}.record p{border-bottom:1px solid #1b3147;padding-bottom:10px}table{width:100%;border-collapse:collapse;background:#0d1b2d}th,td{text-align:left;padding:12px;border:1px solid #20364d}.pass{color:#9ee0b5}.dev{color:#efd18f}@media(max-width:800px){.grid{grid-template-columns:1fr}header{display:block}nav{margin-top:10px}h1{font-size:30px}}
+code{font-family:Consolas,"Courier New",monospace;color:#d9ecff}
+pre{overflow:auto;background:#06101b;border:1px solid #20364d;border-radius:12px;padding:16px;color:#d9ecff;line-height:1.5}
+.badge{display:inline-block;padding:5px 9px;border-radius:999px;border:1px solid #34516f;font-size:11px;font-weight:bold;letter-spacing:.07em;text-transform:uppercase;margin-right:6px}
+.badge.pass{background:#0c2a1c;border-color:#235a3a;color:#9ee0b5}
+.badge.dev{background:#2a2110;border-color:#6a5420;color:#efd18f}
+.badge.info{background:#10253a;border-color:#315a7b;color:#a9d4f7}
+.callout{background:#0a1726;border-left:4px solid #5c99ca;border-radius:10px;padding:14px 16px;margin:16px 0}
+.callout.warn{border-left-color:#d5a84d}
+.api-table td:first-child{white-space:nowrap;font-family:Consolas,"Courier New",monospace;color:#d9ecff}
+.small{font-size:12px;color:#8fa4b8}
+.kpi{font-size:26px;font-weight:bold;color:#e8eef8;margin:4px 0}
+.cols2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(max-width:800px){.cols2{grid-template-columns:1fr}.api-table{display:block;overflow-x:auto}}
