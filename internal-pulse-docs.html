@@ -1,0 +1,79 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="robots" content="noindex,nofollow"><title>STPulse Detailed Documentation</title><link rel="stylesheet" href="internal.css"></head>
+<body><header><b>ST INTERNAL / PULSE DOCS</b><nav><a href="internal.html">Dashboard</a><a href="internal-embedded.html">Embedded Overview</a><a href="internal-embedded-examples.html">All Examples</a><a href="internal-timing-docs.html">Timing Docs</a></nav></header>
+<main>
+<p class="ey">PHASE 3 / PERIPHERAL CONVENIENCE LAYER</p><h1>STPulse v0.1.0-DEV</h1>
+<p>Detailed reference for the current basic pulse-measurement layer using Arduino <code>pulseIn()</code>.</p>
+
+<section><h2>Purpose</h2><div class="record"><b>Measurements</b><p>High pulse width, low pulse width, period, frequency, duty cycle, and RPM conversion.</p><b>Current architecture</b><p>This first version is deliberately blocking and uses <code>pulseIn()</code>. It is intended for basic measurement and diagnostics, not deterministic high-speed capture.</p><b>Validated wiring</b><p>Arduino Nano D9 generated a 100 Hz test signal with <code>tone()</code>; D7 was the STPulse input.</p></div></section>
+
+<section><h2>Validated wiring</h2><pre><code>Nano D9  -------->  Nano D7
+
+D9 = tone() source
+D7 = STPulseInput</code></pre></section>
+
+<section><h2>Basic use</h2><pre><code>#include &lt;STPulse.h&gt;
+
+STPulseInput pulse(7, 50000UL);
+
+void setup()
+{
+    pulse.begin();
+    tone(9, 100);
+}
+
+void loop()
+{
+    float hz = pulse.frequencyHz();
+    float rpm = pulse.rpm(1);
+}</code></pre></section>
+
+<section><h2>API reference</h2><table class="api-table">
+<tr><th>Function</th><th>Meaning</th><th>Status</th></tr>
+<tr><td>begin()</td><td>Initializes the input according to the configured mode.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>highWidth()</td><td>Measures HIGH pulse width in microseconds.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>lowWidth()</td><td>Measures LOW pulse width in microseconds.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>periodMicros()</td><td>Returns measured signal period in microseconds.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>frequencyHz()</td><td>Converts measured period to frequency in hertz.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>dutyCycle()</td><td>Returns approximate HIGH duty cycle percentage.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>rpm(PPR)</td><td>Converts frequency to RPM using pulses per revolution.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>setTimeout(us)</td><td>Changes pulseIn timeout in microseconds.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>timeout()</td><td>Returns configured timeout.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>pin()</td><td>Returns input pin.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>mode()</td><td>Returns configured input mode.</td><td><span class="badge pass">PASS</span></td></tr>
+</table></section>
+
+<section><h2>Measurement relationships</h2><pre><code>Period_us = HIGH_us + LOW_us
+
+Frequency_Hz = 1,000,000 / Period_us
+
+Duty_% = HIGH_us / Period_us × 100
+
+RPM = Frequency_Hz × 60 / PulsesPerRevolution</code></pre></section>
+
+<section><h2>Hardware validation at 100 Hz</h2><pre><code>HIGH ≈ 4950 us
+LOW ≈ 4963–4970 us
+PERIOD ≈ 9913–9920 us
+FREQ ≈ 100.81–100.89 Hz
+DUTY ≈ 49.9 %
+RPM(1 PPR) ≈ 6048–6053</code></pre><p>The measured values are consistent with the D9 100 Hz tone test and the blocking pulseIn()-based measurement method.</p></section>
+
+<section><h2>Pulses per revolution</h2><pre><code>At ~100.89 Hz:
+
+1 PPR  -> 6051.4 RPM
+2 PPR  -> 3025.7 RPM
+20 PPR -> 302.7 RPM</code></pre><p>Increasing PPR reduces calculated mechanical RPM for the same electrical pulse frequency because more pulses represent each revolution.</p></section>
+
+<section><h2>Timeout and no-signal behavior</h2><pre><code>Initial timeout = 50000
+After setTimeout(20000) = 20000
+
+Signal stopped:
+HIGH = 0
+LOW = 0
+PERIOD = 0
+FREQ = 0.00</code></pre><p>This confirms the current no-signal convention: zero-valued measurement results after the configured timeout.</p></section>
+
+<section><h2>Blocking limitation</h2><div class="callout warn"><span class="note-title">Important</span><p>Each <code>pulseIn()</code>-based measurement can block until the requested pulse completes or the timeout expires. This version is suitable for basic measurement, but not for precision multi-channel high-speed capture or time-critical control.</p></div></section>
+
+<section><h2>Future architecture</h2><p>A later separate layer should use external interrupts and/or hardware timers for non-blocking edge timestamping, frequency/count windows, and higher-precision capture. That future implementation should remain distinct from this simple blocking STPulse v0.1.0 API.</p></section>
+</main></body></html>
