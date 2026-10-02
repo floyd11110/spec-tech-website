@@ -1,0 +1,260 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <meta name="robots" content="noindex,nofollow">
+  <title>ST Embedded IDE Internal</title>
+  <link rel="stylesheet" href="internal.css">
+</head>
+<body>
+<header>
+  <b>ST INTERNAL / EMBEDDED</b>
+  <nav>
+    <a href="internal.html">Dashboard</a>
+    <a href="internal-plc.html">PLC</a>
+    <a href="internal-hardware.html">Hardware</a>
+    <a href="internal-modules.html">Modules</a>
+    <a href="internal-systems.html">Systems</a>
+  </nav>
+</header>
+<main>
+  <p class="ey">ST EMBEDDED PLATFORM</p>
+  <h1>ST Embedded IDE & STDigitalIO</h1>
+  <p>Internal engineering reference for the Arduino-compatible ST Embedded Nano development platform and its lightweight digital I/O convenience layer.</p>
+
+  <section>
+    <h2>Current checkpoint</h2>
+    <div class="grid">
+      <article>
+        <span class="badge dev">Development</span>
+        <h3>ST Embedded IDE</h3>
+        <p class="kpi">v0.3.13.0-DEV</p>
+        <ul>
+          <li>Target: Arduino Nano / ATmega328P @ 16 MHz</li>
+          <li>Arduino bootloader retained</li>
+          <li>Arduino Compatibility mode uses normal <code>setup()</code> / <code>loop()</code></li>
+          <li><code>ST.run()</code> is not required</li>
+          <li>Blocking <code>delay()</code> remains allowed in compatibility mode</li>
+        </ul>
+      </article>
+      <article>
+        <span class="badge pass">Hardware Validated</span>
+        <h3>STDigitalIO</h3>
+        <p class="kpi">v0.2.0-DEV</p>
+        <p>Current implemented output, input, debounce and edge-detection API has been exercised on the physical Nano test setup.</p>
+      </article>
+      <article>
+        <span class="badge pass">Hardware Validated</span>
+        <h3>Upload pipeline</h3>
+        <ul>
+          <li>COM13 / 115200 Serial Monitor</li>
+          <li>Old Bootloader upload @ 57600</li>
+          <li>Direct avrdude upload</li>
+          <li>DTR/RTS recovery pulse</li>
+          <li>Serial auto-pause and reconnect</li>
+          <li>Flash verify PASS</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Design philosophy</h2>
+    <div class="record">
+      <b>Compatibility first</b>
+      <p>ST helper APIs sit on top of ordinary Arduino behavior. They do not replace the Arduino execution model.</p>
+      <b>No hidden scheduler</b>
+      <p>Digital I/O helpers do not require a background task, hidden interrupt, heap allocation or mandatory runtime service.</p>
+      <b>Explicit update model</b>
+      <p>Debounced input state is refreshed only when the application calls <code>button.update()</code>. This keeps timing and execution visible to the programmer.</p>
+      <b>Low overhead</b>
+      <p>The convenience layer is intended to remain lightweight and suitable for the ATmega328P resource envelope.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>STDigitalOutput API</h2>
+    <table class="api-table">
+      <tr><th>API</th><th>Purpose</th><th>Validation</th></tr>
+      <tr><td>begin(false)</td><td>Configures the pin as output and starts LOW.</td><td><span class="badge pass">PASS</span></td></tr>
+      <tr><td>begin(true)</td><td>Configures the pin as output and starts HIGH.</td><td><span class="badge pass">PASS</span></td></tr>
+      <tr><td>on()</td><td>Drives the output HIGH.</td><td><span class="badge pass">PASS</span></td></tr>
+      <tr><td>off()</td><td>Drives the output LOW.</td><td><span class="badge pass">PASS</span></td></tr>
+      <tr><td>write(bool)</td><td>Writes HIGH for true and LOW for false.</td><td><span class="badge pass">PASS</span></td></tr>
+      <tr><td>toggle()</td><td>Inverts the tracked output state.</td><td><span class="badge pass">PASS</span></td></tr>
+      <tr><td>state()</td><td>Returns the object's current tracked output state.</td><td><span class="badge pass">PASS</span></td></tr>
+      <tr><td>pin()</td><td>Returns the configured physical Arduino pin number.</td><td><span class="badge pass">PASS</span></td></tr>
+    </table>
+
+    <h3>Basic output example</h3>
+    <pre><code>#include &lt;STDigitalIO.h&gt;
+
+STDigitalOutput led(13);
+
+void setup()
+{
+    led.begin(false);
+}
+
+void loop()
+{
+    led.toggle();
+    delay(200);
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>STDigitalInput raw API</h2>
+    <table class="api-table">
+      <tr><th>API</th><th>Purpose</th><th>Validation</th></tr>
+      <tr><td>begin()</td><td>Applies the configured Arduino input mode.</td><td><span class="badge pass">PASS</span></td></tr>
+      <tr><td>read()</td><td>Performs a raw digital input read.</td><td><span class="badge pass">PASS</span></td></tr>
+      <tr><td>isHigh()</td><td>Returns true when a raw read is HIGH.</td><td><span class="badge pass">PASS</span></td></tr>
+      <tr><td>isLow()</td><td>Returns true when a raw read is LOW.</td><td><span class="badge pass">PASS</span></td></tr>
+      <tr><td>pin()</td><td>Returns the configured Arduino pin.</td><td><span class="badge pass">PASS</span></td></tr>
+      <tr><td>mode()</td><td>Returns the configured Arduino pin mode such as INPUT_PULLUP.</td><td><span class="badge pass">PASS</span></td></tr>
+    </table>
+
+    <div class="callout warn">
+      <b>Raw-read timing note.</b>
+      <p>Each raw helper may sample the physical pin independently. A mechanical button can bounce between calls, so a sequence such as <code>read()</code>, <code>isHigh()</code> and <code>isLow()</code> is not guaranteed to represent one identical instant. Use the debounced cached API below when one coherent stable state is required.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Debounce & edge detection</h2>
+    <p>The v0.2.0 input layer adds a non-blocking debounce state machine. The application explicitly calls <code>update()</code>; all stable-state and edge results for that update are derived from the cached debounced state.</p>
+
+    <div class="cols2">
+      <article>
+        <h3>State API</h3>
+        <ul>
+          <li><code>update()</code> — sample/process the input</li>
+          <li><code>stableRead()</code> — cached debounced HIGH/LOW</li>
+          <li><code>stableHigh()</code> — stable state is HIGH</li>
+          <li><code>stableLow()</code> — stable state is LOW</li>
+          <li><code>changed()</code> — stable state changed on this update</li>
+        </ul>
+      </article>
+      <article>
+        <h3>Edge & configuration API</h3>
+        <ul>
+          <li><code>rose()</code> — debounced LOW → HIGH transition</li>
+          <li><code>fell()</code> — debounced HIGH → LOW transition</li>
+          <li><code>setDebounce(ms)</code> — changes debounce interval</li>
+          <li><code>debounceMs()</code> — reports configured interval</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="callout">
+      <b>Overflow-safe timing principle.</b>
+      <p>Debounce timing should use unsigned elapsed-time subtraction rather than absolute-time comparison so normal <code>millis()</code> wraparound does not break the interval test.</p>
+    </div>
+
+    <h3>Validated press/release example</h3>
+    <pre><code>#include &lt;STDigitalIO.h&gt;
+
+STDigitalOutput led(13);
+STDigitalInput button(2, INPUT_PULLUP, 30);
+
+void setup()
+{
+    Serial.begin(115200);
+    led.begin(false);
+    button.begin();
+}
+
+void loop()
+{
+    button.update();
+
+    if (button.fell())
+    {
+        Serial.println("PRESSED / FELL");
+        led.toggle();
+    }
+
+    if (button.rose())
+    {
+        Serial.println("RELEASED / ROSE");
+    }
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>INPUT_PULLUP semantics</h2>
+    <table>
+      <tr><th>Physical button state</th><th>Electrical state</th><th>Stable helper</th><th>Edge</th></tr>
+      <tr><td>Released</td><td>HIGH</td><td><code>stableHigh() == true</code></td><td>Release transition = <code>rose()</code></td></tr>
+      <tr><td>Pressed to GND</td><td>LOW</td><td><code>stableLow() == true</code></td><td>Press transition = <code>fell()</code></td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Hardware validation record</h2>
+    <div class="grid">
+      <article>
+        <p class="ey">TEST</p>
+        <h3>Debounce / edge sequence</h3>
+        <p>Repeated physical presses produced one <code>PRESSED / FELL</code> event followed by one <code>RELEASED / ROSE</code> event per observed cycle.</p>
+        <span class="badge pass">PASS</span>
+      </article>
+      <article>
+        <p class="ey">TEST</p>
+        <h3>Stable state regression</h3>
+        <p>Pressed state reported 0 / FALSE / TRUE with <code>fell()==true</code>. Released state reported 1 / TRUE / FALSE with <code>rose()==true</code>.</p>
+        <span class="badge pass">PASS</span>
+      </article>
+      <article>
+        <p class="ey">TEST</p>
+        <h3>Runtime debounce change</h3>
+        <p>Constructor debounce value reported 30 ms; after <code>setDebounce(50)</code>, <code>debounceMs()</code> reported 50 ms.</p>
+        <span class="badge pass">PASS</span>
+      </article>
+    </div>
+
+    <h3>Observed regression output</h3>
+    <pre><code>debounceMs() = 30
+after setDebounce(50) = 50
+
+stableRead() = 0
+stableHigh() = FALSE
+stableLow() = TRUE
+changed() = TRUE
+rose() = FALSE
+fell() = TRUE
+
+stableRead() = 1
+stableHigh() = TRUE
+stableLow() = FALSE
+changed() = TRUE
+rose() = TRUE
+fell() = FALSE</code></pre>
+    <p class="small">Status terminology: hardware validated means the described behavior was physically exercised on the test hardware. It does not by itself mean the library is frozen for all future targets or certified for production use.</p>
+  </section>
+
+  <section>
+    <h2>Known limitations & engineering rules</h2>
+    <ul>
+      <li><code>update()</code> must be called frequently enough for the required button/input response time.</li>
+      <li>A long blocking operation in the user loop can delay debounce recognition because there is intentionally no hidden background scheduler.</li>
+      <li>Mechanical debounce is appropriate for slow human-operated contacts; do not use it to intentionally filter high-speed pulse inputs.</li>
+      <li>High-speed timing/counting belongs to hardware-timed acquisition or a dedicated high-speed module when deterministic capture is required.</li>
+      <li>The current validation target is the Arduino Nano / ATmega328P checkpoint; other MCU families require their own regression evidence.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Release decision</h2>
+    <div class="record">
+      <b>Current decision</b>
+      <p>Keep STDigitalIO v0.2.0-DEV as the validated lightweight digital I/O layer for the current Nano development checkpoint.</p>
+      <b>Next development direction</b>
+      <p>Continue Phase 2 with similarly explicit, low-overhead convenience APIs. Do not introduce a scheduler or hidden runtime dependency into Arduino Compatibility mode.</p>
+    </div>
+  </section>
+</main>
+</body>
+</html>
