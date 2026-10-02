@@ -20,11 +20,13 @@
 </header>
 <main>
   <p class="ey">ST EMBEDDED PLATFORM</p>
-  <h1>ST Embedded IDE, STDigitalIO & STAnalogIO</h1>
-  <p>Internal engineering reference for the Arduino-compatible ST Embedded Nano development platform and its lightweight digital and analog I/O convenience layers.</p>
+  <h1>ST Embedded IDE — Digital, Analog, Timing & Pulse</h1>
+  <p>Internal engineering reference for the Arduino-compatible ST Embedded Nano development platform and its lightweight digital I/O, analog I/O, timing, and pulse-measurement convenience layers.</p>
   <p>
     <a class="doc-link" href="internal-embedded-docs.html">STDigitalIO docs →</a>
     <a class="doc-link" href="internal-analog-docs.html">STAnalogIO docs →</a>
+    <a class="doc-link" href="internal-timing-docs.html">STTiming docs →</a>
+    <a class="doc-link" href="internal-pulse-docs.html">STPulse docs →</a>
     <a class="doc-link" href="internal-embedded-examples.html">All examples →</a>
   </p>
 
@@ -34,7 +36,7 @@
       <article>
         <span class="badge dev">Development</span>
         <h3>ST Embedded IDE</h3>
-        <p class="kpi">v0.3.15.0-DEV</p>
+        <p class="kpi">v0.3.17.0-DEV</p>
         <ul>
           <li>Target: Arduino Nano / ATmega328P @ 16 MHz</li>
           <li>Arduino bootloader retained</li>
@@ -54,6 +56,18 @@
         <h3>STAnalogIO</h3>
         <p class="kpi">v0.2.0-DEV</p>
         <p>Analog input, averaging, voltage conversion, configurable reference voltage, and PWM output have been physically validated on the Nano checkpoint.</p>
+      </article>
+      <article>
+        <span class="badge pass">Hardware Validated</span>
+        <h3>STTiming</h3>
+        <p class="kpi">v0.1.0-DEV</p>
+        <p>Non-blocking millisecond timer API with explicit start/reset/restart semantics, remaining time, interval changes, and overflow-safe elapsed-time handling.</p>
+      </article>
+      <article>
+        <span class="badge pass">Hardware Validated</span>
+        <h3>STPulse</h3>
+        <p class="kpi">v0.1.0-DEV</p>
+        <p>Blocking pulseIn()-based measurement layer for pulse width, period, frequency, duty cycle, RPM conversion, timeout configuration, and no-signal handling.</p>
       </article>
       <article>
         <span class="badge pass">Hardware Validated</span>
@@ -263,7 +277,7 @@ fell() = FALSE</code></pre>
       <b>Current decision</b>
       <p>Keep STDigitalIO v0.2.0-DEV as the validated lightweight digital I/O layer for the current Nano development checkpoint.</p>
       <b>Next development direction</b>
-      <p>STDigitalIO and STAnalogIO are the current hardware-validated Phase 2 convenience layers. Continue adding similarly explicit, low-overhead APIs without introducing a scheduler or hidden runtime dependency into Arduino Compatibility mode.</p>
+      <p>STDigitalIO and STAnalogIO form the current hardware-validated Phase 2 convenience layer. Phase 3 has begun with hardware-validated STTiming and STPulse modules. Continue adding explicit, low-overhead peripheral APIs without introducing a hidden scheduler into Arduino Compatibility mode.</p>
     </div>
   </section>
 </main>
