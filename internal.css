@@ -12,3 +12,11 @@ pre{overflow:auto;background:#06101b;border:1px solid #20364d;border-radius:12px
 .kpi{font-size:26px;font-weight:bold;color:#e8eef8;margin:4px 0}
 .cols2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 @media(max-width:800px){.cols2{grid-template-columns:1fr}.api-table{display:block;overflow-x:auto}}
+
+.doc-link{display:inline-block;padding:10px 14px;border:1px solid #315a7b;border-radius:10px;background:#10253a;color:#cfe9ff;font-weight:bold}
+.doc-link:hover{background:#15314d}
+.step-list{counter-reset:steps;list-style:none;padding:0}
+.step-list li{counter-increment:steps;position:relative;padding:0 0 18px 42px}
+.step-list li:before{content:counter(steps);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#16304a;border:1px solid #3a6284;color:#dff1ff;font-weight:bold}
+.compare-table td:first-child{font-weight:bold;color:#e8eef8}
+.note-title{font-weight:bold;color:#91c2e9}
