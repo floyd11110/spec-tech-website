@@ -1,0 +1,522 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <meta name="robots" content="noindex,nofollow">
+  <title>ST Embedded Examples</title>
+  <link rel="stylesheet" href="internal.css">
+</head>
+<body>
+<header>
+  <b>ST INTERNAL / EXAMPLES</b>
+  <nav>
+    <a href="internal.html">Dashboard</a>
+    <a href="internal-embedded.html">Embedded Overview</a>
+    <a href="internal-embedded-docs.html">Digital I/O Docs</a>
+    <a href="internal-analog-docs.html">Analog I/O Docs</a>
+  </nav>
+</header>
+<main>
+  <p class="ey">ST EMBEDDED EXAMPLE LIBRARY</p>
+  <h1>All Current Validated Examples</h1>
+  <p>Collected examples for the current STDigitalIO and STAnalogIO APIs. These examples use the normal Arduino <code>setup()</code> / <code>loop()</code> model.</p>
+
+  <section>
+    <h2>Digital I/O examples</h2>
+
+    <h3>1. Basic digital input controlling LED</h3>
+    <pre><code>#include &lt;STDigitalIO.h&gt;
+
+STDigitalOutput led(13);
+STDigitalInput button(2, INPUT_PULLUP);
+
+void setup()
+{
+    led.begin(false);
+    button.begin();
+}
+
+void loop()
+{
+    if (button.isLow())
+    {
+        led.on();
+    }
+    else
+    {
+        led.off();
+    }
+}</code></pre>
+
+    <h3>2. Output write using boolean values</h3>
+    <pre><code>#include &lt;STDigitalIO.h&gt;
+
+STDigitalOutput led(13);
+
+void setup()
+{
+    led.begin(false);
+}
+
+void loop()
+{
+    led.write(true);
+    delay(1000);
+
+    led.write(false);
+    delay(1000);
+}</code></pre>
+
+    <h3>3. Toggle output continuously</h3>
+    <pre><code>#include &lt;STDigitalIO.h&gt;
+
+STDigitalOutput led(13);
+
+void setup()
+{
+    led.begin(false);
+}
+
+void loop()
+{
+    led.toggle();
+    delay(200);
+}</code></pre>
+
+    <h3>4. Raw input read</h3>
+    <pre><code>#include &lt;STDigitalIO.h&gt;
+
+STDigitalOutput led(13);
+STDigitalInput button(2, INPUT_PULLUP);
+
+void setup()
+{
+    led.begin(false);
+    button.begin();
+}
+
+void loop()
+{
+    int state = button.read();
+
+    if (state)
+    {
+        led.on();
+    }
+    else
+    {
+        led.off();
+    }
+}</code></pre>
+    <p>Because this uses <code>INPUT_PULLUP</code>, released is HIGH and pressed is LOW.</p>
+
+    <h3>5. Debounced one-toggle-per-press</h3>
+    <pre><code>#include &lt;STDigitalIO.h&gt;
+
+STDigitalOutput led(13);
+STDigitalInput button(2, INPUT_PULLUP, 30);
+
+void setup()
+{
+    led.begin(false);
+    button.begin();
+}
+
+void loop()
+{
+    button.update();
+
+    if (button.fell())
+    {
+        led.toggle();
+    }
+}</code></pre>
+
+    <h3>6. Separate press and release events</h3>
+    <pre><code>#include &lt;STDigitalIO.h&gt;
+
+STDigitalInput button(2, INPUT_PULLUP, 30);
+
+void setup()
+{
+    Serial.begin(115200);
+    button.begin();
+}
+
+void loop()
+{
+    button.update();
+
+    if (button.fell())
+    {
+        Serial.println("PRESSED / FELL");
+    }
+
+    if (button.rose())
+    {
+        Serial.println("RELEASED / ROSE");
+    }
+}</code></pre>
+
+    <h3>7. Stable-state regression example</h3>
+    <pre><code>#include &lt;STDigitalIO.h&gt;
+
+STDigitalInput button(2, INPUT_PULLUP, 30);
+
+void setup()
+{
+    Serial.begin(115200);
+    button.begin();
+
+    Serial.print("debounceMs() = ");
+    Serial.println(button.debounceMs());
+
+    button.setDebounce(50);
+
+    Serial.print("after setDebounce(50) = ");
+    Serial.println(button.debounceMs());
+}
+
+void loop()
+{
+    button.update();
+
+    if (button.changed())
+    {
+        Serial.print("stableRead() = ");
+        Serial.println(button.stableRead());
+
+        Serial.print("stableHigh() = ");
+        Serial.println(button.stableHigh() ? "TRUE" : "FALSE");
+
+        Serial.print("stableLow() = ");
+        Serial.println(button.stableLow() ? "TRUE" : "FALSE");
+
+        Serial.print("rose() = ");
+        Serial.println(button.rose() ? "TRUE" : "FALSE");
+
+        Serial.print("fell() = ");
+        Serial.println(button.fell() ? "TRUE" : "FALSE");
+    }
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>Analog input examples</h2>
+
+    <h3>8. Basic raw analog reading</h3>
+    <pre><code>#include &lt;STAnalogIO.h&gt;
+
+STAnalogInput sensor(A0);
+
+void setup()
+{
+    Serial.begin(115200);
+    sensor.begin();
+}
+
+void loop()
+{
+    Serial.println(sensor.read());
+    delay(500);
+}</code></pre>
+
+    <h3>9. Raw plus 10-sample average</h3>
+    <pre><code>#include &lt;STAnalogIO.h&gt;
+
+STAnalogInput sensor(A0);
+
+void setup()
+{
+    Serial.begin(115200);
+    sensor.begin();
+}
+
+void loop()
+{
+    int raw = sensor.read();
+    uint16_t avg = sensor.readAverage(10);
+
+    Serial.print("RAW = ");
+    Serial.print(raw);
+    Serial.print(" | AVG10 = ");
+    Serial.println(avg);
+
+    delay(500);
+}</code></pre>
+
+    <h3>10. Voltage and average voltage</h3>
+    <pre><code>#include &lt;STAnalogIO.h&gt;
+
+STAnalogInput sensor(A0, 5.0f);
+
+void setup()
+{
+    Serial.begin(115200);
+    sensor.begin();
+}
+
+void loop()
+{
+    Serial.print("V = ");
+    Serial.print(sensor.readVoltage(), 3);
+
+    Serial.print(" | AVG V = ");
+    Serial.println(sensor.readAverageVoltage(10), 3);
+
+    delay(500);
+}</code></pre>
+
+    <h3>11. Complete analog input monitor</h3>
+    <pre><code>#include &lt;STAnalogIO.h&gt;
+
+STAnalogInput sensor(A0, 5.0f);
+
+void setup()
+{
+    Serial.begin(115200);
+    sensor.begin();
+}
+
+void loop()
+{
+    int raw = sensor.read();
+    uint16_t average = sensor.readAverage(10);
+    float voltage = sensor.readVoltage();
+    float averageVoltage = sensor.readAverageVoltage(10);
+
+    Serial.print("RAW = ");
+    Serial.print(raw);
+    Serial.print(" | AVG10 = ");
+    Serial.print(average);
+    Serial.print(" | V = ");
+    Serial.print(voltage, 3);
+    Serial.print(" | AVG V = ");
+    Serial.println(averageVoltage, 3);
+
+    delay(500);
+}</code></pre>
+
+    <h3>12. Change reference voltage</h3>
+    <pre><code>#include &lt;STAnalogIO.h&gt;
+
+STAnalogInput sensor(A0, 5.0f);
+
+void setup()
+{
+    Serial.begin(115200);
+    sensor.begin();
+
+    Serial.print("PIN = ");
+    Serial.println(sensor.pin());
+
+    Serial.print("INITIAL VREF = ");
+    Serial.println(sensor.referenceVoltage(), 3);
+
+    sensor.setReferenceVoltage(4.900f);
+
+    Serial.print("NEW VREF = ");
+    Serial.println(sensor.referenceVoltage(), 3);
+
+    Serial.print("ADC = ");
+    Serial.println(sensor.read());
+
+    Serial.print("VOLTAGE USING 4.900 VREF = ");
+    Serial.println(sensor.readVoltage(), 3);
+}
+
+void loop()
+{
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>PWM output examples</h2>
+
+    <h3>13. Basic PWM sweep</h3>
+    <pre><code>#include &lt;STAnalogIO.h&gt;
+
+STAnalogOutput pwm(9);
+
+void setup()
+{
+    pwm.begin();
+}
+
+void loop()
+{
+    pwm.write(0);
+    delay(1500);
+
+    pwm.write(64);
+    delay(1500);
+
+    pwm.write(128);
+    delay(1500);
+
+    pwm.write(192);
+    delay(1500);
+
+    pwm.full();
+    delay(1500);
+
+    pwm.off();
+    delay(1500);
+}</code></pre>
+
+    <h3>14. PWM with serial state verification</h3>
+    <pre><code>#include &lt;STAnalogIO.h&gt;
+
+STAnalogOutput pwm(9);
+
+void setup()
+{
+    Serial.begin(115200);
+    pwm.begin();
+
+    Serial.print("Pin = ");
+    Serial.println(pwm.pin());
+}
+
+void loop()
+{
+    pwm.write(0);
+    Serial.println(pwm.value());
+    delay(1000);
+
+    pwm.write(64);
+    Serial.println(pwm.value());
+    delay(1000);
+
+    pwm.write(128);
+    Serial.println(pwm.value());
+    delay(1000);
+
+    pwm.write(192);
+    Serial.println(pwm.value());
+    delay(1000);
+
+    pwm.full();
+    Serial.println(pwm.value());
+    delay(1000);
+
+    pwm.off();
+    Serial.println(pwm.value());
+    delay(1000);
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>Combined digital + analog examples</h2>
+
+    <h3>15. Potentiometer controls PWM brightness</h3>
+    <pre><code>#include &lt;STAnalogIO.h&gt;
+
+STAnalogInput pot(A0);
+STAnalogOutput pwm(9);
+
+void setup()
+{
+    pot.begin();
+    pwm.begin();
+}
+
+void loop()
+{
+    int raw = pot.readAverage(10);
+
+    int pwmValue = map(raw, 0, 1023, 0, 255);
+
+    pwm.write(pwmValue);
+
+    delay(20);
+}</code></pre>
+    <p>This combines the validated analog averaging input with the validated PWM output. The Arduino <code>map()</code> function converts the 0–1023 ADC range to the 0–255 PWM range.</p>
+
+    <h3>16. Button enables potentiometer-controlled PWM</h3>
+    <pre><code>#include &lt;STDigitalIO.h&gt;
+#include &lt;STAnalogIO.h&gt;
+
+STDigitalInput button(2, INPUT_PULLUP, 30);
+STAnalogInput pot(A0);
+STAnalogOutput pwm(9);
+
+void setup()
+{
+    button.begin();
+    pot.begin();
+    pwm.begin();
+}
+
+void loop()
+{
+    button.update();
+
+    if (button.stableLow())
+    {
+        int raw = pot.readAverage(10);
+        int pwmValue = map(raw, 0, 1023, 0, 255);
+        pwm.write(pwmValue);
+    }
+    else
+    {
+        pwm.off();
+    }
+}</code></pre>
+
+    <h3>17. Press toggles analog-output enable state</h3>
+    <pre><code>#include &lt;STDigitalIO.h&gt;
+#include &lt;STAnalogIO.h&gt;
+
+STDigitalInput button(2, INPUT_PULLUP, 30);
+STAnalogInput pot(A0);
+STAnalogOutput pwm(9);
+
+bool enabled = false;
+
+void setup()
+{
+    button.begin();
+    pot.begin();
+    pwm.begin();
+}
+
+void loop()
+{
+    button.update();
+
+    if (button.fell())
+    {
+        enabled = !enabled;
+    }
+
+    if (enabled)
+    {
+        int raw = pot.readAverage(10);
+        pwm.write(map(raw, 0, 1023, 0, 255));
+    }
+    else
+    {
+        pwm.off();
+    }
+}</code></pre>
+
+    <div class="callout warn">
+      <span class="note-title">Validation note for combined examples</span>
+      <p>The individual STDigitalIO and STAnalogIO functions used here are hardware validated. These exact combined application sketches are documentation examples unless separately recorded as full application-level regression tests.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Current library status</h2>
+    <table>
+      <tr><th>Library</th><th>Version</th><th>Status</th></tr>
+      <tr><td>STDigitalIO</td><td>v0.2.0-DEV</td><td><span class="badge pass">Implemented API hardware validated</span></td></tr>
+      <tr><td>STAnalogIO</td><td>v0.2.0-DEV</td><td><span class="badge pass">Implemented API hardware validated</span></td></tr>
+      <tr><td>ST Embedded IDE</td><td>v0.3.15.0-DEV</td><td><span class="badge dev">Development checkpoint</span></td></tr>
+    </table>
+  </section>
+</main>
+</body>
+</html>
