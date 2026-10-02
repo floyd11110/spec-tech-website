@@ -15,12 +15,14 @@
     <a href="internal-embedded.html">Embedded Overview</a>
     <a href="internal-embedded-docs.html">Digital I/O Docs</a>
     <a href="internal-analog-docs.html">Analog I/O Docs</a>
+    <a href="internal-timing-docs.html">Timing Docs</a>
+    <a href="internal-pulse-docs.html">Pulse Docs</a>
   </nav>
 </header>
 <main>
   <p class="ey">ST EMBEDDED EXAMPLE LIBRARY</p>
   <h1>All Current Validated Examples</h1>
-  <p>Collected examples for the current STDigitalIO and STAnalogIO APIs. These examples use the normal Arduino <code>setup()</code> / <code>loop()</code> model.</p>
+  <p>Collected examples for the current STDigitalIO, STAnalogIO, STTiming, and STPulse APIs. These examples use the normal Arduino <code>setup()</code> / <code>loop()</code> model.</p>
 
   <section>
     <h2>Digital I/O examples</h2>
@@ -509,12 +511,147 @@ void loop()
   </section>
 
   <section>
+    <h2>Timing examples</h2>
+
+    <h3>18. Basic non-blocking interval</h3>
+    <pre><code>#include &lt;STTiming.h&gt;
+
+STTimer timer(1000);
+
+void setup()
+{
+    Serial.begin(115200);
+    timer.start();
+}
+
+void loop()
+{
+    if (timer.expired())
+    {
+        Serial.println("1 second elapsed");
+        timer.restart();
+    }
+}</code></pre>
+
+    <h3>19. Elapsed and remaining time monitor</h3>
+    <pre><code>#include &lt;STTiming.h&gt;
+
+STTimer timer(1000);
+
+void setup()
+{
+    Serial.begin(115200);
+    timer.start();
+}
+
+void loop()
+{
+    Serial.print("elapsed = ");
+    Serial.print(timer.elapsed());
+
+    Serial.print(" | remaining = ");
+    Serial.println(timer.remaining());
+
+    if (timer.expired())
+    {
+        timer.restart();
+    }
+
+    delay(250);
+}</code></pre>
+
+    <h3>20. Reset, interval change and restart</h3>
+    <pre><code>#include &lt;STTiming.h&gt;
+
+STTimer timer(1000);
+
+void setup()
+{
+    Serial.begin(115200);
+
+    timer.start();
+    delay(400);
+
+    timer.reset();          // elapsed = 0, stopped
+    timer.setInterval(2000);
+    timer.restart();        // elapsed = 0, running
+}
+
+void loop()
+{
+    if (timer.expired())
+    {
+        Serial.println("2000 ms expired");
+    }
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>Pulse measurement examples</h2>
+
+    <h3>21. D9 to D7 pulse measurement</h3>
+    <pre><code>#include &lt;STPulse.h&gt;
+
+STPulseInput pulse(7, 50000UL);
+
+void setup()
+{
+    Serial.begin(115200);
+
+    pulse.begin();
+    tone(9, 100);
+}
+
+void loop()
+{
+    Serial.print("HIGH = ");
+    Serial.print(pulse.highWidth());
+
+    Serial.print(" | LOW = ");
+    Serial.print(pulse.lowWidth());
+
+    Serial.print(" | PERIOD = ");
+    Serial.print(pulse.periodMicros());
+
+    Serial.print(" | FREQ = ");
+    Serial.print(pulse.frequencyHz(), 2);
+
+    Serial.print(" | DUTY = ");
+    Serial.print(pulse.dutyCycle(), 1);
+
+    Serial.print(" | RPM = ");
+    Serial.println(pulse.rpm(1), 1);
+
+    delay(500);
+}</code></pre>
+
+    <h3>22. RPM with pulses-per-revolution</h3>
+    <pre><code>float rpm1  = pulse.rpm(1);
+float rpm2  = pulse.rpm(2);
+float rpm20 = pulse.rpm(20);</code></pre>
+    <p>At about 100 Hz, the validated results were approximately 6051 RPM @ 1 PPR, 3026 RPM @ 2 PPR, and 303 RPM @ 20 PPR.</p>
+
+    <h3>23. Timeout / no-signal test</h3>
+    <pre><code>pulse.setTimeout(20000UL);
+
+noTone(9);
+
+unsigned long highUs = pulse.highWidth();
+unsigned long lowUs = pulse.lowWidth();
+unsigned long periodUs = pulse.periodMicros();
+float hz = pulse.frequencyHz();</code></pre>
+    <p>With the D9 source stopped, the validated result was HIGH = 0, LOW = 0, PERIOD = 0, FREQ = 0.00.</p>
+  </section>
+
+  <section>
     <h2>Current library status</h2>
     <table>
       <tr><th>Library</th><th>Version</th><th>Status</th></tr>
       <tr><td>STDigitalIO</td><td>v0.2.0-DEV</td><td><span class="badge pass">Implemented API hardware validated</span></td></tr>
       <tr><td>STAnalogIO</td><td>v0.2.0-DEV</td><td><span class="badge pass">Implemented API hardware validated</span></td></tr>
-      <tr><td>ST Embedded IDE</td><td>v0.3.15.0-DEV</td><td><span class="badge dev">Development checkpoint</span></td></tr>
+      <tr><td>STTiming</td><td>v0.1.0-DEV</td><td><span class="badge pass">Implemented API hardware validated</span></td></tr>
+      <tr><td>STPulse</td><td>v0.1.0-DEV</td><td><span class="badge pass">Implemented API hardware validated</span></td></tr>
+      <tr><td>ST Embedded IDE</td><td>v0.3.17.0-DEV</td><td><span class="badge dev">Development checkpoint</span></td></tr>
     </table>
   </section>
 </main>
