@@ -1,0 +1,483 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <meta name="robots" content="noindex,nofollow">
+  <title>STDigitalIO Detailed Documentation</title>
+  <link rel="stylesheet" href="internal.css">
+</head>
+<body>
+<header>
+  <b>ST INTERNAL / EMBEDDED DOCS</b>
+  <nav>
+    <a href="internal.html">Dashboard</a>
+    <a href="internal-embedded.html">Embedded Overview</a>
+    <a href="internal-plc.html">PLC</a>
+    <a href="internal-hardware.html">Hardware</a>
+    <a href="internal-modules.html">Modules</a>
+    <a href="internal-systems.html">Systems</a>
+  </nav>
+</header>
+
+<main>
+  <p class="ey">ST EMBEDDED DOCUMENTATION</p>
+  <h1>STDigitalIO v0.2.0-DEV</h1>
+  <p>Detailed usage guide, behavior explanation, practical examples, validation notes, and common mistakes for the current Arduino Nano / ATmega328P checkpoint.</p>
+
+  <section>
+    <h2>1. What STDigitalIO is</h2>
+    <div class="record">
+      <b>Purpose</b>
+      <p>STDigitalIO is a lightweight convenience layer over ordinary Arduino digital I/O. It gives clearer object-style functions such as <code>led.on()</code>, <code>led.off()</code>, <code>button.isLow()</code>, and debounced edge functions such as <code>button.fell()</code>.</p>
+      <b>What it does not do</b>
+      <p>It does not replace Arduino <code>setup()</code> and <code>loop()</code>, does not require <code>ST.run()</code>, and does not install a hidden scheduler or background task.</p>
+      <b>Execution model</b>
+      <p>Raw functions read the pin when called. Debounced functions use an explicit <code>update()</code> call so the programmer controls when the input is sampled and processed.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. Creating digital output and input objects</h2>
+    <div class="cols2">
+      <article>
+        <h3>Digital output</h3>
+        <pre><code>STDigitalOutput led(13);</code></pre>
+        <p>This creates an ST output object connected to Arduino digital pin 13.</p>
+        <p><strong>Important:</strong> the constructor identifies the pin, but the pin is not ready as an output until <code>led.begin(...)</code> is called in <code>setup()</code>.</p>
+      </article>
+      <article>
+        <h3>Digital input</h3>
+        <pre><code>STDigitalInput button(2, INPUT_PULLUP);</code></pre>
+        <p>This creates an ST input object connected to D2 and configured for Arduino <code>INPUT_PULLUP</code> mode.</p>
+        <p><strong>Important:</strong> call <code>button.begin()</code> inside <code>setup()</code> before reading the input.</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. STDigitalOutput — complete explanation</h2>
+
+    <h3><code>begin(false)</code></h3>
+    <p>Configures the selected pin as an output and initializes it LOW.</p>
+    <pre><code>STDigitalOutput led(13);
+
+void setup()
+{
+    led.begin(false);
+}</code></pre>
+    <p>Expected physical result: LED/output starts OFF.</p>
+
+    <h3><code>begin(true)</code></h3>
+    <p>Configures the output and initializes it HIGH immediately.</p>
+    <pre><code>void setup()
+{
+    led.begin(true);
+}</code></pre>
+    <p>Expected physical result: LED/output starts ON.</p>
+
+    <h3><code>on()</code> and <code>off()</code></h3>
+    <p>These are convenience functions for forcing the output HIGH or LOW.</p>
+    <pre><code>led.on();   // HIGH
+delay(1000);
+
+led.off();  // LOW
+delay(1000);</code></pre>
+
+    <h3><code>write(bool)</code></h3>
+    <p>Use this when the desired output state comes from a variable or condition.</p>
+    <pre><code>bool desiredState = true;
+led.write(desiredState);</code></pre>
+    <p><code>true</code> means HIGH. <code>false</code> means LOW.</p>
+
+    <div class="callout">
+      <span class="note-title">When is <code>write()</code> better than <code>on()</code>/<code>off()</code>?</span>
+      <p>Use <code>on()</code> or <code>off()</code> when the state is fixed by the instruction. Use <code>write(x)</code> when the state is calculated, stored in a variable, or copied from another condition.</p>
+    </div>
+
+    <h3><code>toggle()</code></h3>
+    <p>Reverses the currently tracked output state.</p>
+    <pre><code>void loop()
+{
+    led.toggle();
+    delay(200);
+}</code></pre>
+    <p>If the LED is OFF, it becomes ON. If it is ON, it becomes OFF. Repeating this creates a blink.</p>
+
+    <h3><code>state()</code></h3>
+    <p>Returns the output state tracked by the STDigitalOutput object.</p>
+    <pre><code>Serial.println(led.state());</code></pre>
+    <p>Observed validation behavior: after <code>led.off()</code>, <code>state()</code> returned 0; after <code>led.on()</code>, it returned 1.</p>
+
+    <h3><code>pin()</code></h3>
+    <p>Returns the Arduino pin number assigned to the object.</p>
+    <pre><code>Serial.println(led.pin());  // expected 13</code></pre>
+    <p>This is primarily useful for diagnostics, logging, inspectors, and generic helper code.</p>
+  </section>
+
+  <section>
+    <h2>4. STDigitalInput — raw input functions</h2>
+
+    <h3><code>begin()</code></h3>
+    <p>Applies the configured Arduino input mode.</p>
+    <pre><code>STDigitalInput button(2, INPUT_PULLUP);
+
+void setup()
+{
+    button.begin();
+}</code></pre>
+
+    <h3><code>read()</code></h3>
+    <p>Reads the pin immediately and returns the raw digital level.</p>
+    <pre><code>int state = button.read();
+
+if (state == HIGH)
+{
+    led.on();
+}
+else
+{
+    led.off();
+}</code></pre>
+
+    <h3><code>isHigh()</code> and <code>isLow()</code></h3>
+    <p>These are readable alternatives to comparing <code>read()</code> with HIGH or LOW.</p>
+    <pre><code>if (button.isHigh())
+{
+    led.on();
+}
+
+if (button.isLow())
+{
+    led.off();
+}</code></pre>
+
+    <h3><code>pin()</code> and <code>mode()</code></h3>
+    <p>These expose object configuration information.</p>
+    <pre><code>Serial.println(button.pin());
+
+if (button.mode() == INPUT_PULLUP)
+{
+    Serial.println("Button uses INPUT_PULLUP");
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>5. INPUT_PULLUP — why released means HIGH</h2>
+    <p>With <code>INPUT_PULLUP</code>, the microcontroller enables an internal pull-up resistor. The input naturally sits HIGH when the switch is open. Pressing a button connected from the input pin to GND pulls the signal LOW.</p>
+
+    <table class="compare-table">
+      <tr><th>Button condition</th><th>Electrical result</th><th>Code meaning</th></tr>
+      <tr><td>Released</td><td>HIGH / 1</td><td><code>button.isHigh()</code> is true</td></tr>
+      <tr><td>Pressed</td><td>LOW / 0</td><td><code>button.isLow()</code> is true</td></tr>
+    </table>
+
+    <pre><code>if (button.isLow())
+{
+    // For INPUT_PULLUP this normally means:
+    // BUTTON IS PRESSED
+}</code></pre>
+
+    <div class="callout warn">
+      <span class="note-title">Common confusion</span>
+      <p>A beginner may expect “pressed = HIGH,” but <code>INPUT_PULLUP</code> is normally active-low when the button connects the pin to GND.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>6. Why the raw test produced contradictory readings</h2>
+    <p>During one regression test, output similar to the following appeared:</p>
+    <pre><code>button.read() = 0
+button.isHigh() = FALSE
+button.isLow() = FALSE</code></pre>
+    <p>This does not necessarily mean the three functions are logically broken. Each raw function can perform a separate physical read. A mechanical button can bounce rapidly during press or release, so the pin can change between those calls.</p>
+
+    <p>Conceptually:</p>
+    <pre><code>button.read();    // sample at time A
+button.isHigh();  // sample at time B
+button.isLow();   // sample at time C</code></pre>
+    <p>If the switch contact changes between A, B, and C, the results no longer describe one single instant.</p>
+  </section>
+
+  <section>
+    <h2>7. Mechanical button bounce</h2>
+    <p>A mechanical switch does not always change cleanly from HIGH to LOW once. Its metal contacts can physically bounce for a short time and produce a rapid sequence of transitions.</p>
+    <pre><code>Ideal press:
+HIGH ---------------- LOW
+
+Real mechanical press may look like:
+HIGH -- LOW -- HIGH -- LOW - HIGH - LOW ---- LOW</code></pre>
+    <p>Without debounce, one physical press may be interpreted as several presses.</p>
+  </section>
+
+  <section>
+    <h2>8. Debounced input model</h2>
+    <p>STDigitalInput v0.2.0 adds an explicit non-blocking debounce mechanism. The key function is:</p>
+    <pre><code>button.update();</code></pre>
+
+    <ol class="step-list">
+      <li>The application calls <code>update()</code>.</li>
+      <li>The library samples the raw input.</li>
+      <li>If the raw state changed, a debounce timing window begins or restarts.</li>
+      <li>The new raw state must remain stable for the configured debounce interval.</li>
+      <li>Only then does the library accept the new stable state.</li>
+      <li>On that accepted change, <code>changed()</code>, <code>rose()</code>, or <code>fell()</code> can report the event.</li>
+    </ol>
+
+    <p>This approach does not use a blocking <code>delay()</code> for debounce.</p>
+  </section>
+
+  <section>
+    <h2>9. <code>update()</code> — why it must be called</h2>
+    <p>The debounce system is deliberately explicit. There is no hidden task that keeps reading the input in the background.</p>
+
+    <pre><code>void loop()
+{
+    button.update();
+
+    // Use debounced functions after update()
+}</code></pre>
+
+    <div class="callout warn">
+      <span class="note-title">If you forget <code>update()</code></span>
+      <p>The debounced state cannot process new raw samples, so <code>stableRead()</code>, <code>changed()</code>, <code>rose()</code>, and <code>fell()</code> will not reflect new button activity correctly.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>10. Stable-state functions</h2>
+
+    <h3><code>stableRead()</code></h3>
+    <p>Returns the accepted debounced state rather than an immediate raw sample.</p>
+
+    <h3><code>stableHigh()</code></h3>
+    <p>Returns true when the accepted stable state is HIGH.</p>
+
+    <h3><code>stableLow()</code></h3>
+    <p>Returns true when the accepted stable state is LOW.</p>
+
+    <pre><code>button.update();
+
+if (button.stableLow())
+{
+    // stable pressed state for INPUT_PULLUP
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>11. Edge detection: <code>rose()</code> and <code>fell()</code></h2>
+    <p>An edge means a transition from one stable digital state to the other.</p>
+
+    <table class="compare-table">
+      <tr><th>Function</th><th>Transition</th><th>INPUT_PULLUP button meaning</th></tr>
+      <tr><td><code>rose()</code></td><td>LOW → HIGH</td><td>Button released</td></tr>
+      <tr><td><code>fell()</code></td><td>HIGH → LOW</td><td>Button pressed</td></tr>
+    </table>
+
+    <h3>One toggle per press</h3>
+    <pre><code>#include &lt;STDigitalIO.h&gt;
+
+STDigitalOutput led(13);
+STDigitalInput button(2, INPUT_PULLUP, 30);
+
+void setup()
+{
+    led.begin(false);
+    button.begin();
+}
+
+void loop()
+{
+    button.update();
+
+    if (button.fell())
+    {
+        led.toggle();
+    }
+}</code></pre>
+
+    <p>This differs from testing <code>button.isLow()</code> continuously. With <code>fell()</code>, the action occurs only on the accepted HIGH-to-LOW transition, not during the whole time the button is being held.</p>
+  </section>
+
+  <section>
+    <h2>12. <code>changed()</code></h2>
+    <p><code>changed()</code> becomes true when the stable debounced state changes during the current update cycle.</p>
+    <pre><code>button.update();
+
+if (button.changed())
+{
+    Serial.print("New stable state: ");
+    Serial.println(button.stableRead());
+}</code></pre>
+    <p>Use this when you care that a transition happened but do not need to distinguish rising from falling immediately.</p>
+  </section>
+
+  <section>
+    <h2>13. Setting debounce time</h2>
+
+    <h3>Constructor setting</h3>
+    <pre><code>STDigitalInput button(2, INPUT_PULLUP, 30);</code></pre>
+    <p>The third argument configures a 30 ms debounce interval.</p>
+
+    <h3>Runtime setting</h3>
+    <pre><code>button.setDebounce(50);</code></pre>
+    <p>This changes the debounce interval to 50 ms.</p>
+
+    <h3>Reading the configured value</h3>
+    <pre><code>Serial.println(button.debounceMs());</code></pre>
+
+    <p>Hardware regression confirmed 30 ms from construction and 50 ms after <code>setDebounce(50)</code>.</p>
+  </section>
+
+  <section>
+    <h2>14. Raw input vs debounced input</h2>
+    <table class="compare-table">
+      <tr><th>Use case</th><th>Recommended API</th><th>Reason</th></tr>
+      <tr><td>Read current logic level now</td><td><code>read()</code></td><td>Immediate raw sample</td></tr>
+      <tr><td>Simple direct HIGH/LOW check</td><td><code>isHigh()</code> / <code>isLow()</code></td><td>Readable raw condition</td></tr>
+      <tr><td>Human pushbutton</td><td><code>update()</code> + stable/edge API</td><td>Reject mechanical bounce</td></tr>
+      <tr><td>One event per press</td><td><code>fell()</code> for active-low button</td><td>Detect only the stable transition</td></tr>
+      <tr><td>One event per release</td><td><code>rose()</code> for active-low button</td><td>Detect only the stable transition</td></tr>
+      <tr><td>High-speed pulse/counting</td><td>Do not use mechanical debounce layer</td><td>Use timer/capture/high-speed architecture instead</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>15. Practical examples</h2>
+
+    <h3>Example A — LED follows raw button state</h3>
+    <pre><code>#include &lt;STDigitalIO.h&gt;
+
+STDigitalOutput led(13);
+STDigitalInput button(2, INPUT_PULLUP);
+
+void setup()
+{
+    led.begin(false);
+    button.begin();
+}
+
+void loop()
+{
+    if (button.isLow())
+    {
+        led.on();
+    }
+    else
+    {
+        led.off();
+    }
+}</code></pre>
+    <p>For INPUT_PULLUP: pressed = LED ON, released = LED OFF.</p>
+
+    <h3>Example B — copy a boolean state to an output</h3>
+    <pre><code>bool alarmActive = true;
+led.write(alarmActive);</code></pre>
+
+    <h3>Example C — toggle only once per press</h3>
+    <pre><code>button.update();
+
+if (button.fell())
+{
+    led.toggle();
+}</code></pre>
+
+    <h3>Example D — print every stable input change</h3>
+    <pre><code>button.update();
+
+if (button.changed())
+{
+    Serial.print("Stable input = ");
+    Serial.println(button.stableRead());
+}</code></pre>
+
+    <h3>Example E — separate press and release actions</h3>
+    <pre><code>button.update();
+
+if (button.fell())
+{
+    Serial.println("Button pressed");
+    led.on();
+}
+
+if (button.rose())
+{
+    Serial.println("Button released");
+    led.off();
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>16. Common mistakes</h2>
+    <table class="compare-table">
+      <tr><th>Mistake</th><th>Why it happens</th><th>Correction</th></tr>
+      <tr><td>Expecting INPUT_PULLUP press to be HIGH</td><td>Active-low wiring is misunderstood</td><td>Pressed to GND is LOW</td></tr>
+      <tr><td>Using <code>isLow()</code> for “one press = one action”</td><td>The condition remains true while held</td><td>Use <code>fell()</code></td></tr>
+      <tr><td>Calling stable functions without <code>update()</code></td><td>Debounce state is not refreshed</td><td>Call <code>update()</code> every loop cycle</td></tr>
+      <tr><td>Using long <code>delay()</code> with debounce</td><td>Sampling is delayed</td><td>Keep the loop responsive when edge timing matters</td></tr>
+      <tr><td>Comparing separate raw reads as if they were one snapshot</td><td>Each call may sample at a different instant</td><td>Save one <code>read()</code> result or use stable cached state</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>17. Validation record</h2>
+    <table>
+      <tr><th>Function / behavior</th><th>Status</th><th>Observed result</th></tr>
+      <tr><td>Output begin(false)</td><td><span class="badge pass">PASS</span></td><td>Output initialized LOW</td></tr>
+      <tr><td>Output begin(true)</td><td><span class="badge pass">PASS</span></td><td>Output initialized HIGH</td></tr>
+      <tr><td>on/off/write/toggle</td><td><span class="badge pass">PASS</span></td><td>Physical LED behavior matched command</td></tr>
+      <tr><td>state()/pin()</td><td><span class="badge pass">PASS</span></td><td>Reported expected state and D13</td></tr>
+      <tr><td>Input begin/read</td><td><span class="badge pass">PASS</span></td><td>INPUT_PULLUP raw behavior confirmed</td></tr>
+      <tr><td>input pin()/mode()</td><td><span class="badge pass">PASS</span></td><td>Reported D2 and INPUT_PULLUP</td></tr>
+      <tr><td>update()/fell()/rose()</td><td><span class="badge pass">PASS</span></td><td>Repeated press/release sequence was consistent</td></tr>
+      <tr><td>stableRead()/stableHigh()/stableLow()</td><td><span class="badge pass">PASS</span></td><td>Stable states matched expected electrical levels</td></tr>
+      <tr><td>changed()</td><td><span class="badge pass">PASS</span></td><td>True on accepted stable transitions</td></tr>
+      <tr><td>setDebounce()/debounceMs()</td><td><span class="badge pass">PASS</span></td><td>30 ms reported, then 50 ms after runtime change</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>18. Engineering limitations</h2>
+    <ul>
+      <li>Current validation is for the Arduino Nano / ATmega328P checkpoint.</li>
+      <li>The library remains DEV even though the current implemented API has hardware-validated behaviors.</li>
+      <li>Debounce response depends on how often <code>update()</code> is called.</li>
+      <li>Long blocking code can delay event recognition because no hidden scheduler exists.</li>
+      <li>Mechanical debounce must not be treated as a high-speed pulse acquisition method.</li>
+      <li>Other MCU families require separate regression and timing verification.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>19. Quick reference</h2>
+    <pre><code>// OUTPUT
+led.begin(false);
+led.on();
+led.off();
+led.write(true);
+led.toggle();
+led.state();
+led.pin();
+
+// RAW INPUT
+button.begin();
+button.read();
+button.isHigh();
+button.isLow();
+button.pin();
+button.mode();
+
+// DEBOUNCED INPUT
+button.update();
+button.stableRead();
+button.stableHigh();
+button.stableLow();
+button.changed();
+button.rose();
+button.fell();
+button.setDebounce(50);
+button.debounceMs();</code></pre>
+  </section>
+</main>
+</body>
+</html>
