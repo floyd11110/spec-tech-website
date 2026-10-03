@@ -1,0 +1,59 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="robots" content="noindex,nofollow"><title>STSerial Detailed Documentation</title><link rel="stylesheet" href="internal.css"></head>
+<body><header><b>ST INTERNAL / SERIAL DOCS</b><nav><a href="internal.html">Dashboard</a><a href="internal-embedded.html">Embedded Overview</a><a href="internal-embedded-examples.html">All Examples</a><a href="internal-eeprom-docs.html">EEPROM Docs</a></nav></header>
+<main>
+<p class="ey">PHASE 3 / PERIPHERAL CONVENIENCE LAYER</p><h1>STSerial v0.1.0-DEV</h1>
+<p>General serial convenience wrapper for the current Arduino Nano / ATmega328P checkpoint. It uses the normal Arduino HardwareSerial path and does not add a scheduler, interrupts, or background processing.</p>
+
+<section><h2>Basic use</h2><pre><code>#include &lt;STSerial.h&gt;
+
+STSerial stSerial(Serial);
+
+void setup()
+{
+    stSerial.begin(115200);
+}
+
+void loop()
+{
+}</code></pre></section>
+
+<section><h2>API reference</h2><table class="api-table">
+<tr><th>Function</th><th>Purpose</th><th>Status</th></tr>
+<tr><td>begin(baud)</td><td>Starts the selected HardwareSerial port and applies the configured timeout.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>available()</td><td>Reports bytes waiting in the RX buffer.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>read()</td><td>Reads one byte from the RX buffer.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>readLine(buffer,length)</td><td>Reads until newline or timeout, null-terminates the result, and strips trailing CR from CRLF input.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>print(value)</td><td>Forwards formatted output to HardwareSerial.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>println(value)</td><td>Prints a value followed by a line ending.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>println()</td><td>Prints only a line ending.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>printValue(label,value)</td><td>Prints a simple <code>LABEL=value</code> record.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>clearInput()</td><td>Drains all currently buffered RX bytes.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>setTimeout(ms)</td><td>Changes timeout used by blocking stream reads.</td><td><span class="badge pass">PASS</span></td></tr>
+<tr><td>timeout()</td><td>Returns the wrapper's configured timeout.</td><td><span class="badge pass">PASS</span></td></tr>
+</table></section>
+
+<section><h2>Line-read validation</h2><pre><code>STSerial v0.1.0 BASIC VALIDATION
+BAUD=115200
+Initial timeout = 1000
+After setTimeout(2000) = 2000
+RECEIVED = [line]
+LENGTH=4
+RECEIVED = [another line]
+LENGTH=12
+RECEIVED = [hello]
+LENGTH=5</code></pre><p>The line helper preserved embedded spaces and returned the expected stored-character count.</p></section>
+
+<section><h2>Raw read and clearInput validation</h2><pre><code>FIRST CHAR = H
+ASCII = 72
+AVAILABLE AFTER FIRST READ = 5
+AVAILABLE AFTER CLEANUP = 0
+
+Fresh second input: ABCDE
+AVAILABLE BEFORE clearInput() = 6
+AVAILABLE AFTER clearInput() = 0</code></pre><p>The second stage used a fresh input after cleaning the first line, so the RX-buffer clearing behavior was independently validated.</p></section>
+
+<section><h2>Blocking behavior</h2><div class="callout warn"><span class="note-title">Important</span><p><code>readLine()</code> uses a timeout-based stream read and can block until newline, buffer limit, or timeout. It is appropriate for simple interactive communication; a future framed/non-blocking parser should be a separate layer.</p></div></section>
+
+<section><h2>STSerial vs STSerialIO</h2><table><tr><th>Layer</th><th>Role</th></tr><tr><td>STSerial</td><td>General serial communication helper for text, lines, bytes, values, and input-buffer management.</td></tr><tr><td>STSerialIO</td><td>Specialized I/O monitor protocol for reporting watched digital/analog state to the IDE monitor.</td></tr></table></section>
+</main></body></html>
