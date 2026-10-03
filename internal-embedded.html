@@ -20,13 +20,15 @@
 </header>
 <main>
   <p class="ey">ST EMBEDDED PLATFORM</p>
-  <h1>ST Embedded IDE — Digital, Analog, Timing & Pulse</h1>
-  <p>Internal engineering reference for the Arduino-compatible ST Embedded Nano development platform and its lightweight digital I/O, analog I/O, timing, and pulse-measurement convenience layers.</p>
+  <h1>ST Embedded IDE — Digital, Analog, Timing, Pulse & Serial</h1>
+  <p>Internal engineering reference for the Arduino-compatible ST Embedded Nano development platform and its lightweight digital I/O, analog I/O, timing, pulse-measurement, serial, and EEPROM convenience layers.</p>
   <p>
     <a class="doc-link" href="internal-embedded-docs.html">STDigitalIO docs →</a>
     <a class="doc-link" href="internal-analog-docs.html">STAnalogIO docs →</a>
     <a class="doc-link" href="internal-timing-docs.html">STTiming docs →</a>
     <a class="doc-link" href="internal-pulse-docs.html">STPulse docs →</a>
+    <a class="doc-link" href="internal-serial-docs.html">STSerial docs →</a>
+    <a class="doc-link" href="internal-eeprom-docs.html">STEEPROM docs →</a>
     <a class="doc-link" href="internal-embedded-examples.html">All examples →</a>
   </p>
 
@@ -36,7 +38,7 @@
       <article>
         <span class="badge dev">Development</span>
         <h3>ST Embedded IDE</h3>
-        <p class="kpi">v0.3.17.0-DEV</p>
+        <p class="kpi">v0.3.19.0-DEV</p>
         <ul>
           <li>Target: Arduino Nano / ATmega328P @ 16 MHz</li>
           <li>Arduino bootloader retained</li>
@@ -68,6 +70,18 @@
         <h3>STPulse</h3>
         <p class="kpi">v0.1.0-DEV</p>
         <p>Blocking pulseIn()-based measurement layer for pulse width, period, frequency, duty cycle, RPM conversion, timeout configuration, and no-signal handling.</p>
+      </article>
+      <article>
+        <span class="badge pass">Hardware Validated</span>
+        <h3>STSerial</h3>
+        <p class="kpi">v0.1.0-DEV</p>
+        <p>General serial convenience layer with line input, raw byte reads, formatted output, timeout control, and RX-buffer clearing. Current implemented API is hardware validated on the Nano USB serial path.</p>
+      </article>
+      <article>
+        <span class="badge dev">Development</span>
+        <h3>STEEPROM</h3>
+        <p class="kpi">v0.1.0-DEV</p>
+        <p>EEPROM convenience wrapper for byte read/write/update, typed get/put, size reporting, and address validation. Implementation is ready for Nano hardware regression but is not yet marked hardware validated.</p>
       </article>
       <article>
         <span class="badge pass">Hardware Validated</span>
@@ -277,7 +291,7 @@ fell() = FALSE</code></pre>
       <b>Current decision</b>
       <p>Keep STDigitalIO v0.2.0-DEV as the validated lightweight digital I/O layer for the current Nano development checkpoint.</p>
       <b>Next development direction</b>
-      <p>STDigitalIO and STAnalogIO form the current hardware-validated Phase 2 convenience layer. Phase 3 has begun with hardware-validated STTiming and STPulse modules. Continue adding explicit, low-overhead peripheral APIs without introducing a hidden scheduler into Arduino Compatibility mode.</p>
+      <p>STDigitalIO and STAnalogIO form the current hardware-validated Phase 2 convenience layer. Phase 3 currently includes hardware-validated STTiming, STPulse and STSerial modules. STEEPROM v0.1.0-DEV is the next validation target. Continue adding explicit, low-overhead peripheral APIs without introducing a hidden scheduler into Arduino Compatibility mode.</p>
     </div>
   </section>
 </main>
