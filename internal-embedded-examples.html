@@ -17,12 +17,14 @@
     <a href="internal-analog-docs.html">Analog I/O Docs</a>
     <a href="internal-timing-docs.html">Timing Docs</a>
     <a href="internal-pulse-docs.html">Pulse Docs</a>
+    <a href="internal-serial-docs.html">Serial Docs</a>
+    <a href="internal-eeprom-docs.html">EEPROM Docs</a>
   </nav>
 </header>
 <main>
   <p class="ey">ST EMBEDDED EXAMPLE LIBRARY</p>
   <h1>All Current Validated Examples</h1>
-  <p>Collected examples for the current STDigitalIO, STAnalogIO, STTiming, and STPulse APIs. These examples use the normal Arduino <code>setup()</code> / <code>loop()</code> model.</p>
+  <p>Collected examples for the current STDigitalIO, STAnalogIO, STTiming, STPulse, STSerial, and STEEPROM APIs. These examples use the normal Arduino <code>setup()</code> / <code>loop()</code> model.</p>
 
   <section>
     <h2>Digital I/O examples</h2>
@@ -644,6 +646,81 @@ float hz = pulse.frequencyHz();</code></pre>
   </section>
 
   <section>
+    <h2>Serial examples</h2>
+
+    <h3>24. Basic STSerial line input</h3>
+    <pre><code>#include &lt;STSerial.h&gt;
+
+STSerial stSerial(Serial);
+
+void setup()
+{
+    stSerial.begin(115200);
+    stSerial.println("Type a line and press Enter:");
+}
+
+void loop()
+{
+    if (stSerial.available() > 0)
+    {
+        char line[64];
+        size_t length = stSerial.readLine(line, sizeof(line));
+
+        stSerial.print("RECEIVED = [");
+        stSerial.print(line);
+        stSerial.println("]");
+        stSerial.printValue("LENGTH", length);
+    }
+}</code></pre>
+
+    <h3>25. Raw byte read and RX clear</h3>
+    <pre><code>int c = stSerial.read();
+
+stSerial.print("FIRST CHAR = ");
+stSerial.println((char)c);
+
+stSerial.clearInput();</code></pre>
+    <p>Validated with fresh serial input: <code>HELLO</code> returned H / ASCII 72, and a separate <code>ABCDE</code> input produced 6 buffered bytes with newline before <code>clearInput()</code>, then 0 after clearing.</p>
+  </section>
+
+  <section>
+    <h2>EEPROM examples</h2>
+
+    <h3>26. Byte and structured record regression</h3>
+    <pre><code>#include &lt;STEEPROM.h&gt;
+
+STEEPROM storage;
+
+struct TestRecord
+{
+    int16_t count;
+    float value;
+};
+
+void setup()
+{
+    Serial.begin(115200);
+
+    storage.write(100, 42);
+    storage.update(100, 99);
+
+    TestRecord written = {1234, 56.75f};
+    storage.put(110, written);
+
+    TestRecord readBack;
+    storage.get(110, readBack);
+}
+
+void loop()
+{
+}</code></pre>
+    <div class="callout warn">
+      <span class="note-title">Validation status</span>
+      <p>STEEPROM v0.1.0-DEV is implemented for the current Nano checkpoint, but this API is not yet marked hardware validated. The packaged regression saves and restores the original EEPROM contents used by the test.</p>
+    </div>
+  </section>
+
+  <section>
     <h2>Current library status</h2>
     <table>
       <tr><th>Library</th><th>Version</th><th>Status</th></tr>
@@ -651,7 +728,9 @@ float hz = pulse.frequencyHz();</code></pre>
       <tr><td>STAnalogIO</td><td>v0.2.0-DEV</td><td><span class="badge pass">Implemented API hardware validated</span></td></tr>
       <tr><td>STTiming</td><td>v0.1.0-DEV</td><td><span class="badge pass">Implemented API hardware validated</span></td></tr>
       <tr><td>STPulse</td><td>v0.1.0-DEV</td><td><span class="badge pass">Implemented API hardware validated</span></td></tr>
-      <tr><td>ST Embedded IDE</td><td>v0.3.17.0-DEV</td><td><span class="badge dev">Development checkpoint</span></td></tr>
+      <tr><td>STSerial</td><td>v0.1.0-DEV</td><td><span class="badge pass">Implemented API hardware validated</span></td></tr>
+      <tr><td>STEEPROM</td><td>v0.1.0-DEV</td><td><span class="badge dev">Implemented / hardware validation pending</span></td></tr>
+      <tr><td>ST Embedded IDE</td><td>v0.3.19.0-DEV</td><td><span class="badge dev">Development checkpoint</span></td></tr>
     </table>
   </section>
 </main>
