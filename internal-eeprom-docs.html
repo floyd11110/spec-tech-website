@@ -1,0 +1,22 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="robots" content="noindex,nofollow"><title>STEEPROM Detailed Documentation</title><link rel="stylesheet" href="internal.css"></head>
+<body><header><b>ST INTERNAL / EEPROM DOCS</b><nav><a href="internal.html">Dashboard</a><a href="internal-embedded.html">Embedded Overview</a><a href="internal-embedded-examples.html">All Examples</a><a href="internal-serial-docs.html">Serial Docs</a></nav></header>
+<main>
+<p class="ey">PHASE 3 / NEXT VALIDATION TARGET</p><h1>STEEPROM v0.1.0-DEV</h1>
+<p>Lightweight EEPROM convenience wrapper for the Arduino Nano / ATmega328P target. Implementation is ready for regression testing but is not yet marked hardware validated.</p>
+
+<section><h2>API</h2><table class="api-table">
+<tr><th>Function</th><th>Purpose</th><th>Status</th></tr>
+<tr><td>read(address)</td><td>Reads one EEPROM byte.</td><td><span class="badge dev">PENDING</span></td></tr>
+<tr><td>write(address,value)</td><td>Writes one EEPROM byte.</td><td><span class="badge dev">PENDING</span></td></tr>
+<tr><td>update(address,value)</td><td>Writes only when the stored byte differs.</td><td><span class="badge dev">PENDING</span></td></tr>
+<tr><td>get(address,object)</td><td>Reads a typed object/record.</td><td><span class="badge dev">PENDING</span></td></tr>
+<tr><td>put(address,object)</td><td>Stores a typed object/record using Arduino EEPROM semantics.</td><td><span class="badge dev">PENDING</span></td></tr>
+<tr><td>length()</td><td>Returns EEPROM capacity reported by the Arduino core.</td><td><span class="badge dev">PENDING</span></td></tr>
+<tr><td>validAddress(address)</td><td>Checks whether an address is within the reported EEPROM byte range.</td><td><span class="badge dev">PENDING</span></td></tr>
+</table></section>
+
+<section><h2>Regression design</h2><p>The first packaged regression uses byte address 100 and structured-record address 110. It saves their existing contents, performs byte and typed-record tests, and restores the original data before completing.</p><div class="callout warn"><span class="note-title">EEPROM endurance</span><p>EEPROM has finite write endurance. The regression performs only a small controlled number of writes. Prefer <code>update()</code> when a byte may already contain the desired value.</p></div></section>
+
+<section><h2>Validation hardware</h2><p>No external components are required: Arduino Nano, USB cable, PC, and ST Embedded IDE Serial Monitor are sufficient.</p></section>
+</main></body></html>
